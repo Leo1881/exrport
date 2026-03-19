@@ -107,7 +107,7 @@ Before considering any change complete, verify:
 
 ## Known Limitations
 
-- **Internal PDF links:** ToC links open in browser instead of jumping within PDF (html2pdf limitation)
+- **Internal PDF links:** ToC links in html2pdf Export open in browser. Use **Print to PDF** (Ctrl/Cmd+P) and choose "Save as PDF" – Chrome preserves internal links within the PDF.
 - **PDF background:** Grey background was attempted but removed; margin area is white
 - **PDF export:** Requires local server (e.g. `npx serve`)
 

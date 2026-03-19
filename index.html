@@ -20,6 +20,7 @@
       <option value="3">Design 3 – Professional Report</option>
     </select>
     <button id="export-pdf" style="background: #1a5f9e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">Export to PDF</button>
+    <button id="print-pdf" title="Uses browser print – ToC links work within the PDF" style="background: #5c4d9e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">Print to PDF</button>
   </div>
 
   <script>
@@ -1078,7 +1079,8 @@
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        enableLinks: true
+        enableLinks: true,
+        pagebreak: { mode: ['css', 'legacy'], avoid: '.d2-card' }
       };
       convertImagesToBase64(report)
         .then(function() {
@@ -1094,6 +1096,12 @@
             alert('PDF export failed. Use Print (Ctrl/Cmd+P) and choose "Save as PDF" instead.');
           }
         });
+    });
+
+    document.getElementById('print-pdf').addEventListener('click', function() {
+      document.querySelector('.print-actions').style.display = 'none';
+      window.print();
+      document.querySelector('.print-actions').style.display = '';
     });
   </script>
 </body>
