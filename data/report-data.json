@@ -1,0 +1,400 @@
+{
+  "meta": {
+    "reportType": "Gold Report",
+    "bureau": "EXPERIAN BUREAU",
+    "kimNumber": "118428",
+    "yourReference": "",
+    "updatedOn": "2025/02/04",
+    "enquiryNo": "6746415"
+  },
+  "subject": {
+    "name": "NEW MARKET DECISION SYSTEMS (PTY) LTD",
+    "registrationNumber": "2014/987654/07",
+    "companyStatus": "Active",
+    "incorporatesOperationsOf": [
+      {
+        "name": "WALTERS AND PARTNERS CREDIT BEREAU (PTY) LTD",
+        "date": "2022/01/01"
+      },
+      {
+        "name": "UP AND AWAY DECISION SYSTEMS (PTY) LTD",
+        "date": "2020/04/20",
+        "type": "Name Change"
+      },
+      {
+        "name": "UP AND AWAY DECISION SYSTEMS CC (1995/987654/23)",
+        "date": "2014/10/31",
+        "type": "Conversion name"
+      }
+    ],
+    "otherNames": "No Other Business Names."
+  },
+  "addressDetails": {
+    "physical": {
+      "unit": "Unit 8",
+      "building": "Tiger Central Park",
+      "street": "Jan Jordaan Avenue",
+      "town": "Hazyview",
+      "postalCode": "1242",
+      "province": "Mpumalanga",
+      "country": "South Africa"
+    },
+    "postal": {
+      "box": "P O Box 73616",
+      "town": "Hazyview",
+      "postalCode": "1242",
+      "province": "Mpumalanga",
+      "country": "South Africa"
+    },
+    "additionalComments": [
+      "Alternative cellphone numbers: 0834679876, 0827465243",
+      "The following telephone number is incorrect: 013 487 2233"
+    ]
+  },
+  "assessment": {
+    "enquiry": {
+      "amount": 600000,
+      "terms": "30 Days",
+      "date": "2/3/2025"
+    },
+    "summary": [
+      "The subject is very well established.",
+      "No judgements in the name of the principal(s).",
+      "No judgements taken against the subject on the Experian database.",
+      "The account is paid on due date.",
+      "Refer to our additional comment."
+    ],
+    "recommendation": "After perusal of the latest Annual Financial Statements as at 30 June 2024 and in view of the financial summary ratio analysis below, the subject is considered an acceptable risk for your enquiry amount and terms of R 600 000 over 30 days. A maximum credit limit of R 1 500 000 over 30 days is suggested. The account should be reviewed in 6 months.",
+    "profitability": "The financial performance is highlighted by the profitability ratios, with a gross profit margin of 39.38% and an operating profit margin of 9.65%.",
+    "liquidity": "The subject is considered to be very liquid with a satisfactory current ratio of 1.51 and an acid test ratio of 1.01 respectively.",
+    "solvency": "Lastly, the entity's financial position remains stable with an overall solvency ratio of 1.23.",
+    "disclaimer": "Please ensure the necessary KYC and Due Diligence is conducted prior to advancing credit or onboarding the customer."
+  },
+  "contactDetails": {
+    "telephone": "013 476 9876",
+    "fax": "013 476 9876",
+    "cellphone": "0823653636",
+    "email": "michellebb@nmdc.com",
+    "web": "www.nmdc.com",
+    "vatNumber": "4537289876",
+    "vatNote": "The VAT registration number is held in the name of Up and Away Decision Systems CC.",
+    "auditor": "Steyn and Barnard Registered Auditors"
+  },
+  "auditorAddress": {
+    "registered": {
+      "address": "UNIT 14 14TH AVENUE CENTRE, CNR OF 14TH AVENUE & KESSEL STR",
+      "town": "FAIRLAND",
+      "postalCode": "2195"
+    },
+    "postal": {
+      "box": "P O Box 73616",
+      "town": "FAIRLAND",
+      "postalCode": "2195"
+    }
+  },
+  "registeredAddressNote": "According to a spokesperson for the subject, the registered address is as follows, but was not confirmed by CIPC: Unit 8, Tiger Central Park, Jan Jordaan Avenue, Hazyview, 1242, Mpumalanga, South Africa",
+  "branches": [
+    {
+      "name": "Cape Town Branch",
+      "address": "1 Tullip Street",
+      "town": "Table View",
+      "postalCode": "7441",
+      "province": "Western Cape",
+      "country": "South Africa",
+      "staffCount": null
+    }
+  ],
+  "history": {
+    "incorporatedOn": "2014/10/31",
+    "tradingCommencedOn": "1995/10/05",
+    "narrative": "Up and Away Decision Systems CC (1995/987654/23) was established in October 1995. In October 2014, the subject converted to a private company. In April 2020, the name was changed to the current name New Market Decision Systems (Pty) Ltd. In 2022, the assets and operations of Walters and Partners Credit Bureau (Pty) Ltd, were taken over by the subject. Walters and Partners Credit Bureau (Pty) Ltd is now dormant. The remaining 20% shares are held by Goldman Sachs Ltd."
+  },
+  "corporateStructure": {
+    "ultimateHoldingCompany": "No Ultimate Holding Company supplied or applicable.",
+    "holdingCompany": {
+      "name": "Berkshire Hathaway",
+      "country": "Denmark",
+      "shareholding": 70
+    },
+    "associateCompany": {
+      "name": "A and D International (Pty) Ltd",
+      "share": 0
+    },
+    "subsidiaryCompany": {
+      "name": "Power Freight (Pty) Ltd",
+      "share": 0
+    }
+  },
+  "activePrincipals": [
+    {
+      "name": "BURGER, MR",
+      "initials": "MA",
+      "idNumber": "5402125654080",
+      "dateOfBirth": "1954/02/12",
+      "idVerified": "No",
+      "experianScore": null,
+      "status": "ACTIVE",
+      "statusDate": null,
+      "cm29Date": "Confirmed by CIPC on",
+      "appointmentDate": "1995/01/01",
+      "directorIndicator": "Director",
+      "principalType": "Director",
+      "areaOfResponsibility": "Chief Executive Officer",
+      "sharePercent": 10,
+      "saResident": "SA Resident",
+      "courtRecords": "A consumer scan revealed no personal judgements.",
+      "currentBusinessInterests": "No other business interests were identified.",
+      "previousBusinessInterests": "No previous business interests were identified.",
+      "propertiesAndBonds": "No properties and bonds are registered in the name of this principal."
+    },
+    {
+      "name": "DU PLOOY, MR",
+      "initials": "DDP",
+      "idNumber": "8109185737308",
+      "dateOfBirth": "1981/09/18",
+      "idVerified": "No",
+      "experianScore": null,
+      "status": "ACTIVE",
+      "statusDate": null,
+      "cm29Date": "Confirmed by CIPC on",
+      "appointmentDate": "1995/01/01",
+      "directorIndicator": "Director",
+      "principalType": "Director",
+      "areaOfResponsibility": "Financial",
+      "sharePercent": 0,
+      "saResident": "SA Resident",
+      "courtRecords": "A consumer scan could not be conducted.",
+      "currentBusinessInterests": "No other business interests were identified.",
+      "previousBusinessInterests": "No previous business interests were identified.",
+      "propertiesAndBonds": "No properties and bonds are registered in the name of this principal."
+    }
+  ],
+  "nonActivePrincipals": [
+    {
+      "name": "SILBURN",
+      "initials": "HC",
+      "idNumber": "3012225096082",
+      "dateOfBirth": "1930/12/22",
+      "experianScore": 584,
+      "appointmentDate": "1988/09/27",
+      "status": "RESIGNED",
+      "idVerified": "Yes"
+    }
+  ],
+  "operations": {
+    "businessActivities": "The subject operates as a registered credit bureau. Services include bank notifications, data cleaning, research reports and other credit bureau activities.",
+    "majorClients": "Absa, Nedbank, Woolworths and the general public.",
+    "majorSicCode": {
+      "code": "88991.01",
+      "description": "Credit rating agency activities"
+    },
+    "agenciesHeld": "No Agencies held.",
+    "importExport": "The subject neither imports nor exports.",
+    "clearingAndForwarding": "No Clearing and Forwarding agencies.",
+    "fleet": {
+      "total": 2,
+      "cars": 1,
+      "lightDeliveryVehicles": 1
+    }
+  },
+  "staff": {
+    "total": 120,
+    "salaried": 110,
+    "salariedPaymentDay": "25th of each month",
+    "wages": 10,
+    "wagesPaymentDay": "every Friday",
+    "casual": 1,
+    "contract": 0
+  },
+  "bbbee": {
+    "status": "Non-compliant Contributor"
+  },
+  "premises": {
+    "type": "Office",
+    "location": "Office Complex",
+    "ownedLeased": "Leased",
+    "landlord": "Bruzer's Property CC",
+    "leaseExpiry": null,
+    "occupationNote": "The subject has an ongoing lease agreement."
+  },
+  "propertiesAndBonds": "No properties or bonds registered in the name of the subject.",
+  "divisions": "No Divisions supplied",
+  "financialInformation": {
+    "dateObtained": "2025/02/04",
+    "salesTermOption": "credit",
+    "salesTermPeriods": ["30 days", "60 days"],
+    "bankOverdraft": "The subject has a bank overdraft facility which is not utilised. The bank overdraft facility is not secured.",
+    "debtorsCession": "The debtors have been ceded. Details to the cession is as follows: Rand Merchant Bank.",
+    "debtorsDiscount": "The debtors' book has not been discounted with a bank or a factoring house.",
+    "mortgageNote": "No mortgage(s) and/or notarial bond(s) have been registered over the fixed or moveable assets of the business.",
+    "reportingCurrency": "South African Rand (ZAR)",
+    "financialStatements": "Annual Financial Statements were made available.",
+    "financialYearEnd": "June",
+    "previousTurnoverRange": "100 000 000 - 200 000 000",
+    "currentTurnoverProjection": "Not supplied",
+    "estimatedCash": 19402198,
+    "estimatedDebtors": 38375720,
+    "estimatedStock": 0,
+    "estimatedCreditors": 17749518,
+    "turnoverFY2024": 188196113,
+    "ratios": {
+      "liquidity": {
+        "currentRatio": "1.51:1",
+        "acidTestRatio": "1.01:1"
+      },
+      "profitability": {
+        "grossProfitMargin": "39.38",
+        "preTaxProfitMargin": "9.65"
+      },
+      "solvency": {
+        "solvencyRatio": "1.92"
+      }
+    }
+  },
+  "contracts": [
+    {
+      "description": "A and B Projects",
+      "value": 2000000,
+      "currency": "ZAR",
+      "startDate": "2025/02/01",
+      "endDate": null,
+      "paymentTerms": null,
+      "obtainedBy": "Referrals",
+      "progressPayments": "No Progress Payments Applicable",
+      "retentions": "No Contract Retentions Applicable",
+      "notes": "The contract is ongoing, however further details were not made available."
+    },
+    {
+      "description": "Codi Project",
+      "value": 1500000,
+      "currency": "ZAR",
+      "startDate": "2025/02/01",
+      "endDate": null,
+      "paymentTerms": null,
+      "obtainedBy": "Word of Mouth",
+      "progressPayments": "No Progress Payments Applicable",
+      "retentions": "No Contract Retentions Applicable",
+      "notes": "The contract is ongoing, however further details were not made available."
+    }
+  ],
+  "courtRecords": {
+    "judgements": "No Judgements recorded.",
+    "notarialBonds": "No Notarial Bonds recorded.",
+    "businessRescue": "No Business Rescue and Debt Review proceedings are being instituted against the business."
+  },
+  "tradeReferences": [
+    { "ref": 46, "dateChecked": "02/2025", "yearsTrading": 0, "aveMonthlyPurchases": null, "termsGiven": null, "termsTaken": null, "comments": "The supplier indicated that it is against Company Policy to provide trade references." },
+    { "ref": 45, "dateChecked": "02/2025", "yearsTrading": 0, "aveMonthlyPurchases": 700000, "termsGiven": "30", "termsTaken": "25", "comments": "Excellent account. The supplier stated that the credit limit is R 1 500 000.00. The Referee has not secured this account. The Referee has not insured this account. The supplier stated that the subject receives a 2.5% settlement discount." },
+    { "ref": 44, "dateChecked": "02/2025", "yearsTrading": 9, "aveMonthlyPurchases": 125000, "termsGiven": "30", "termsTaken": "30", "comments": "The account is paid on due date. The Referee has not secured this account. The Referee has not insured this account. This is a rental account." },
+    { "ref": 43, "dateChecked": "02/2025", "yearsTrading": 0, "aveMonthlyPurchases": 1500000, "termsGiven": "30/60", "termsTaken": "30/60", "comments": "The account is paid on due date. The Referee has insured this account. The supplier stated that the subject's monthly purchases are between R 1 000 000 and R 2 000 000. The credit limit is open." },
+    { "ref": 42, "dateChecked": "02/2025", "yearsTrading": 6, "aveMonthlyPurchases": 100000, "termsGiven": "30", "termsTaken": "25", "comments": "Excellent account. The supplier stated that the credit limit is R 250 000.00. The Referee has not secured this account. The Referee has not insured this account." },
+    { "ref": 41, "dateChecked": "02/2025", "yearsTrading": 5, "aveMonthlyPurchases": 800000, "termsGiven": "30", "termsTaken": "30", "comments": "The account is paid on due date. The supplier stated that the credit limit is R 2 500 000.00. The Referee has not secured this account. The Referee has not insured this account." },
+    { "ref": 40, "dateChecked": "11/2023", "yearsTrading": 0, "aveMonthlyPurchases": null, "termsGiven": "CASH", "termsTaken": "CASH", "comments": "The subject pays cash." },
+    { "ref": 33, "dateChecked": "11/2023", "yearsTrading": 0, "aveMonthlyPurchases": null, "termsGiven": null, "termsTaken": null, "comments": "The supplier indicated that it is against Company Policy to provide trade references." },
+    { "ref": 23, "dateChecked": "11/2023", "yearsTrading": 6, "aveMonthlyPurchases": 550000, "termsGiven": "30", "termsTaken": "30", "comments": "The account is paid on due date. The supplier stated that the credit limit is R 1 500 000.00. The Referee has not secured this account. The Referee has not insured this account." }
+  ],
+  "constantUpdateNote": "Should any information come to hand in the next 12 months that would change the status of the Company, you will be notified via our \"Constant Update Service\".",
+  "riskGrade": {
+    "score": 65,
+    "maxScore": 100,
+    "grade": "Maximum Risk",
+    "riskLevel": "Very Low Risk",
+    "failureOdds": "52.4:1",
+    "model": "Commercial Delphi 4 - Researched Non SME",
+    "modelDescription": "Commercial Delphi 4 is designed to predict the probability of business failure over a 12 month period using a combination of adverse, stability and where applicable relevant consumer information in the modelling process.",
+    "interpretation": "For every 1 bad company there are 52.4 good companies at this risk band.",
+    "poorRiskFactors": ["Lack of information", "New business", "Adverse information"]
+  },
+  "tradeReferenceSummary": {
+    "bands": [
+      { "size": "Minor", "rangeStart": 0, "rangeEnd": 100000, "references": 1, "yearsKnown": "6-6", "termsGiven": "30", "termsTaken": "25" },
+      { "size": "Small", "rangeStart": 100001, "rangeEnd": 250000, "references": 1, "yearsKnown": "9-9", "termsGiven": "30", "termsTaken": "30" },
+      { "size": "Medium", "rangeStart": 250001, "rangeEnd": 500000, "references": 0, "yearsKnown": "-", "termsGiven": "-", "termsTaken": "-" },
+      { "size": "Large", "rangeStart": 500001, "rangeEnd": 1000000, "references": 3, "yearsKnown": "5-6", "termsGiven": "30", "termsTaken": "28" },
+      { "size": "Strategic", "rangeStart": 1000001, "rangeEnd": null, "references": 1, "yearsKnown": "-", "termsGiven": "30", "termsTaken": "30" }
+    ],
+    "note": "The table above represents a consolidation of trade references on file for this company. The majority of this company's references are within the 500001 and above size, and are handled within the agreed upon terms. However it is also important to note that long standing accounts valued at 500001 and above exist and are handled within the agreed upon terms."
+  },
+  "kiss": {
+    "terminology": {
+      "period": "Year and Month - maximum displayed is 6 months",
+      "nbrSupOver": "Number of Suppliers in the Period with the subject as an active debtor",
+      "outstanding": "Total value the Suppliers were exposed to at the Period end",
+      "overdue": "Amount reported or calculated as Overdue",
+      "current": "Current month outstanding amount",
+      "agedAmounts": "Aged balances of all amounts \"30\" \"60\" \"90\" and \"120 & over\" days"
+    },
+    "data": [
+      { "period": "202412", "nbrSup": 1, "overduePercent": 90, "outstanding": 469, "current": null, "aged30": null, "aged60": null, "aged90": null, "aged120": null },
+      { "period": "202409", "nbrSup": 1, "overduePercent": 48, "outstanding": 542, "current": null, "aged30": null, "aged60": null, "aged90": null, "aged120": null }
+    ],
+    "debtDistributionCurrent": "100.00%"
+  },
+  "industryOverview": {
+    "sicCode": "88991",
+    "companiesInSic": 15,
+    "withKiss": 7,
+    "totalAccountsOnFile": 1,
+    "subjectExposurePercent": "686.53%",
+    "totalPurchasesIndustry": 616,
+    "subjectOutstanding": 96993,
+    "industryOutstanding": 34238,
+    "largestMonthOnFile": 96993,
+    "smallestMonthOnFile": 34238,
+    "creditLimits": {
+      "highest": { "amount": 1500000, "terms": "30 days" },
+      "lowest": { "amount": 100000, "terms": "25 days" },
+      "average": { "amount": 629167, "terms": "28 days" }
+    }
+  },
+  "overallPerformance": {
+    "period1": {
+      "label": "Last 6 months",
+      "largestMonth": { "size": 90469, "overduePercent": 0, "dtp": 79.1, "terms": 30 },
+      "smallestMonth": { "size": 48542, "overduePercent": 0, "dtp": 30.0, "terms": 30 },
+      "averageMonth": { "size": 69506, "overduePercent": 0, "dtp": 54.6, "terms": 30 }
+    },
+    "period2": {
+      "label": "Last 12 Months",
+      "largestMonth": { "size": 90469, "overduePercent": 0, "dtp": 79.1, "terms": 30 },
+      "smallestMonth": { "size": 34238, "overduePercent": 0, "dtp": 30.0, "terms": 30 },
+      "averageMonth": { "size": 53331, "overduePercent": 0, "dtp": 48.7, "terms": 30 }
+    },
+    "period3": {
+      "label": "Last 24 Months",
+      "largestMonth": { "size": 96993, "overduePercent": 0, "dtp": 30.0, "terms": 30 },
+      "smallestMonth": { "size": 34238, "overduePercent": 0, "dtp": 30.0, "terms": 30 },
+      "averageMonth": { "size": 60856, "overduePercent": 15.01, "dtp": 64.0, "terms": 30 }
+    }
+  },
+  "companyBenchmark": {
+    "sicCode": "88991",
+    "subjectKim": "118428",
+    "comparisons": [
+      { "metric": "Terms Taken", "industry": "32", "subject": "28" },
+      { "metric": "BEE Status", "industry": "53% Yes", "subject": "No" },
+      { "metric": "Principals", "industry": "3", "subject": "3" },
+      { "metric": "Employee/s", "industry": "165", "subject": "120" },
+      { "metric": "Fleet Size (Vehicles)", "industry": "3", "subject": "2" },
+      { "metric": "Import and/or Export", "industry": "0% Yes", "subject": "No" },
+      { "metric": "Has Judgements", "industry": "0% Yes", "subject": "No" },
+      { "metric": "Has RD Cheques", "industry": "0% Yes", "subject": "No" },
+      { "metric": "Has other Adverse", "industry": "0% Yes", "subject": "No" },
+      { "metric": "Low Risk", "industry": "20%", "subject": "No" },
+      { "metric": "Average Risk", "industry": "73%", "subject": "Yes" },
+      { "metric": "High - Very High Risk", "industry": "7%", "subject": "No" },
+      { "metric": "Rent or Lease", "industry": "73%", "subject": "Yes" },
+      { "metric": "Own", "industry": "27%", "subject": "No" },
+      { "metric": "Top 3 Provinces - Gauteng", "industry": "65%", "subject": "No" },
+      { "metric": "Top 3 Provinces - KwaZulu-Natal", "industry": "21%", "subject": "No" },
+      { "metric": "Top 3 Provinces - Western Cape", "industry": "14%", "subject": "Yes" }
+    ]
+  },
+  "summary": {
+    "paymentTrend": "This company takes, on average, the same amount of time as other companies within this industry to pay their debt. It can be noted from the payments trend analysis for the last 24 months that the company can be expected to stay within the offered terms of 30 days.",
+    "companyStructure": "This company is outside of the 53% of BEE for companies within this industry. Consideration should be given to this based on your company policies as BEE companies may be given preference to orders and/or tenders. It is also important to note that this company has a similar number of principals as other companies within this industry. However, pay particular attention to the percentages held by each principal, where applicable.",
+    "capacity": "Employees, size of fleet and branches determine capacity of a company. This company has less than the norm for companies within this industry. This company operates outside of the same province as 65% of the companies within this industry. The average account size this company requires is higher than the norm for companies in this industry.",
+    "historical": "Counting in favour of this company is that there is no adverse, judgements or refer to drawer cheques within the last 5 years, showing that this debt can be maintained if managed correctly.",
+    "score": "This company's score reflects that the risk incurred would be similar to dealing with another company within this industry as 73% score within the average risk category."
+  }
+}
