@@ -54,9 +54,9 @@ body.pdf-export .report.design-3 .d3-cover {
   background: var(--experian-blue-dark) !important;
 }
 
-/* PDF export - cover full bleed (no border), extend into top margin so page 1 has no margin */
+/* PDF export - cover full bleed, extend to cancel report padding */
 body.pdf-export .report.design-2 .d2-cover {
-  margin: -22mm -12mm -12mm -12mm !important;
+  margin: -12mm -12mm -12mm -12mm !important;
   min-height: 100vh;
   background-size: cover !important;
 }

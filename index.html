@@ -549,11 +549,11 @@
         { id: 'sec-financial-information', title: 'Financial Information' },
         { id: 'sec-contracts', title: 'Contracts' },
         { id: 'sec-court-records', title: 'Court Records' },
-        { id: 'sec-risk-grade', title: 'Risk Grade Analysis' },
         { id: 'sec-trade-references', title: 'Trade References' },
-        { id: 'sec-summary', title: 'Summary' },
         { id: 'sec-media-press', title: 'Media and Press Release' },
         { id: 'sec-photos', title: 'Photos of the Business' },
+        { id: 'sec-risk-grade', title: 'Risk Grade Analysis' },
+        { id: 'sec-summary', title: 'Summary' },
         { id: 'sec-financial-statement', title: 'Financial Statement' },
         { id: 'sec-swot', title: 'SWOT Analysis' },
         { id: 'sec-trade-reference-summary', title: 'Trade Reference Summary' },
@@ -738,6 +738,20 @@
               <h3 class="d2-card-title">Court Records</h3>
               <p class="d2-text">${d.courtRecords.judgements} ${d.courtRecords.notarialBonds} ${d.courtRecords.businessRescue}</p>
             </div>
+            <div class="d2-card" id="sec-trade-references">
+              <h3 class="d2-card-title">Trade References</h3>
+              ${d.tradeReferences.slice(0, 6).map(r => '<div class="d2-trade-ref"><strong>Ref ' + r.ref + '</strong> ' + r.dateChecked + ' | ' + (r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : '-') + ' | ' + (r.termsGiven || '-') + '/' + (r.termsTaken || '-') + '<br><span class="d2-muted">' + r.comments + '</span></div>').join('')}
+            </div>
+            <div class="d2-card" id="sec-media-press">
+              <h3 class="d2-card-title">Media and Press Release</h3>
+              ${(d.mediaAndPressReleases || []).map(item => '<div class="d2-media-item"><p class="d2-text"><strong>' + item.title + '</strong></p><p class="d2-text d2-muted">' + item.source + ' | ' + item.date + '</p><p class="d2-text">' + item.summary + '</p></div>').join('')}
+            </div>
+            <div class="d2-card" id="sec-photos">
+              <h3 class="d2-card-title">Photos of the Business</h3>
+              <div class="d2-photos-grid">
+                ${(d.photosOfBusiness || []).map(photo => '<div class="d2-photo-item"><img src="' + photo.url + '" alt="' + (photo.caption || '') + '" class="d2-photo-img"><p class="d2-text d2-muted">' + (photo.caption || '') + '</p></div>').join('')}
+              </div>
+            </div>
             <div class="d2-card" id="sec-risk-grade">
               <h3 class="d2-card-title">Risk Grade Analysis</h3>
               <div class="d2-risk-banner">
@@ -752,10 +766,6 @@
                 </div>
               </div>
             </div>
-            <div class="d2-card" id="sec-trade-references">
-              <h3 class="d2-card-title">Trade References</h3>
-              ${d.tradeReferences.slice(0, 6).map(r => '<div class="d2-trade-ref"><strong>Ref ' + r.ref + '</strong> ' + r.dateChecked + ' | ' + (r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : '-') + ' | ' + (r.termsGiven || '-') + '/' + (r.termsTaken || '-') + '<br><span class="d2-muted">' + r.comments + '</span></div>').join('')}
-            </div>
             <div class="d2-card" id="sec-summary">
               <h3 class="d2-card-title">Summary</h3>
               <p class="d2-text"><strong>Payment Trend:</strong> ${d.summary.paymentTrend}</p>
@@ -763,16 +773,6 @@
               <p class="d2-text"><strong>Capacity:</strong> ${d.summary.capacity}</p>
               <p class="d2-text"><strong>Historical:</strong> ${d.summary.historical}</p>
               <p class="d2-text"><strong>Score:</strong> ${d.summary.score}</p>
-            </div>
-            <div class="d2-card" id="sec-media-press">
-              <h3 class="d2-card-title">Media and Press Release</h3>
-              ${(d.mediaAndPressReleases || []).map(item => '<div class="d2-media-item"><p class="d2-text"><strong>' + item.title + '</strong></p><p class="d2-text d2-muted">' + item.source + ' | ' + item.date + '</p><p class="d2-text">' + item.summary + '</p></div>').join('')}
-            </div>
-            <div class="d2-card" id="sec-photos">
-              <h3 class="d2-card-title">Photos of the Business</h3>
-              <div class="d2-photos-grid">
-                ${(d.photosOfBusiness || []).map(photo => '<div class="d2-photo-item"><img src="' + photo.url + '" alt="' + (photo.caption || '') + '" class="d2-photo-img"><p class="d2-text d2-muted">' + (photo.caption || '') + '</p></div>').join('')}
-              </div>
             </div>
             <div class="d2-card" id="sec-financial-statement">
               <h3 class="d2-card-title">Financial Statement</h3>
