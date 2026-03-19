@@ -44,7 +44,7 @@ body.pdf-export .report {
   margin: 0 auto;
 }
 body.pdf-export .report.design-2 {
-  padding: 12mm;
+  padding: 0 12mm 12mm 12mm; /* no top padding – cover is full bleed */
 }
 body.pdf-export .report.design-3 {
   padding: 0;
@@ -54,11 +54,16 @@ body.pdf-export .report.design-3 .d3-cover {
   background: var(--experian-blue-dark) !important;
 }
 
-/* PDF export - cover full bleed, extend to cancel report padding */
+/* PDF export - cover full bleed, extend to cancel report padding (sides/bottom only) */
 body.pdf-export .report.design-2 .d2-cover {
-  margin: -12mm -12mm -12mm -12mm !important;
+  margin: 0 -12mm -12mm -12mm !important;
   min-height: 100vh;
   background-size: cover !important;
+}
+
+/* Top spacer – 10mm after cover (page 2+), appears right after .d2-cover */
+.page-top-spacer {
+  height: 10mm;
 }
 
 /* Header */

@@ -4,9 +4,14 @@ A proof-of-concept redesign of the Experian Gold business credit report with imp
 
 ## Quick Start
 
-1. Open `index.html` in your browser (double-click or drag into browser window).
-2. Click **Export to PDF** to open the print dialog.
-3. Choose "Save as PDF" as the destination and save.
+**Option A – Browser (html2pdf.js)**
+1. Run `npx serve` and open http://localhost:3000
+2. Select Design 2 (Dashboard), then click **Export to PDF**
+
+**Option B – Puppeteer (recommended for best PDF quality)**
+1. `npm install`
+2. `npm run generate-pdf`
+3. Opens a local server, generates `Gold-Report.pdf` with full-bleed cover and 10mm top margin on page 2+
 
 ## Project Structure
 
@@ -32,8 +37,8 @@ The report data is embedded in `index.html` for the proof of concept. The full s
 - **Layout**: Two-column address blocks, ratio cards, data tables, principal cards
 - **Print**: Optimized for A4 PDF export with proper page breaks
 
-## Future Enhancements
+## PDF Export
 
-- Load data from API or JSON file
-- Add more sections (KISS, Industry Overview, Overall Performance)
-- PDF generation via Puppeteer for server-side export
+- **Export to PDF** (browser): Uses html2pdf.js – client-side, works in browser
+- **Print to PDF** (browser): Uses `window.print()` – ToC links work in PDF
+- **Puppeteer** (`npm run generate-pdf`): Headless Chrome – best quality, supports `@page :first` for full-bleed cover

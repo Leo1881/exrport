@@ -1,245 +1,610 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gold Report</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-</head>
-<body>
-  <div class="report design-1" id="report"></div>
-  <div class="print-actions" style="position: fixed; top: 16px; right: 16px; z-index: 1000; display: flex; align-items: center; gap: 12px;">
-    <label for="design-select" style="font-size: 12px; font-weight: 600; color: #1a5f9e;">Design:</label>
-    <select id="design-select" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #1a5f9e; font-size: 12px; background: white; cursor: pointer;">
-      <option value="1">Design 1 – Cards</option>
-      <option value="2">Design 2 – Dashboard</option>
-      <option value="3">Design 3 – Professional Report</option>
-    </select>
-    <button id="export-pdf" style="background: #1a5f9e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">Export to PDF</button>
-    <button id="print-pdf" title="Uses browser print – ToC links work within the PDF" style="background: #5c4d9e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;">Print to PDF</button>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gold Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="report design-1" id="report"></div>
+    <div
+      class="print-actions"
+      style="
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      "
+    >
+      <label
+        for="design-select"
+        style="font-size: 12px; font-weight: 600; color: #1a5f9e"
+        >Design:</label
+      >
+      <select
+        id="design-select"
+        style="
+          padding: 8px 12px;
+          border-radius: 6px;
+          border: 1px solid #1a5f9e;
+          font-size: 12px;
+          background: white;
+          cursor: pointer;
+        "
+      >
+        <option value="1">Design 1 – Cards</option>
+        <option value="2">Design 2 – Dashboard</option>
+        <option value="3">Design 3 – Professional Report</option>
+      </select>
+      <button
+        id="export-pdf"
+        style="
+          background: #1a5f9e;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: 600;
+        "
+      >
+        Export to PDF
+      </button>
+      <button
+        id="print-pdf"
+        title="Uses browser print – ToC links work within the PDF"
+        style="
+          background: #5c4d9e;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: 600;
+        "
+      >
+        Print to PDF
+      </button>
+    </div>
 
-  <script>
-    // Report data - in production this would be loaded from an API or file
-    const REPORT_DATA = {
-      "meta": {
-        "reportType": "Gold Report",
-        "bureau": "EXPERIAN BUREAU",
-        "kimNumber": "118428",
-        "updatedOn": "2025/02/04",
-        "enquiryNo": "6746415"
-      },
-      "subject": {
-        "name": "NEW MARKET DECISION SYSTEMS (PTY) LTD",
-        "registrationNumber": "2014/987654/07",
-        "companyStatus": "Active",
-        "incorporatesOperationsOf": [
-          { "name": "WALTERS AND PARTNERS CREDIT BEREAU (PTY) LTD", "date": "2022/01/01" },
-          { "name": "UP AND AWAY DECISION SYSTEMS (PTY) LTD", "date": "2020/04/20", "type": "Name Change" },
-          { "name": "UP AND AWAY DECISION SYSTEMS CC (1995/987654/23)", "date": "2014/10/31", "type": "Conversion name" }
+    <script>
+      // Report data - in production this would be loaded from an API or file
+      const REPORT_DATA = {
+        meta: {
+          reportType: "Gold Report",
+          bureau: "EXPERIAN BUREAU",
+          kimNumber: "118428",
+          updatedOn: "2025/02/04",
+          enquiryNo: "6746415",
+        },
+        subject: {
+          name: "NEW MARKET DECISION SYSTEMS (PTY) LTD",
+          registrationNumber: "2014/987654/07",
+          companyStatus: "Active",
+          incorporatesOperationsOf: [
+            {
+              name: "WALTERS AND PARTNERS CREDIT BEREAU (PTY) LTD",
+              date: "2022/01/01",
+            },
+            {
+              name: "UP AND AWAY DECISION SYSTEMS (PTY) LTD",
+              date: "2020/04/20",
+              type: "Name Change",
+            },
+            {
+              name: "UP AND AWAY DECISION SYSTEMS CC (1995/987654/23)",
+              date: "2014/10/31",
+              type: "Conversion name",
+            },
+          ],
+          otherNames: "No Other Business Names.",
+        },
+        addressDetails: {
+          physical: {
+            unit: "Unit 8",
+            building: "Tiger Central Park",
+            street: "Jan Jordaan Avenue",
+            town: "Hazyview",
+            postalCode: "1242",
+            province: "Mpumalanga",
+            country: "South Africa",
+          },
+          postal: {
+            box: "P O Box 73616",
+            town: "Hazyview",
+            postalCode: "1242",
+            province: "Mpumalanga",
+            country: "South Africa",
+          },
+          additionalComments: [
+            "Alternative cellphone numbers: 0834679876, 0827465243",
+            "The following telephone number is incorrect: 013 487 2233",
+          ],
+        },
+        assessment: {
+          enquiry: { amount: 600000, terms: "30 Days", date: "2/3/2025" },
+          summary: [
+            "The subject is very well established.",
+            "No judgements in the name of the principal(s).",
+            "No judgements taken against the subject on the Experian database.",
+            "The account is paid on due date.",
+            "Refer to our additional comment.",
+          ],
+          recommendation:
+            "After perusal of the latest Annual Financial Statements as at 30 June 2024 and in view of the financial summary ratio analysis below, the subject is considered an acceptable risk for your enquiry amount and terms of R 600 000 over 30 days. A maximum credit limit of R 1 500 000 over 30 days is suggested. The account should be reviewed in 6 months.",
+          profitability:
+            "The financial performance is highlighted by the profitability ratios, with a gross profit margin of 39.38% and an operating profit margin of 9.65%.",
+          liquidity:
+            "The subject is considered to be very liquid with a satisfactory current ratio of 1.51 and an acid test ratio of 1.01 respectively.",
+          solvency:
+            "Lastly, the entity's financial position remains stable with an overall solvency ratio of 1.23.",
+          disclaimer:
+            "Please ensure the necessary KYC and Due Diligence is conducted prior to advancing credit or onboarding the customer.",
+        },
+        contactDetails: {
+          telephone: "013 476 9876",
+          fax: "013 476 9876",
+          cellphone: "0823653636",
+          email: "michellebb@nmdc.com",
+          web: "www.nmdc.com",
+          vatNumber: "4537289876",
+          vatNote:
+            "The VAT registration number is held in the name of Up and Away Decision Systems CC.",
+          auditor: "Steyn and Barnard Registered Auditors",
+        },
+        branches: [
+          {
+            name: "Cape Town Branch",
+            address: "1 Tullip Street",
+            town: "Table View",
+            postalCode: "7441",
+            province: "Western Cape",
+            country: "South Africa",
+          },
         ],
-        "otherNames": "No Other Business Names."
-      },
-      "addressDetails": {
-        "physical": { "unit": "Unit 8", "building": "Tiger Central Park", "street": "Jan Jordaan Avenue", "town": "Hazyview", "postalCode": "1242", "province": "Mpumalanga", "country": "South Africa" },
-        "postal": { "box": "P O Box 73616", "town": "Hazyview", "postalCode": "1242", "province": "Mpumalanga", "country": "South Africa" },
-        "additionalComments": ["Alternative cellphone numbers: 0834679876, 0827465243", "The following telephone number is incorrect: 013 487 2233"]
-      },
-      "assessment": {
-        "enquiry": { "amount": 600000, "terms": "30 Days", "date": "2/3/2025" },
-        "summary": ["The subject is very well established.", "No judgements in the name of the principal(s).", "No judgements taken against the subject on the Experian database.", "The account is paid on due date.", "Refer to our additional comment."],
-        "recommendation": "After perusal of the latest Annual Financial Statements as at 30 June 2024 and in view of the financial summary ratio analysis below, the subject is considered an acceptable risk for your enquiry amount and terms of R 600 000 over 30 days. A maximum credit limit of R 1 500 000 over 30 days is suggested. The account should be reviewed in 6 months.",
-        "profitability": "The financial performance is highlighted by the profitability ratios, with a gross profit margin of 39.38% and an operating profit margin of 9.65%.",
-        "liquidity": "The subject is considered to be very liquid with a satisfactory current ratio of 1.51 and an acid test ratio of 1.01 respectively.",
-        "solvency": "Lastly, the entity's financial position remains stable with an overall solvency ratio of 1.23.",
-        "disclaimer": "Please ensure the necessary KYC and Due Diligence is conducted prior to advancing credit or onboarding the customer."
-      },
-      "contactDetails": {
-        "telephone": "013 476 9876", "fax": "013 476 9876", "cellphone": "0823653636",
-        "email": "michellebb@nmdc.com", "web": "www.nmdc.com", "vatNumber": "4537289876",
-        "vatNote": "The VAT registration number is held in the name of Up and Away Decision Systems CC.",
-        "auditor": "Steyn and Barnard Registered Auditors"
-      },
-      "branches": [{ "name": "Cape Town Branch", "address": "1 Tullip Street", "town": "Table View", "postalCode": "7441", "province": "Western Cape", "country": "South Africa" }],
-      "history": {
-        "incorporatedOn": "2014/10/31",
-        "tradingCommencedOn": "1995/10/05",
-        "narrative": "Up and Away Decision Systems CC (1995/987654/23) was established in October 1995. In October 2014, the subject converted to a private company. In April 2020, the name was changed to the current name New Market Decision Systems (Pty) Ltd. In 2022, the assets and operations of Walters and Partners Credit Bureau (Pty) Ltd, were taken over by the subject. Walters and Partners Credit Bureau (Pty) Ltd is now dormant. The remaining 20% shares are held by Goldman Sachs Ltd."
-      },
-      "corporateStructure": {
-        "ultimateHoldingCompany": "No Ultimate Holding Company supplied or applicable.",
-        "holdingCompany": { "name": "Berkshire Hathaway", "country": "Denmark", "shareholding": 70 },
-        "associateCompany": { "name": "A and D International (Pty) Ltd", "share": 0 },
-        "subsidiaryCompany": { "name": "Power Freight (Pty) Ltd", "share": 0 }
-      },
-      "activePrincipals": [
-        { "name": "BURGER, MR", "initials": "MA", "idNumber": "5402125654080", "dateOfBirth": "1954/02/12", "idVerified": "No", "status": "ACTIVE", "appointmentDate": "1995/01/01", "areaOfResponsibility": "Chief Executive Officer", "sharePercent": 10, "courtRecords": "A consumer scan revealed no personal judgements.", "currentBusinessInterests": "No other business interests were identified.", "previousBusinessInterests": "No previous business interests were identified.", "propertiesAndBonds": "No properties and bonds are registered in the name of this principal." },
-        { "name": "DU PLOOY, MR", "initials": "DDP", "idNumber": "8109185737308", "dateOfBirth": "1981/09/18", "idVerified": "No", "status": "ACTIVE", "appointmentDate": "1995/01/01", "areaOfResponsibility": "Financial", "sharePercent": 0, "courtRecords": "A consumer scan could not be conducted.", "currentBusinessInterests": "No other business interests were identified.", "previousBusinessInterests": "No previous business interests were identified.", "propertiesAndBonds": "No properties and bonds are registered in the name of this principal." }
-      ],
-      "nonActivePrincipals": [{ "name": "SILBURN", "initials": "HC", "idNumber": "3012225096082", "dateOfBirth": "1930/12/22", "experianScore": 584, "appointmentDate": "1988/09/27", "status": "RESIGNED", "idVerified": "Yes" }],
-      "operations": {
-        "businessActivities": "The subject operates as a registered credit bureau. Services include bank notifications, data cleaning, research reports and other credit bureau activities.",
-        "majorClients": "Absa, Nedbank, Woolworths and the general public.",
-        "majorSicCode": { "code": "88991.01", "description": "Credit rating agency activities" },
-        "agenciesHeld": "No Agencies held.",
-        "importExport": "The subject neither imports nor exports.",
-        "fleet": { "total": 2, "cars": 1, "lightDeliveryVehicles": 1 }
-      },
-      "staff": { "total": 120, "salaried": 110, "salariedPaymentDay": "25th of each month", "wages": 10, "wagesPaymentDay": "every Friday", "casual": 1, "contract": 0 },
-      "bbbee": { "status": "Non-compliant Contributor" },
-      "premises": { "type": "Office", "location": "Office Complex", "ownedLeased": "Leased", "landlord": "Bruzer's Property CC", "occupationNote": "The subject has an ongoing lease agreement." },
-      "propertiesAndBonds": "No properties or bonds registered in the name of the subject.",
-      "financialInformation": {
-        "dateObtained": "2025/02/04",
-        "salesTermOption": "credit",
-        "salesTermPeriods": ["30 days", "60 days"],
-        "reportingCurrency": "South African Rand (ZAR)",
-        "financialStatements": "Annual Financial Statements were made available.",
-        "financialYearEnd": "June",
-        "previousTurnoverRange": "100 000 000 - 200 000 000",
-        "estimatedCash": 19402198,
-        "estimatedDebtors": 38375720,
-        "estimatedStock": 0,
-        "estimatedCreditors": 17749518,
-        "turnoverFY2024": 188196113,
-        "ratios": { "liquidity": { "currentRatio": "1.51:1", "acidTestRatio": "1.01:1" }, "profitability": { "grossProfitMargin": "39.38", "preTaxProfitMargin": "9.65" }, "solvency": { "solvencyRatio": "1.92" } }
-      },
-      "contracts": [
-        { "description": "A and B Projects", "value": 2000000, "currency": "ZAR", "startDate": "2025/02/01", "obtainedBy": "Referrals", "notes": "The contract is ongoing, however further details were not made available." },
-        { "description": "Codi Project", "value": 1500000, "currency": "ZAR", "startDate": "2025/02/01", "obtainedBy": "Word of Mouth", "notes": "The contract is ongoing, however further details were not made available." }
-      ],
-      "courtRecords": { "judgements": "No Judgements recorded.", "notarialBonds": "No Notarial Bonds recorded.", "businessRescue": "No Business Rescue and Debt Review proceedings are being instituted against the business." },
-      "tradeReferences": [
-        { "ref": 46, "dateChecked": "02/2025", "yearsTrading": 0, "aveMonthlyPurchases": null, "termsGiven": null, "termsTaken": null, "comments": "The supplier indicated that it is against Company Policy to provide trade references." },
-        { "ref": 45, "dateChecked": "02/2025", "yearsTrading": 0, "aveMonthlyPurchases": 700000, "termsGiven": "30", "termsTaken": "25", "comments": "Excellent account. The supplier stated that the credit limit is R 1 500 000.00. The Referee has not secured this account. The Referee has not insured this account. The supplier stated that the subject receives a 2.5% settlement discount." },
-        { "ref": 44, "dateChecked": "02/2025", "yearsTrading": 9, "aveMonthlyPurchases": 125000, "termsGiven": "30", "termsTaken": "30", "comments": "The account is paid on due date. The Referee has not secured this account. The Referee has not insured this account. This is a rental account." },
-        { "ref": 43, "dateChecked": "02/2025", "yearsTrading": 0, "aveMonthlyPurchases": 1500000, "termsGiven": "30/60", "termsTaken": "30/60", "comments": "The account is paid on due date. The Referee has insured this account. The supplier stated that the subject's monthly purchases are between R 1 000 000 and R 2 000 000. The credit limit is open." },
-        { "ref": 42, "dateChecked": "02/2025", "yearsTrading": 6, "aveMonthlyPurchases": 100000, "termsGiven": "30", "termsTaken": "25", "comments": "Excellent account. The supplier stated that the credit limit is R 250 000.00. The Referee has not secured this account. The Referee has not insured this account." },
-        { "ref": 41, "dateChecked": "02/2025", "yearsTrading": 5, "aveMonthlyPurchases": 800000, "termsGiven": "30", "termsTaken": "30", "comments": "The account is paid on due date. The supplier stated that the credit limit is R 2 500 000.00. The Referee has not secured this account. The Referee has not insured this account." }
-      ],
-      "constantUpdateNote": "Should any information come to hand in the next 12 months that would change the status of the Company, you will be notified via our \"Constant Update Service\".",
-      "riskGrade": { "score": 65, "maxScore": 100, "grade": "Maximum Risk", "riskLevel": "Very Low Risk", "failureOdds": "52.4:1", "model": "Commercial Delphi 4 - Researched Non SME", "interpretation": "For every 1 bad company there are 52.4 good companies at this risk band." },
-      "tradeReferenceSummary": {
-        "bands": [
-          { "size": "Minor", "rangeStart": 0, "rangeEnd": 100000, "references": 1, "yearsKnown": "6-6", "termsGiven": "30", "termsTaken": "25" },
-          { "size": "Small", "rangeStart": 100001, "rangeEnd": 250000, "references": 1, "yearsKnown": "9-9", "termsGiven": "30", "termsTaken": "30" },
-          { "size": "Medium", "rangeStart": 250001, "rangeEnd": 500000, "references": 0, "yearsKnown": "-", "termsGiven": "-", "termsTaken": "-" },
-          { "size": "Large", "rangeStart": 500001, "rangeEnd": 1000000, "references": 3, "yearsKnown": "5-6", "termsGiven": "30", "termsTaken": "28" },
-          { "size": "Strategic", "rangeStart": 1000001, "rangeEnd": null, "references": 1, "yearsKnown": "-", "termsGiven": "30", "termsTaken": "30" }
-        ]
-      },
-      "industryOverview": {
-        "sicCode": "88991",
-        "companiesInSic": 15,
-        "withKiss": 7,
-        "creditLimits": { "highest": { "amount": 1500000, "terms": "30 days" }, "lowest": { "amount": 100000, "terms": "25 days" }, "average": { "amount": 629167, "terms": "28 days" } }
-      },
-      "companyBenchmark": {
-        "comparisons": [
-          { "metric": "Terms Taken", "industry": "32", "subject": "28" },
-          { "metric": "BEE Status", "industry": "53% Yes", "subject": "No" },
-          { "metric": "Principals", "industry": "3", "subject": "3" },
-          { "metric": "Employee/s", "industry": "165", "subject": "120" },
-          { "metric": "Fleet Size (Vehicles)", "industry": "3", "subject": "2" },
-          { "metric": "Average Risk", "industry": "73%", "subject": "Yes" },
-          { "metric": "Rent or Lease", "industry": "73%", "subject": "Yes" }
-        ]
-      },
-      "summary": {
-        "paymentTrend": "This company takes, on average, the same amount of time as other companies within this industry to pay their debt. It can be noted from the payments trend analysis for the last 24 months that the company can be expected to stay within the offered terms of 30 days.",
-        "companyStructure": "This company is outside of the 53% of BEE for companies within this industry. Consideration should be given to this based on your company policies as BEE companies may be given preference to orders and/or tenders.",
-        "capacity": "Employees, size of fleet and branches determine capacity of a company. This company has less than the norm for companies within this industry.",
-        "historical": "Counting in favour of this company is that there is no adverse, judgements or refer to drawer cheques within the last 5 years, showing that this debt can be maintained if managed correctly.",
-        "score": "This company's score reflects that the risk incurred would be similar to dealing with another company within this industry as 73% score within the average risk category."
-      },
-      "mediaAndPressReleases": [
-        { "title": "Credit Bureau Expands Services to Regional Markets", "date": "2024/01/15", "source": "Business Day", "summary": "New Market Decision Systems announced expansion of credit bureau services to regional markets, including bank notifications and data cleaning capabilities." },
-        { "title": "FY2024 Annual Results Press Release", "date": "2024/03/01", "source": "Company Press Release", "summary": "Financial results for the year ended June 2024 highlight strong performance in credit rating agency activities, with turnover exceeding R188 million." },
-        { "title": "Industry Recognition for Credit Data Excellence", "date": "2023/11/20", "source": "Credit Industry News", "summary": "The subject received recognition for excellence in credit data management and compliance with industry standards." }
-      ],
-      "photosOfBusiness": [
-        { "url": "assets/photo-executive-office.png", "caption": "Executive office and meeting area" },
-        { "url": "assets/photo-financial-office.png", "caption": "Financial department workspace" },
-        { "url": "assets/photo-office-buildings.png", "caption": "Office location and urban environment" },
-        { "url": "assets/photo-city-square.png", "caption": "Corporate headquarters plaza" },
-        { "url": "assets/photo-team-collaboration.png", "caption": "Team collaboration and workspace" },
-        { "url": "assets/photo-open-office.png", "caption": "Open-plan office and breakout area" }
-      ],
-      "financialStatement": {
-        "period": "Year ended 30 June 2024",
-        "profitAndLoss": [
-          { "line": "Turnover", "amount": 188196113 },
-          { "line": "Cost of sales", "amount": -114100000 },
-          { "line": "Gross profit", "amount": 74096113 },
-          { "line": "Operating expenses", "amount": -55800000 },
-          { "line": "Operating profit", "amount": 18296113 },
-          { "line": "Finance cost", "amount": -1200000 },
-          { "line": "Profit before tax", "amount": 17096113 },
-          { "line": "Taxation", "amount": -4600000 },
-          { "line": "Profit after tax", "amount": 12496113 }
+        history: {
+          incorporatedOn: "2014/10/31",
+          tradingCommencedOn: "1995/10/05",
+          narrative:
+            "Up and Away Decision Systems CC (1995/987654/23) was established in October 1995. In October 2014, the subject converted to a private company. In April 2020, the name was changed to the current name New Market Decision Systems (Pty) Ltd. In 2022, the assets and operations of Walters and Partners Credit Bureau (Pty) Ltd, were taken over by the subject. Walters and Partners Credit Bureau (Pty) Ltd is now dormant. The remaining 20% shares are held by Goldman Sachs Ltd.",
+        },
+        corporateStructure: {
+          ultimateHoldingCompany:
+            "No Ultimate Holding Company supplied or applicable.",
+          holdingCompany: {
+            name: "Berkshire Hathaway",
+            country: "Denmark",
+            shareholding: 70,
+          },
+          associateCompany: {
+            name: "A and D International (Pty) Ltd",
+            share: 0,
+          },
+          subsidiaryCompany: { name: "Power Freight (Pty) Ltd", share: 0 },
+        },
+        activePrincipals: [
+          {
+            name: "BURGER, MR",
+            initials: "MA",
+            idNumber: "5402125654080",
+            dateOfBirth: "1954/02/12",
+            idVerified: "No",
+            status: "ACTIVE",
+            appointmentDate: "1995/01/01",
+            areaOfResponsibility: "Chief Executive Officer",
+            sharePercent: 10,
+            courtRecords: "A consumer scan revealed no personal judgements.",
+            currentBusinessInterests:
+              "No other business interests were identified.",
+            previousBusinessInterests:
+              "No previous business interests were identified.",
+            propertiesAndBonds:
+              "No properties and bonds are registered in the name of this principal.",
+          },
+          {
+            name: "DU PLOOY, MR",
+            initials: "DDP",
+            idNumber: "8109185737308",
+            dateOfBirth: "1981/09/18",
+            idVerified: "No",
+            status: "ACTIVE",
+            appointmentDate: "1995/01/01",
+            areaOfResponsibility: "Financial",
+            sharePercent: 0,
+            courtRecords: "A consumer scan could not be conducted.",
+            currentBusinessInterests:
+              "No other business interests were identified.",
+            previousBusinessInterests:
+              "No previous business interests were identified.",
+            propertiesAndBonds:
+              "No properties and bonds are registered in the name of this principal.",
+          },
         ],
-        "balanceSheet": [
-          { "line": "Total assets", "amount": 125000000 },
-          { "line": "Current assets", "amount": 95000000 },
-          { "line": "Non-current assets", "amount": 30000000 },
-          { "line": "Total liabilities", "amount": 65000000 },
-          { "line": "Current liabilities", "amount": 63000000 },
-          { "line": "Non-current liabilities", "amount": 2000000 },
-          { "line": "Shareholders' equity", "amount": 60000000 }
-        ]
-      },
-      "swotAnalysis": {
-        "strengths": [
-          "Well established with strong trading history since 1995",
-          "Strong financial position with satisfactory liquidity and solvency ratios",
-          "Account paid on due date with positive trade references",
-          "No judgements or adverse court records",
-          "Major clients include Absa, Nedbank and Woolworths"
+        nonActivePrincipals: [
+          {
+            name: "SILBURN",
+            initials: "HC",
+            idNumber: "3012225096082",
+            dateOfBirth: "1930/12/22",
+            experianScore: 584,
+            appointmentDate: "1988/09/27",
+            status: "RESIGNED",
+            idVerified: "Yes",
+          },
         ],
-        "weaknesses": [
-          "Non-compliant B-BBEE contributor",
-          "Below industry norm for employees and fleet size",
-          "Limited capacity compared to industry peers"
+        operations: {
+          businessActivities:
+            "The subject operates as a registered credit bureau. Services include bank notifications, data cleaning, research reports and other credit bureau activities.",
+          majorClients: "Absa, Nedbank, Woolworths and the general public.",
+          majorSicCode: {
+            code: "88991.01",
+            description: "Credit rating agency activities",
+          },
+          agenciesHeld: "No Agencies held.",
+          importExport: "The subject neither imports nor exports.",
+          fleet: { total: 2, cars: 1, lightDeliveryVehicles: 1 },
+        },
+        staff: {
+          total: 120,
+          salaried: 110,
+          salariedPaymentDay: "25th of each month",
+          wages: 10,
+          wagesPaymentDay: "every Friday",
+          casual: 1,
+          contract: 0,
+        },
+        bbbee: { status: "Non-compliant Contributor" },
+        premises: {
+          type: "Office",
+          location: "Office Complex",
+          ownedLeased: "Leased",
+          landlord: "Bruzer's Property CC",
+          occupationNote: "The subject has an ongoing lease agreement.",
+        },
+        propertiesAndBonds:
+          "No properties or bonds registered in the name of the subject.",
+        financialInformation: {
+          dateObtained: "2025/02/04",
+          salesTermOption: "credit",
+          salesTermPeriods: ["30 days", "60 days"],
+          reportingCurrency: "South African Rand (ZAR)",
+          financialStatements:
+            "Annual Financial Statements were made available.",
+          financialYearEnd: "June",
+          previousTurnoverRange: "100 000 000 - 200 000 000",
+          estimatedCash: 19402198,
+          estimatedDebtors: 38375720,
+          estimatedStock: 0,
+          estimatedCreditors: 17749518,
+          turnoverFY2024: 188196113,
+          ratios: {
+            liquidity: { currentRatio: "1.51:1", acidTestRatio: "1.01:1" },
+            profitability: {
+              grossProfitMargin: "39.38",
+              preTaxProfitMargin: "9.65",
+            },
+            solvency: { solvencyRatio: "1.92" },
+          },
+        },
+        contracts: [
+          {
+            description: "A and B Projects",
+            value: 2000000,
+            currency: "ZAR",
+            startDate: "2025/02/01",
+            obtainedBy: "Referrals",
+            notes:
+              "The contract is ongoing, however further details were not made available.",
+          },
+          {
+            description: "Codi Project",
+            value: 1500000,
+            currency: "ZAR",
+            startDate: "2025/02/01",
+            obtainedBy: "Word of Mouth",
+            notes:
+              "The contract is ongoing, however further details were not made available.",
+          },
         ],
-        "opportunities": [
-          "Expansion of credit bureau services to regional markets",
-          "Growth in demand for credit data and analytics",
-          "Potential to improve B-BBEE status"
+        courtRecords: {
+          judgements: "No Judgements recorded.",
+          notarialBonds: "No Notarial Bonds recorded.",
+          businessRescue:
+            "No Business Rescue and Debt Review proceedings are being instituted against the business.",
+        },
+        tradeReferences: [
+          {
+            ref: 46,
+            dateChecked: "02/2025",
+            yearsTrading: 0,
+            aveMonthlyPurchases: null,
+            termsGiven: null,
+            termsTaken: null,
+            comments:
+              "The supplier indicated that it is against Company Policy to provide trade references.",
+          },
+          {
+            ref: 45,
+            dateChecked: "02/2025",
+            yearsTrading: 0,
+            aveMonthlyPurchases: 700000,
+            termsGiven: "30",
+            termsTaken: "25",
+            comments:
+              "Excellent account. The supplier stated that the credit limit is R 1 500 000.00. The Referee has not secured this account. The Referee has not insured this account. The supplier stated that the subject receives a 2.5% settlement discount.",
+          },
+          {
+            ref: 44,
+            dateChecked: "02/2025",
+            yearsTrading: 9,
+            aveMonthlyPurchases: 125000,
+            termsGiven: "30",
+            termsTaken: "30",
+            comments:
+              "The account is paid on due date. The Referee has not secured this account. The Referee has not insured this account. This is a rental account.",
+          },
+          {
+            ref: 43,
+            dateChecked: "02/2025",
+            yearsTrading: 0,
+            aveMonthlyPurchases: 1500000,
+            termsGiven: "30/60",
+            termsTaken: "30/60",
+            comments:
+              "The account is paid on due date. The Referee has insured this account. The supplier stated that the subject's monthly purchases are between R 1 000 000 and R 2 000 000. The credit limit is open.",
+          },
+          {
+            ref: 42,
+            dateChecked: "02/2025",
+            yearsTrading: 6,
+            aveMonthlyPurchases: 100000,
+            termsGiven: "30",
+            termsTaken: "25",
+            comments:
+              "Excellent account. The supplier stated that the credit limit is R 250 000.00. The Referee has not secured this account. The Referee has not insured this account.",
+          },
+          {
+            ref: 41,
+            dateChecked: "02/2025",
+            yearsTrading: 5,
+            aveMonthlyPurchases: 800000,
+            termsGiven: "30",
+            termsTaken: "30",
+            comments:
+              "The account is paid on due date. The supplier stated that the credit limit is R 2 500 000.00. The Referee has not secured this account. The Referee has not insured this account.",
+          },
         ],
-        "threats": [
-          "Increased competition in credit rating sector",
-          "Regulatory changes affecting credit bureau operations",
-          "Economic conditions may impact client payment behaviour"
-        ]
+        constantUpdateNote:
+          'Should any information come to hand in the next 12 months that would change the status of the Company, you will be notified via our "Constant Update Service".',
+        riskGrade: {
+          score: 65,
+          maxScore: 100,
+          grade: "Maximum Risk",
+          riskLevel: "Very Low Risk",
+          failureOdds: "52.4:1",
+          model: "Commercial Delphi 4 - Researched Non SME",
+          interpretation:
+            "For every 1 bad company there are 52.4 good companies at this risk band.",
+        },
+        tradeReferenceSummary: {
+          bands: [
+            {
+              size: "Minor",
+              rangeStart: 0,
+              rangeEnd: 100000,
+              references: 1,
+              yearsKnown: "6-6",
+              termsGiven: "30",
+              termsTaken: "25",
+            },
+            {
+              size: "Small",
+              rangeStart: 100001,
+              rangeEnd: 250000,
+              references: 1,
+              yearsKnown: "9-9",
+              termsGiven: "30",
+              termsTaken: "30",
+            },
+            {
+              size: "Medium",
+              rangeStart: 250001,
+              rangeEnd: 500000,
+              references: 0,
+              yearsKnown: "-",
+              termsGiven: "-",
+              termsTaken: "-",
+            },
+            {
+              size: "Large",
+              rangeStart: 500001,
+              rangeEnd: 1000000,
+              references: 3,
+              yearsKnown: "5-6",
+              termsGiven: "30",
+              termsTaken: "28",
+            },
+            {
+              size: "Strategic",
+              rangeStart: 1000001,
+              rangeEnd: null,
+              references: 1,
+              yearsKnown: "-",
+              termsGiven: "30",
+              termsTaken: "30",
+            },
+          ],
+        },
+        industryOverview: {
+          sicCode: "88991",
+          companiesInSic: 15,
+          withKiss: 7,
+          creditLimits: {
+            highest: { amount: 1500000, terms: "30 days" },
+            lowest: { amount: 100000, terms: "25 days" },
+            average: { amount: 629167, terms: "28 days" },
+          },
+        },
+        companyBenchmark: {
+          comparisons: [
+            { metric: "Terms Taken", industry: "32", subject: "28" },
+            { metric: "BEE Status", industry: "53% Yes", subject: "No" },
+            { metric: "Principals", industry: "3", subject: "3" },
+            { metric: "Employee/s", industry: "165", subject: "120" },
+            { metric: "Fleet Size (Vehicles)", industry: "3", subject: "2" },
+            { metric: "Average Risk", industry: "73%", subject: "Yes" },
+            { metric: "Rent or Lease", industry: "73%", subject: "Yes" },
+          ],
+        },
+        summary: {
+          paymentTrend:
+            "This company takes, on average, the same amount of time as other companies within this industry to pay their debt. It can be noted from the payments trend analysis for the last 24 months that the company can be expected to stay within the offered terms of 30 days.",
+          companyStructure:
+            "This company is outside of the 53% of BEE for companies within this industry. Consideration should be given to this based on your company policies as BEE companies may be given preference to orders and/or tenders.",
+          capacity:
+            "Employees, size of fleet and branches determine capacity of a company. This company has less than the norm for companies within this industry.",
+          historical:
+            "Counting in favour of this company is that there is no adverse, judgements or refer to drawer cheques within the last 5 years, showing that this debt can be maintained if managed correctly.",
+          score:
+            "This company's score reflects that the risk incurred would be similar to dealing with another company within this industry as 73% score within the average risk category.",
+        },
+        mediaAndPressReleases: [
+          {
+            title: "Credit Bureau Expands Services to Regional Markets",
+            date: "2024/01/15",
+            source: "Business Day",
+            summary:
+              "New Market Decision Systems announced expansion of credit bureau services to regional markets, including bank notifications and data cleaning capabilities.",
+          },
+          {
+            title: "FY2024 Annual Results Press Release",
+            date: "2024/03/01",
+            source: "Company Press Release",
+            summary:
+              "Financial results for the year ended June 2024 highlight strong performance in credit rating agency activities, with turnover exceeding R188 million.",
+          },
+          {
+            title: "Industry Recognition for Credit Data Excellence",
+            date: "2023/11/20",
+            source: "Credit Industry News",
+            summary:
+              "The subject received recognition for excellence in credit data management and compliance with industry standards.",
+          },
+        ],
+        photosOfBusiness: [
+          {
+            url: "assets/photo-executive-office.png",
+            caption: "Executive office and meeting area",
+          },
+          {
+            url: "assets/photo-financial-office.png",
+            caption: "Financial department workspace",
+          },
+          {
+            url: "assets/photo-office-buildings.png",
+            caption: "Office location and urban environment",
+          },
+          {
+            url: "assets/photo-city-square.png",
+            caption: "Corporate headquarters plaza",
+          },
+          {
+            url: "assets/photo-team-collaboration.png",
+            caption: "Team collaboration and workspace",
+          },
+          {
+            url: "assets/photo-open-office.png",
+            caption: "Open-plan office and breakout area",
+          },
+        ],
+        financialStatement: {
+          period: "Year ended 30 June 2024",
+          profitAndLoss: [
+            { line: "Turnover", amount: 188196113 },
+            { line: "Cost of sales", amount: -114100000 },
+            { line: "Gross profit", amount: 74096113 },
+            { line: "Operating expenses", amount: -55800000 },
+            { line: "Operating profit", amount: 18296113 },
+            { line: "Finance cost", amount: -1200000 },
+            { line: "Profit before tax", amount: 17096113 },
+            { line: "Taxation", amount: -4600000 },
+            { line: "Profit after tax", amount: 12496113 },
+          ],
+          balanceSheet: [
+            { line: "Total assets", amount: 125000000 },
+            { line: "Current assets", amount: 95000000 },
+            { line: "Non-current assets", amount: 30000000 },
+            { line: "Total liabilities", amount: 65000000 },
+            { line: "Current liabilities", amount: 63000000 },
+            { line: "Non-current liabilities", amount: 2000000 },
+            { line: "Shareholders' equity", amount: 60000000 },
+          ],
+        },
+        swotAnalysis: {
+          strengths: [
+            "Well established with strong trading history since 1995",
+            "Strong financial position with satisfactory liquidity and solvency ratios",
+            "Account paid on due date with positive trade references",
+            "No judgements or adverse court records",
+            "Major clients include Absa, Nedbank and Woolworths",
+          ],
+          weaknesses: [
+            "Non-compliant B-BBEE contributor",
+            "Below industry norm for employees and fleet size",
+            "Limited capacity compared to industry peers",
+          ],
+          opportunities: [
+            "Expansion of credit bureau services to regional markets",
+            "Growth in demand for credit data and analytics",
+            "Potential to improve B-BBEE status",
+          ],
+          threats: [
+            "Increased competition in credit rating sector",
+            "Regulatory changes affecting credit bureau operations",
+            "Economic conditions may impact client payment behaviour",
+          ],
+        },
+      };
+
+      function formatCurrency(num) {
+        if (num == null) return "-";
+        var formatted =
+          "R " +
+          Math.abs(num).toLocaleString("en-ZA", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          });
+        return num < 0 ? "(" + formatted + ")" : formatted;
       }
-    };
 
-    function formatCurrency(num) {
-      if (num == null) return '-';
-      var formatted = 'R ' + Math.abs(num).toLocaleString('en-ZA', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-      return num < 0 ? '(' + formatted + ')' : formatted;
-    }
+      function renderReport(designId) {
+        designId =
+          designId || document.getElementById("design-select").value || "1";
+        const d = REPORT_DATA;
+        const report = document.getElementById("report");
+        report.className = "report design-" + designId;
 
-    function renderReport(designId) {
-      designId = designId || document.getElementById('design-select').value || '1';
-      const d = REPORT_DATA;
-      const report = document.getElementById('report');
-      report.className = 'report design-' + designId;
+        if (designId === "2") {
+          report.innerHTML = renderDesign2(d);
+          return;
+        }
+        if (designId === "3") {
+          report.innerHTML = renderDesign3(d);
+          return;
+        }
 
-      if (designId === '2') {
-        report.innerHTML = renderDesign2(d);
-        return;
-      }
-      if (designId === '3') {
-        report.innerHTML = renderDesign3(d);
-        return;
-      }
-
-      report.innerHTML = `
+        report.innerHTML = `
         <header class="report-header">
           <img src="assets/experian-logo.png" alt="Experian" class="logo">
           <div class="report-meta">
@@ -259,12 +624,16 @@
             <span class="key">Other Names</span>
             <span class="value">${d.subject.otherNames}</span>
           </div>
-          ${d.subject.incorporatesOperationsOf.map(op => `
+          ${d.subject.incorporatesOperationsOf
+            .map(
+              (op) => `
             <div class="key-value-grid">
-              <span class="key">${op.type || 'Incorporates'}</span>
+              <span class="key">${op.type || "Incorporates"}</span>
               <span class="value">${op.name} (${op.date})</span>
             </div>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </section>
 
         <section class="section">
@@ -279,14 +648,14 @@
               <div class="content">${d.addressDetails.postal.box}<br>${d.addressDetails.postal.town} ${d.addressDetails.postal.postalCode}<br>${d.addressDetails.postal.province}<br>${d.addressDetails.postal.country}</div>
             </div>
           </div>
-          ${d.addressDetails.additionalComments.length ? `<div class="mt-16 text-muted">${d.addressDetails.additionalComments.join('<br>')}</div>` : ''}
+          ${d.addressDetails.additionalComments.length ? `<div class="mt-16 text-muted">${d.addressDetails.additionalComments.join("<br>")}</div>` : ""}
         </section>
 
         <section class="section">
           <h2 class="section-title">Assessment</h2>
           <div class="assessment-box">
             <div class="enquiry-highlight">Your enquiry: ${formatCurrency(d.assessment.enquiry.amount)} | Terms: ${d.assessment.enquiry.terms} | Date: ${d.assessment.enquiry.date}</div>
-            <ul>${d.assessment.summary.map(s => `<li>${s}</li>`).join('')}</ul>
+            <ul>${d.assessment.summary.map((s) => `<li>${s}</li>`).join("")}</ul>
             <p>${d.assessment.recommendation}</p>
             <p><strong>Profitability:</strong> ${d.assessment.profitability}</p>
             <p><strong>Liquidity:</strong> ${d.assessment.liquidity}</p>
@@ -311,12 +680,16 @@
 
         <section class="section">
           <h2 class="section-title">Branches</h2>
-          ${d.branches.map(b => `
+          ${d.branches
+            .map(
+              (b) => `
             <div class="address-block">
               <div class="label">${b.name}</div>
               <div class="content">${b.address}, ${b.town} ${b.postalCode}, ${b.province}, ${b.country}</div>
             </div>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </section>
 
         <section class="section">
@@ -340,7 +713,9 @@
 
         <section class="section">
           <h2 class="section-title">Active Principals</h2>
-          ${d.activePrincipals.map(p => `
+          ${d.activePrincipals
+            .map(
+              (p) => `
             <div class="principal-card">
               <div class="principal-name">${p.name} (${p.initials})</div>
               <div class="principal-details">
@@ -354,7 +729,9 @@
               <p class="text-muted">${p.currentBusinessInterests}</p>
               <p class="text-muted">${p.propertiesAndBonds}</p>
             </div>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </section>
 
         <section class="section">
@@ -362,12 +739,16 @@
           <table class="data-table">
             <thead><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointment Date</th></tr></thead>
             <tbody>
-              ${d.nonActivePrincipals.map(p => `
+              ${d.nonActivePrincipals
+                .map(
+                  (p) => `
                 <tr>
                   <td>${p.name}</td><td>${p.initials}</td><td>${p.idNumber}</td>
                   <td>${p.dateOfBirth}</td><td>${p.status}</td><td>${p.appointmentDate}</td>
                 </tr>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </tbody>
           </table>
         </section>
@@ -439,7 +820,9 @@
 
         <section class="section">
           <h2 class="section-title">Contracts</h2>
-          ${d.contracts.map(c => `
+          ${d.contracts
+            .map(
+              (c) => `
             <div class="contract-card">
               <div>
                 <span class="contract-name">${c.description}</span>
@@ -448,7 +831,9 @@
               <div class="contract-value">${formatCurrency(c.value)} ${c.currency}</div>
             </div>
             <p class="text-muted mb-0">${c.notes}</p>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </section>
 
         <section class="section">
@@ -475,13 +860,18 @@
 
         <section class="section">
           <h2 class="section-title">Payment Analysis - Trade References</h2>
-          ${d.tradeReferences.slice(0, 6).map(r => `
+          ${d.tradeReferences
+            .slice(0, 6)
+            .map(
+              (r) => `
             <div class="trade-ref-row">
               <span class="ref-number">Ref ${r.ref}</span>
-              <span>${r.dateChecked}</span> | ${r.yearsTrading} yrs | ${r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : '-'} | ${r.termsGiven || '-'} / ${r.termsTaken || '-'}
+              <span>${r.dateChecked}</span> | ${r.yearsTrading} yrs | ${r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : "-"} | ${r.termsGiven || "-"} / ${r.termsTaken || "-"}
               <div class="ref-comments">${r.comments}</div>
             </div>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </section>
 
         <section class="section">
@@ -489,16 +879,20 @@
           <table class="data-table">
             <thead><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr></thead>
             <tbody>
-              ${d.tradeReferenceSummary.bands.map(b => `
+              ${d.tradeReferenceSummary.bands
+                .map(
+                  (b) => `
                 <tr>
                   <td>${b.size}</td>
-                  <td>R ${b.rangeStart?.toLocaleString()} - ${b.rangeEnd ? 'R ' + b.rangeEnd.toLocaleString() : 'above'}</td>
+                  <td>R ${b.rangeStart?.toLocaleString()} - ${b.rangeEnd ? "R " + b.rangeEnd.toLocaleString() : "above"}</td>
                   <td>${b.references}</td>
                   <td>${b.yearsKnown}</td>
                   <td>${b.termsGiven}</td>
                   <td>${b.termsTaken}</td>
                 </tr>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </tbody>
           </table>
         </section>
@@ -509,9 +903,13 @@
           <table class="data-table">
             <thead><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr></thead>
             <tbody>
-              ${d.companyBenchmark.comparisons.map(c => `
+              ${d.companyBenchmark.comparisons
+                .map(
+                  (c) => `
                 <tr><td>${c.metric}</td><td>${c.industry}</td><td>${c.subject}</td></tr>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </tbody>
           </table>
         </section>
@@ -530,36 +928,39 @@
           <p>Experian Confidential</p>
         </footer>
       `;
-    }
+      }
 
-    function renderDesign2(d) {
-      const tocSections = [
-        { id: 'sec-company-overview', title: 'Company Overview' },
-        { id: 'sec-assessment', title: 'Assessment' },
-        { id: 'sec-address-details', title: 'Address Details' },
-        { id: 'sec-contact-details', title: 'Contact Details' },
-        { id: 'sec-branches', title: 'Branches' },
-        { id: 'sec-history', title: 'History' },
-        { id: 'sec-corporate-structure', title: 'Corporate Structure' },
-        { id: 'sec-active-principals', title: 'Active Principals' },
-        { id: 'sec-non-active-principals', title: 'Non-Active Principals' },
-        { id: 'sec-operations', title: 'Operations' },
-        { id: 'sec-staff-bbee', title: 'Staff & B-BBEE' },
-        { id: 'sec-premises', title: 'Premises' },
-        { id: 'sec-financial-information', title: 'Financial Information' },
-        { id: 'sec-contracts', title: 'Contracts' },
-        { id: 'sec-court-records', title: 'Court Records' },
-        { id: 'sec-trade-references', title: 'Trade References' },
-        { id: 'sec-media-press', title: 'Media and Press Release' },
-        { id: 'sec-photos', title: 'Photos of the Business' },
-        { id: 'sec-risk-grade', title: 'Risk Grade Analysis' },
-        { id: 'sec-summary', title: 'Summary' },
-        { id: 'sec-financial-statement', title: 'Financial Statement' },
-        { id: 'sec-swot', title: 'SWOT Analysis' },
-        { id: 'sec-trade-reference-summary', title: 'Trade Reference Summary' },
-        { id: 'sec-company-benchmark', title: 'Company Benchmark' }
-      ];
-      return `
+      function renderDesign2(d) {
+        const tocSections = [
+          { id: "sec-company-overview", title: "Company Overview" },
+          { id: "sec-assessment", title: "Assessment" },
+          { id: "sec-address-details", title: "Address Details" },
+          { id: "sec-contact-details", title: "Contact Details" },
+          { id: "sec-branches", title: "Branches" },
+          { id: "sec-history", title: "History" },
+          { id: "sec-corporate-structure", title: "Corporate Structure" },
+          { id: "sec-active-principals", title: "Active Principals" },
+          { id: "sec-non-active-principals", title: "Non-Active Principals" },
+          { id: "sec-operations", title: "Operations" },
+          { id: "sec-staff-bbee", title: "Staff & B-BBEE" },
+          { id: "sec-premises", title: "Premises" },
+          { id: "sec-financial-information", title: "Financial Information" },
+          { id: "sec-contracts", title: "Contracts" },
+          { id: "sec-court-records", title: "Court Records" },
+          { id: "sec-trade-references", title: "Trade References" },
+          { id: "sec-media-press", title: "Media and Press Release" },
+          { id: "sec-photos", title: "Photos of the Business" },
+          { id: "sec-risk-grade", title: "Risk Grade Analysis" },
+          { id: "sec-summary", title: "Summary" },
+          { id: "sec-financial-statement", title: "Financial Statement" },
+          { id: "sec-swot", title: "SWOT Analysis" },
+          {
+            id: "sec-trade-reference-summary",
+            title: "Trade Reference Summary",
+          },
+          { id: "sec-company-benchmark", title: "Company Benchmark" },
+        ];
+        return `
         <div class="d2-cover">
           <img src="assets/experian-logo.png" alt="Experian" class="d2-cover-logo">
           <div class="d2-cover-bottom">
@@ -571,10 +972,11 @@
             </div>
           </div>
         </div>
+        <div class="page-top-spacer"></div>
         <div class="d2-card d2-toc-card">
           <h3 class="d2-card-title">Table of Contents</h3>
           <nav class="d2-toc-nav">
-            ${tocSections.map((s, i) => '<a href="#' + s.id + '" class="d2-toc-link">' + (i + 1) + '. ' + s.title + '</a>').join('')}
+            ${tocSections.map((s, i) => '<a href="#' + s.id + '" class="d2-toc-link">' + (i + 1) + ". " + s.title + "</a>").join("")}
           </nav>
         </div>
         <div class="d2-welcome">
@@ -651,12 +1053,12 @@
               <h2 class="d2-company">${d.subject.name}</h2>
               <p class="d2-status-badge">${d.subject.companyStatus}</p>
               <p class="d2-text">Reg: ${d.subject.registrationNumber} | ${d.subject.otherNames}</p>
-              ${d.subject.incorporatesOperationsOf.map(op => '<p class="d2-text d2-muted">' + (op.type || 'Incorporates') + ': ' + op.name + ' (' + op.date + ')</p>').join('')}
+              ${d.subject.incorporatesOperationsOf.map((op) => '<p class="d2-text d2-muted">' + (op.type || "Incorporates") + ": " + op.name + " (" + op.date + ")</p>").join("")}
             </div>
             <div class="d2-card" id="sec-assessment">
               <h3 class="d2-card-title">Assessment</h3>
               <p class="d2-highlight">${formatCurrency(d.assessment.enquiry.amount)} | ${d.assessment.enquiry.terms} | ${d.assessment.enquiry.date}</p>
-              <ul class="d2-list">${d.assessment.summary.map(s => '<li>' + s + '</li>').join('')}</ul>
+              <ul class="d2-list">${d.assessment.summary.map((s) => "<li>" + s + "</li>").join("")}</ul>
               <p class="d2-text">${d.assessment.recommendation}</p>
               <p class="d2-text"><strong>Profitability:</strong> ${d.assessment.profitability}</p>
               <p class="d2-text"><strong>Liquidity:</strong> ${d.assessment.liquidity}</p>
@@ -667,7 +1069,7 @@
               <h3 class="d2-card-title">Address Details</h3>
               <p class="d2-text"><strong>Physical:</strong> ${d.addressDetails.physical.unit}, ${d.addressDetails.physical.building}, ${d.addressDetails.physical.street}, ${d.addressDetails.physical.town} ${d.addressDetails.physical.postalCode}, ${d.addressDetails.physical.province}, ${d.addressDetails.physical.country}</p>
               <p class="d2-text"><strong>Postal:</strong> ${d.addressDetails.postal.box}, ${d.addressDetails.postal.town} ${d.addressDetails.postal.postalCode}, ${d.addressDetails.postal.province}, ${d.addressDetails.postal.country}</p>
-              ${d.addressDetails.additionalComments.length ? '<p class="d2-text d2-muted">' + d.addressDetails.additionalComments.join('; ') + '</p>' : ''}
+              ${d.addressDetails.additionalComments.length ? '<p class="d2-text d2-muted">' + d.addressDetails.additionalComments.join("; ") + "</p>" : ""}
             </div>
             <div class="d2-card" id="sec-contact-details">
               <h3 class="d2-card-title">Contact Details</h3>
@@ -678,7 +1080,7 @@
             </div>
             <div class="d2-card" id="sec-branches">
               <h3 class="d2-card-title">Branches</h3>
-              ${d.branches.map(b => '<p class="d2-text"><strong>' + b.name + ':</strong> ' + b.address + ', ' + b.town + ' ' + b.postalCode + ', ' + b.province + ', ' + b.country + '</p>').join('')}
+              ${d.branches.map((b) => '<p class="d2-text"><strong>' + b.name + ":</strong> " + b.address + ", " + b.town + " " + b.postalCode + ", " + b.province + ", " + b.country + "</p>").join("")}
             </div>
             <div class="d2-card" id="sec-history">
               <h3 class="d2-card-title">History</h3>
@@ -693,11 +1095,11 @@
             </div>
             <div class="d2-card" id="sec-active-principals">
               <h3 class="d2-card-title">Active Principals</h3>
-              ${d.activePrincipals.map(p => '<div class="d2-principal"><strong>' + p.name + ' (' + p.initials + ')</strong> – ' + p.areaOfResponsibility + ' (' + p.sharePercent + '%)<br><span class="d2-muted">ID: ' + p.idNumber + ' | DOB: ' + p.dateOfBirth + ' | Appointed: ' + p.appointmentDate + ' | ' + p.courtRecords + '</span><br><span class="d2-muted">' + p.currentBusinessInterests + '</span><br><span class="d2-muted">' + p.propertiesAndBonds + '</span></div>').join('')}
+              ${d.activePrincipals.map((p) => '<div class="d2-principal"><strong>' + p.name + " (" + p.initials + ")</strong> – " + p.areaOfResponsibility + " (" + p.sharePercent + '%)<br><span class="d2-muted">ID: ' + p.idNumber + " | DOB: " + p.dateOfBirth + " | Appointed: " + p.appointmentDate + " | " + p.courtRecords + '</span><br><span class="d2-muted">' + p.currentBusinessInterests + '</span><br><span class="d2-muted">' + p.propertiesAndBonds + "</span></div>").join("")}
             </div>
             <div class="d2-card" id="sec-non-active-principals">
               <h3 class="d2-card-title">Non-Active Principals</h3>
-              <table class="d2-table"><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointment Date</th></tr>${d.nonActivePrincipals.map(p => '<tr><td>' + p.name + '</td><td>' + p.initials + '</td><td>' + p.idNumber + '</td><td>' + p.dateOfBirth + '</td><td>' + p.status + '</td><td>' + p.appointmentDate + '</td></tr>').join('')}</table>
+              <table class="d2-table"><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointment Date</th></tr>${d.nonActivePrincipals.map((p) => "<tr><td>" + p.name + "</td><td>" + p.initials + "</td><td>" + p.idNumber + "</td><td>" + p.dateOfBirth + "</td><td>" + p.status + "</td><td>" + p.appointmentDate + "</td></tr>").join("")}</table>
             </div>
             <div class="d2-card" id="sec-operations">
               <h3 class="d2-card-title">Operations</h3>
@@ -732,7 +1134,7 @@
             </div>
             <div class="d2-card" id="sec-contracts">
               <h3 class="d2-card-title">Contracts</h3>
-              ${d.contracts.map(c => '<p class="d2-text"><strong>' + c.description + '</strong> – ' + formatCurrency(c.value) + ' (' + c.obtainedBy + ')<br><span class="d2-muted">' + c.notes + '</span></p>').join('')}
+              ${d.contracts.map((c) => '<p class="d2-text"><strong>' + c.description + "</strong> – " + formatCurrency(c.value) + " (" + c.obtainedBy + ')<br><span class="d2-muted">' + c.notes + "</span></p>").join("")}
             </div>
             <div class="d2-card" id="sec-court-records">
               <h3 class="d2-card-title">Court Records</h3>
@@ -740,16 +1142,36 @@
             </div>
             <div class="d2-card" id="sec-trade-references">
               <h3 class="d2-card-title">Trade References</h3>
-              ${d.tradeReferences.slice(0, 6).map(r => '<div class="d2-trade-ref"><strong>Ref ' + r.ref + '</strong> ' + r.dateChecked + ' | ' + (r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : '-') + ' | ' + (r.termsGiven || '-') + '/' + (r.termsTaken || '-') + '<br><span class="d2-muted">' + r.comments + '</span></div>').join('')}
+              ${d.tradeReferences
+                .slice(0, 6)
+                .map(
+                  (r) =>
+                    '<div class="d2-trade-ref"><strong>Ref ' +
+                    r.ref +
+                    "</strong> " +
+                    r.dateChecked +
+                    " | " +
+                    (r.aveMonthlyPurchases
+                      ? formatCurrency(r.aveMonthlyPurchases)
+                      : "-") +
+                    " | " +
+                    (r.termsGiven || "-") +
+                    "/" +
+                    (r.termsTaken || "-") +
+                    '<br><span class="d2-muted">' +
+                    r.comments +
+                    "</span></div>",
+                )
+                .join("")}
             </div>
             <div class="d2-card" id="sec-media-press">
               <h3 class="d2-card-title">Media and Press Release</h3>
-              ${(d.mediaAndPressReleases || []).map(item => '<div class="d2-media-item"><p class="d2-text"><strong>' + item.title + '</strong></p><p class="d2-text d2-muted">' + item.source + ' | ' + item.date + '</p><p class="d2-text">' + item.summary + '</p></div>').join('')}
+              ${(d.mediaAndPressReleases || []).map((item) => '<div class="d2-media-item"><p class="d2-text"><strong>' + item.title + '</strong></p><p class="d2-text d2-muted">' + item.source + " | " + item.date + '</p><p class="d2-text">' + item.summary + "</p></div>").join("")}
             </div>
             <div class="d2-card" id="sec-photos">
               <h3 class="d2-card-title">Photos of the Business</h3>
               <div class="d2-photos-grid">
-                ${(d.photosOfBusiness || []).map(photo => '<div class="d2-photo-item"><img src="' + photo.url + '" alt="' + (photo.caption || '') + '" class="d2-photo-img"><p class="d2-text d2-muted">' + (photo.caption || '') + '</p></div>').join('')}
+                ${(d.photosOfBusiness || []).map((photo) => '<div class="d2-photo-item"><img src="' + photo.url + '" alt="' + (photo.caption || "") + '" class="d2-photo-img"><p class="d2-text d2-muted">' + (photo.caption || "") + "</p></div>").join("")}
               </div>
             </div>
             <div class="d2-card" id="sec-risk-grade">
@@ -776,17 +1198,17 @@
             </div>
             <div class="d2-card" id="sec-financial-statement">
               <h3 class="d2-card-title">Financial Statement</h3>
-              <p class="d2-text d2-muted">${(d.financialStatement || {}).period || ''} | ${d.financialInformation.reportingCurrency}</p>
+              <p class="d2-text d2-muted">${(d.financialStatement || {}).period || ""} | ${d.financialInformation.reportingCurrency}</p>
               <h4 class="d2-fin-subtitle">Profit and Loss</h4>
               <table class="d2-table d2-fin-table">
                 <tbody>
-                  ${((d.financialStatement || {}).profitAndLoss || []).map(row => '<tr><td>' + row.line + '</td><td class="d2-fin-amt">' + formatCurrency(row.amount) + '</td></tr>').join('')}
+                  ${((d.financialStatement || {}).profitAndLoss || []).map((row) => "<tr><td>" + row.line + '</td><td class="d2-fin-amt">' + formatCurrency(row.amount) + "</td></tr>").join("")}
                 </tbody>
               </table>
               <h4 class="d2-fin-subtitle">Balance Sheet</h4>
               <table class="d2-table d2-fin-table">
                 <tbody>
-                  ${((d.financialStatement || {}).balanceSheet || []).map(row => '<tr><td>' + row.line + '</td><td class="d2-fin-amt">' + formatCurrency(row.amount) + '</td></tr>').join('')}
+                  ${((d.financialStatement || {}).balanceSheet || []).map((row) => "<tr><td>" + row.line + '</td><td class="d2-fin-amt">' + formatCurrency(row.amount) + "</td></tr>").join("")}
                 </tbody>
               </table>
             </div>
@@ -795,41 +1217,52 @@
               <div class="d2-swot-grid">
                 <div class="d2-swot-box d2-swot-strengths">
                   <h4 class="d2-swot-heading">Strengths</h4>
-                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).strengths || []).map(s => '<li>' + s + '</li>').join('')}</ul>
+                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).strengths || []).map((s) => "<li>" + s + "</li>").join("")}</ul>
                 </div>
                 <div class="d2-swot-box d2-swot-weaknesses">
                   <h4 class="d2-swot-heading">Weaknesses</h4>
-                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).weaknesses || []).map(w => '<li>' + w + '</li>').join('')}</ul>
+                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).weaknesses || []).map((w) => "<li>" + w + "</li>").join("")}</ul>
                 </div>
                 <div class="d2-swot-box d2-swot-opportunities">
                   <h4 class="d2-swot-heading">Opportunities</h4>
-                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).opportunities || []).map(o => '<li>' + o + '</li>').join('')}</ul>
+                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).opportunities || []).map((o) => "<li>" + o + "</li>").join("")}</ul>
                 </div>
                 <div class="d2-swot-box d2-swot-threats">
                   <h4 class="d2-swot-heading">Threats</h4>
-                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).threats || []).map(t => '<li>' + t + '</li>').join('')}</ul>
+                  <ul class="d2-swot-list">${((d.swotAnalysis || {}).threats || []).map((t) => "<li>" + t + "</li>").join("")}</ul>
                 </div>
               </div>
             </div>
         </div>
         <div class="d2-card" id="sec-trade-reference-summary">
           <h3 class="d2-card-title">Trade Reference Summary</h3>
-          <table class="d2-table"><thead><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr></thead><tbody>${d.tradeReferenceSummary.bands.map(b => '<tr><td>' + b.size + '</td><td>R ' + (b.rangeStart != null ? b.rangeStart.toLocaleString() : '-') + ' - ' + (b.rangeEnd != null ? 'R ' + b.rangeEnd.toLocaleString() : 'above') + '</td><td>' + b.references + '</td><td>' + (b.yearsKnown || '-') + '</td><td>' + b.termsGiven + '</td><td>' + b.termsTaken + '</td></tr>').join('')}</tbody></table>
+          <table class="d2-table"><thead><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr></thead><tbody>${d.tradeReferenceSummary.bands.map((b) => "<tr><td>" + b.size + "</td><td>R " + (b.rangeStart != null ? b.rangeStart.toLocaleString() : "-") + " - " + (b.rangeEnd != null ? "R " + b.rangeEnd.toLocaleString() : "above") + "</td><td>" + b.references + "</td><td>" + (b.yearsKnown || "-") + "</td><td>" + b.termsGiven + "</td><td>" + b.termsTaken + "</td></tr>").join("")}</tbody></table>
         </div>
         <div class="d2-card" id="sec-company-benchmark">
           <h3 class="d2-card-title">Company Benchmark</h3>
           <p class="d2-text d2-muted">SIC Code: ${d.industryOverview.sicCode} - Credit rating agency activities</p>
-          <table class="d2-table"><thead><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr></thead><tbody>${d.companyBenchmark.comparisons.map(c => '<tr><td>' + c.metric + '</td><td>' + c.industry + '</td><td>' + c.subject + '</td></tr>').join('')}</tbody></table>
+          <table class="d2-table"><thead><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr></thead><tbody>${d.companyBenchmark.comparisons.map((c) => "<tr><td>" + c.metric + "</td><td>" + c.industry + "</td><td>" + c.subject + "</td></tr>").join("")}</tbody></table>
         </div>
         <footer class="report-footer d2-footer"><p>${d.constantUpdateNote}</p><p>This report must not be communicated to the person/s or firm/s reported on, or to any other party. No part of this report may be reproduced, stored in a retrieval system or transmitted, in any form or by any means without Experian's prior permission. It is furnished by Experian in strict confidence at your request for your exclusive use.</p><p>Experian Confidential</p></footer>
       `;
-    }
+      }
 
-    function renderDesign3(d) {
-      const riskPct = Math.round((d.riskGrade.score / d.riskGrade.maxScore) * 100);
-      const liqPct = Math.round(parseFloat(d.financialInformation.ratios.liquidity.currentRatio) * 33);
-      const profPct = Math.min(100, Math.round(parseFloat(d.financialInformation.ratios.profitability.grossProfitMargin)));
-      return `
+      function renderDesign3(d) {
+        const riskPct = Math.round(
+          (d.riskGrade.score / d.riskGrade.maxScore) * 100,
+        );
+        const liqPct = Math.round(
+          parseFloat(d.financialInformation.ratios.liquidity.currentRatio) * 33,
+        );
+        const profPct = Math.min(
+          100,
+          Math.round(
+            parseFloat(
+              d.financialInformation.ratios.profitability.grossProfitMargin,
+            ),
+          ),
+        );
+        return `
         <div class="d3-cover">
           <div class="d3-cover-pattern"></div>
           <img src="assets/experian-logo.png" alt="Experian" class="d3-cover-logo">
@@ -850,7 +1283,7 @@
               <span class="d3-kv-value">${d.subject.registrationNumber}</span>
               <span class="d3-kv-key">Other Names</span>
               <span class="d3-kv-value">${d.subject.otherNames}</span>
-              ${d.subject.incorporatesOperationsOf.map(op => '<span class="d3-kv-key">' + (op.type || 'Incorporates') + '</span><span class="d3-kv-value">' + op.name + ' (' + op.date + ')</span>').join('')}
+              ${d.subject.incorporatesOperationsOf.map((op) => '<span class="d3-kv-key">' + (op.type || "Incorporates") + '</span><span class="d3-kv-value">' + op.name + " (" + op.date + ")</span>").join("")}
             </div>
           </section>
           <section class="d3-section">
@@ -935,7 +1368,7 @@
             <h2 class="d3-title">Address Details</h2>
             <p><strong>Physical:</strong> ${d.addressDetails.physical.unit}, ${d.addressDetails.physical.building}, ${d.addressDetails.physical.street}, ${d.addressDetails.physical.town} ${d.addressDetails.physical.postalCode}, ${d.addressDetails.physical.province}, ${d.addressDetails.physical.country}</p>
             <p><strong>Postal:</strong> ${d.addressDetails.postal.box}, ${d.addressDetails.postal.town} ${d.addressDetails.postal.postalCode}, ${d.addressDetails.postal.province}, ${d.addressDetails.postal.country}</p>
-            ${d.addressDetails.additionalComments.length ? '<p class="d3-muted">' + d.addressDetails.additionalComments.join('; ') + '</p>' : ''}
+            ${d.addressDetails.additionalComments.length ? '<p class="d3-muted">' + d.addressDetails.additionalComments.join("; ") + "</p>" : ""}
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Contact Details</h2>
@@ -945,7 +1378,7 @@
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Branches</h2>
-            ${d.branches.map(b => '<p>' + b.name + ': ' + b.address + ', ' + b.town + ' ' + b.postalCode + ', ' + b.province + ', ' + b.country + '</p>').join('')}
+            ${d.branches.map((b) => "<p>" + b.name + ": " + b.address + ", " + b.town + " " + b.postalCode + ", " + b.province + ", " + b.country + "</p>").join("")}
           </section>
           <section class="d3-section">
             <h2 class="d3-title">History</h2>
@@ -960,11 +1393,11 @@
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Active Principals</h2>
-            ${d.activePrincipals.map(p => '<p><strong>' + p.name + ' (' + p.initials + ')</strong> – ' + p.areaOfResponsibility + ' (' + p.sharePercent + '%)<br><span class="d3-muted">ID: ' + p.idNumber + ' | DOB: ' + p.dateOfBirth + ' | Appointed: ' + p.appointmentDate + ' | ' + p.courtRecords + '</span><br><span class="d3-muted">' + p.currentBusinessInterests + '</span><br><span class="d3-muted">' + p.propertiesAndBonds + '</span></p>').join('')}
+            ${d.activePrincipals.map((p) => "<p><strong>" + p.name + " (" + p.initials + ")</strong> – " + p.areaOfResponsibility + " (" + p.sharePercent + '%)<br><span class="d3-muted">ID: ' + p.idNumber + " | DOB: " + p.dateOfBirth + " | Appointed: " + p.appointmentDate + " | " + p.courtRecords + '</span><br><span class="d3-muted">' + p.currentBusinessInterests + '</span><br><span class="d3-muted">' + p.propertiesAndBonds + "</span></p>").join("")}
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Non-Active Principals</h2>
-            <table class="d3-table"><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointed</th></tr>${d.nonActivePrincipals.map(p => '<tr><td>' + p.name + '</td><td>' + p.initials + '</td><td>' + p.idNumber + '</td><td>' + p.dateOfBirth + '</td><td>' + p.status + '</td><td>' + p.appointmentDate + '</td></tr>').join('')}</table>
+            <table class="d3-table"><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointed</th></tr>${d.nonActivePrincipals.map((p) => "<tr><td>" + p.name + "</td><td>" + p.initials + "</td><td>" + p.idNumber + "</td><td>" + p.dateOfBirth + "</td><td>" + p.status + "</td><td>" + p.appointmentDate + "</td></tr>").join("")}</table>
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Operations</h2>
@@ -987,7 +1420,7 @@
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Contracts</h2>
-            ${d.contracts.map(c => '<p><strong>' + c.description + '</strong> – ' + formatCurrency(c.value) + ' (' + c.obtainedBy + ')<br><span class="d3-muted">' + c.notes + '</span></p>').join('')}
+            ${d.contracts.map((c) => "<p><strong>" + c.description + "</strong> – " + formatCurrency(c.value) + " (" + c.obtainedBy + ')<br><span class="d3-muted">' + c.notes + "</span></p>").join("")}
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Court Records</h2>
@@ -1001,16 +1434,38 @@
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Trade References</h2>
-            ${d.tradeReferences.slice(0, 6).map(r => '<p><strong>Ref ' + r.ref + '</strong> ' + r.dateChecked + ' | ' + (r.yearsTrading != null ? r.yearsTrading + ' yrs' : '-') + ' | ' + (r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : '-') + ' | ' + (r.termsGiven || '-') + '/' + (r.termsTaken || '-') + '<br><span class="d3-muted">' + r.comments + '</span></p>').join('')}
+            ${d.tradeReferences
+              .slice(0, 6)
+              .map(
+                (r) =>
+                  "<p><strong>Ref " +
+                  r.ref +
+                  "</strong> " +
+                  r.dateChecked +
+                  " | " +
+                  (r.yearsTrading != null ? r.yearsTrading + " yrs" : "-") +
+                  " | " +
+                  (r.aveMonthlyPurchases
+                    ? formatCurrency(r.aveMonthlyPurchases)
+                    : "-") +
+                  " | " +
+                  (r.termsGiven || "-") +
+                  "/" +
+                  (r.termsTaken || "-") +
+                  '<br><span class="d3-muted">' +
+                  r.comments +
+                  "</span></p>",
+              )
+              .join("")}
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Trade Reference Summary</h2>
-            <table class="d3-table"><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr>${d.tradeReferenceSummary.bands.map(b => '<tr><td>' + b.size + '</td><td>R ' + (b.rangeStart != null ? b.rangeStart.toLocaleString() : '-') + ' - ' + (b.rangeEnd != null ? 'R ' + b.rangeEnd.toLocaleString() : 'above') + '</td><td>' + b.references + '</td><td>' + (b.yearsKnown || '-') + '</td><td>' + b.termsGiven + '</td><td>' + b.termsTaken + '</td></tr>').join('')}</table>
+            <table class="d3-table"><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr>${d.tradeReferenceSummary.bands.map((b) => "<tr><td>" + b.size + "</td><td>R " + (b.rangeStart != null ? b.rangeStart.toLocaleString() : "-") + " - " + (b.rangeEnd != null ? "R " + b.rangeEnd.toLocaleString() : "above") + "</td><td>" + b.references + "</td><td>" + (b.yearsKnown || "-") + "</td><td>" + b.termsGiven + "</td><td>" + b.termsTaken + "</td></tr>").join("")}</table>
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Company Benchmark</h2>
             <p class="d3-muted">SIC Code: ${d.industryOverview.sicCode} - Credit rating agency activities</p>
-            <table class="d3-table"><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr>${d.companyBenchmark.comparisons.map(c => '<tr><td>' + c.metric + '</td><td>' + c.industry + '</td><td>' + c.subject + '</td></tr>').join('')}</table>
+            <table class="d3-table"><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr>${d.companyBenchmark.comparisons.map((c) => "<tr><td>" + c.metric + "</td><td>" + c.industry + "</td><td>" + c.subject + "</td></tr>").join("")}</table>
           </section>
           <section class="d3-section">
             <h2 class="d3-title">Summary</h2>
@@ -1023,86 +1478,109 @@
         </div>
         <footer class="report-footer d3-footer"><p>${d.constantUpdateNote}</p><p>Experian Confidential</p></footer>
       `;
-    }
-
-    document.getElementById('design-select').addEventListener('change', function() {
-      renderReport(this.value);
-    });
-
-    renderReport();
-
-    // PDF export - no browser header/footer (date, title, URL), custom page numbers
-    function restoreExportUI() {
-      document.documentElement.classList.remove('pdf-export');
-      document.body.classList.remove('pdf-export');
-      var actions = document.querySelector('.print-actions');
-      if (actions) actions.style.display = '';
-      var btn = document.getElementById('export-pdf');
-      if (btn) { btn.disabled = false; btn.textContent = 'Export to PDF'; }
-    }
-    function convertImagesToBase64(element) {
-      var imgs = element.querySelectorAll('img[src]');
-      var promises = Array.from(imgs).map(function(img) {
-        var src = img.src || img.getAttribute('src');
-        if (!src || src.indexOf('data:') === 0) return Promise.resolve();
-        return fetch(src)
-          .then(function(r) { return r.blob(); })
-          .then(function(blob) {
-            return new Promise(function(resolve, reject) {
-              var reader = new FileReader();
-              reader.onloadend = function() { resolve(reader.result); };
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            });
-          })
-          .then(function(dataUrl) { img.src = dataUrl; });
-      });
-      return Promise.all(promises);
-    }
-    document.getElementById('export-pdf').addEventListener('click', function() {
-      if (window.location.protocol === 'file:') {
-        alert('PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.');
-        return;
       }
-      const btn = document.getElementById('export-pdf');
-      btn.disabled = true;
-      btn.textContent = 'Generating...';
-      document.documentElement.classList.add('pdf-export');
-      document.body.classList.add('pdf-export');
-      document.querySelector('.print-actions').style.display = 'none';
-      window.scrollTo(0, 0);
-      const report = document.getElementById('report');
-      report.scrollIntoView({ block: 'start', behavior: 'instant' });
-      const opt = {
-        margin: [10, 0, 0, 0],
-        filename: 'Gold-Report.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        enableLinks: true,
-        pagebreak: { mode: ['css', 'legacy'], avoid: '.d2-card' }
-      };
-      convertImagesToBase64(report)
-        .then(function() {
-          return html2pdf().set(opt).from(report).save();
-        })
-        .then(function() { restoreExportUI(); })
-        .catch(function(err) {
-          console.error('PDF export failed:', err);
-          restoreExportUI();
-          if (window.location.protocol === 'file:') {
-            alert('PDF export requires a local server.\n\nRun: npx serve\nThen open http://localhost:3000');
-          } else {
-            alert('PDF export failed. Use Print (Ctrl/Cmd+P) and choose "Save as PDF" instead.');
-          }
-        });
-    });
 
-    document.getElementById('print-pdf').addEventListener('click', function() {
-      document.querySelector('.print-actions').style.display = 'none';
-      window.print();
-      document.querySelector('.print-actions').style.display = '';
-    });
-  </script>
-</body>
+      document
+        .getElementById("design-select")
+        .addEventListener("change", function () {
+          renderReport(this.value);
+        });
+
+      renderReport();
+
+      // PDF export - no browser header/footer (date, title, URL), custom page numbers
+      function restoreExportUI() {
+        document.documentElement.classList.remove("pdf-export");
+        document.body.classList.remove("pdf-export");
+        var actions = document.querySelector(".print-actions");
+        if (actions) actions.style.display = "";
+        var btn = document.getElementById("export-pdf");
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Export to PDF";
+        }
+      }
+      function convertImagesToBase64(element) {
+        var imgs = element.querySelectorAll("img[src]");
+        var promises = Array.from(imgs).map(function (img) {
+          var src = img.src || img.getAttribute("src");
+          if (!src || src.indexOf("data:") === 0) return Promise.resolve();
+          return fetch(src)
+            .then(function (r) {
+              return r.blob();
+            })
+            .then(function (blob) {
+              return new Promise(function (resolve, reject) {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                  resolve(reader.result);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+              });
+            })
+            .then(function (dataUrl) {
+              img.src = dataUrl;
+            });
+        });
+        return Promise.all(promises);
+      }
+      document
+        .getElementById("export-pdf")
+        .addEventListener("click", function () {
+          if (window.location.protocol === "file:") {
+            alert(
+              "PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.",
+            );
+            return;
+          }
+          const btn = document.getElementById("export-pdf");
+          btn.disabled = true;
+          btn.textContent = "Generating...";
+          document.documentElement.classList.add("pdf-export");
+          document.body.classList.add("pdf-export");
+          document.querySelector(".print-actions").style.display = "none";
+          window.scrollTo(0, 0);
+          const report = document.getElementById("report");
+          report.scrollIntoView({ block: "start", behavior: "instant" });
+          const opt = {
+            margin: [0, 0, 0, 0],
+            filename: "Gold-Report.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+            enableLinks: true,
+            pagebreak: { mode: ["css", "legacy"], avoid: ".d2-card" },
+          };
+          convertImagesToBase64(report)
+            .then(function () {
+              return html2pdf().set(opt).from(report).save();
+            })
+            .then(function () {
+              restoreExportUI();
+            })
+            .catch(function (err) {
+              console.error("PDF export failed:", err);
+              restoreExportUI();
+              if (window.location.protocol === "file:") {
+                alert(
+                  "PDF export requires a local server.\n\nRun: npx serve\nThen open http://localhost:3000",
+                );
+              } else {
+                alert(
+                  'PDF export failed. Use Print (Ctrl/Cmd+P) and choose "Save as PDF" instead.',
+                );
+              }
+            });
+        });
+
+      document
+        .getElementById("print-pdf")
+        .addEventListener("click", function () {
+          document.querySelector(".print-actions").style.display = "none";
+          window.print();
+          document.querySelector(".print-actions").style.display = "";
+        });
+    </script>
+  </body>
 </html>
