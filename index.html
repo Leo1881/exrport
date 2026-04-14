@@ -14,65 +14,120 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </head>
   <body>
-    <div class="report design-1" id="report"></div>
-    <div
-      class="print-actions"
-      style="
-        position: fixed;
-        top: 16px;
-        right: 16px;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      "
+    <section
+      id="report-selection-screen"
+      class="report-selection-stage"
+      aria-label="Configure report"
     >
-      <label
-        for="design-select"
-        style="font-size: 12px; font-weight: 600; color: #1a5f9e"
-        >Design:</label
-      >
-      <select
-        id="design-select"
-        style="
-          padding: 8px 12px;
-          border-radius: 6px;
-          border: 1px solid #1a5f9e;
-          font-size: 12px;
-          background: white;
-          cursor: pointer;
-        "
-      >
-        <option value="1">Design 1 – Cards</option>
-        <option value="2">Design 2 – Dashboard</option>
-        <option value="3">Design 3 – Professional Report</option>
-      </select>
-      <button
-        id="export-pdf"
-        style="
-          background: #1a5f9e;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-weight: 600;
-        "
-      >
+      <div class="report design-2 report-selection-shell">
+        <header class="report-selection-head">
+          <img
+            src="assets/experian-logo.png"
+            alt="Experian"
+            width="180"
+            height="48"
+            class="report-selection-logo"
+          />
+          <div class="report-selection-head-text">
+            <h1 class="report-selection-title">Gold Report</h1>
+            <p class="report-selection-lead">
+              Select a report product from the list, then continue to preview.
+              Standard packages include the full section catalogue at a package
+              rate; choose <strong>Customized report</strong> to pick sections
+              individually. Amounts shown are demo pricing in ZAR.
+            </p>
+          </div>
+        </header>
+
+        <div class="d2-card report-selection-type-card">
+          <h2 class="d2-card-title" id="report-product-heading">
+            1. Report product
+          </h2>
+          <p class="d2-text d2-muted report-selection-hint">
+            Standard reports (Bronze through Gold Hybrid) include every section in
+            the catalogue at a fixed package total. Only
+            <strong>Customized report</strong> lets you select individual
+            sections and build your own total.
+          </p>
+          <div class="report-selection-field">
+            <select
+              id="report-product"
+              class="report-selection-select"
+              autocomplete="off"
+              aria-labelledby="report-product-heading"
+            >
+              <option value="bronze-pb">Bronze P&amp;B</option>
+              <option value="silver-pb">Silver P&amp;B</option>
+              <option value="gold-sas">Gold SAS</option>
+              <option value="gold-hybrid">Gold Hybrid</option>
+              <option value="customized">Customized report</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="standard-pricing-block" class="report-pricing-block d2-card">
+          <h3 class="d2-card-title" id="standard-pricing-title">
+            Included sections (package)
+          </h3>
+          <ul class="report-pricing-lines" id="standard-pricing-lines"></ul>
+          <p class="report-pricing-total" id="standard-package-total-row">
+            <strong>Package total</strong>
+            <span id="standard-pricing-total"></span>
+          </p>
+        </div>
+
+        <div id="custom-pricing-block" class="report-pricing-block d2-card" hidden>
+          <div class="report-custom-section-head">
+            <h3 class="d2-card-title report-custom-section-title">
+              Select sections (customized)
+            </h3>
+            <button
+              type="button"
+              class="btn-d2-ghost btn-d2-compact"
+              id="btn-deselect-all-sections"
+            >
+              Deselect all
+            </button>
+          </div>
+          <ul class="report-pricing-custom" id="custom-pricing-checklist"></ul>
+          <div class="report-pricing-custom-totals" id="custom-pricing-split-totals">
+            <div class="report-pricing-subtotal">
+              <span>Total standard (fixed)</span>
+              <span id="custom-total-standard-base">R 0,00</span>
+            </div>
+            <div class="report-pricing-subtotal">
+              <span>Additional catalogue headings</span>
+              <span id="custom-total-additional">R 0,00</span>
+            </div>
+            <p class="report-pricing-total report-pricing-total--grand">
+              <strong>Total</strong>
+              <span id="custom-pricing-grand-total">R 0,00</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="report-selection-actions">
+          <button type="button" class="btn-d2-primary" id="btn-view-report">
+            View report
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="report design-2" id="report" hidden></div>
+
+    <div class="print-actions" id="print-actions" hidden>
+      <button type="button" class="btn-d2-ghost" id="btn-change-config">
+        Change configuration
+      </button>
+      <button type="button" class="btn-d2-primary" id="export-pdf">
         Export to PDF
       </button>
       <button
+        type="button"
+        class="btn-d2-secondary"
         id="print-pdf"
-        title="Uses browser print – ToC links work within the PDF"
-        style="
-          background: #5c4d9e;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-weight: 600;
-        "
+        title="Uses browser print — ToC links work within the PDF"
       >
         Print to PDF
       </button>
@@ -577,6 +632,340 @@
         },
       };
 
+      /** Standard catalogue: same headings for standard + custom; ZAR is demo-only */
+      /** headingGroup: "standard" = core headings; "additional" = extended catalogue headings */
+      const STANDARD_REPORT_SECTIONS = [
+        {
+          id: "sum",
+          label: "SUMMARY",
+          priceZar: 175,
+          headingGroup: "standard",
+        },
+        {
+          id: "biz",
+          label: "BUSINESS DETAILS",
+          priceZar: 320,
+          headingGroup: "standard",
+        },
+        {
+          id: "names",
+          label: "NAME CHANGES",
+          priceZar: 95,
+          headingGroup: "standard",
+        },
+        {
+          id: "other-names",
+          label: "OTHER NAMES BY WHICH BUSINESS IS KNOWN",
+          priceZar: 110,
+          headingGroup: "standard",
+        },
+        {
+          id: "addr",
+          label: "ADDRESS DETAILS",
+          priceZar: 145,
+          headingGroup: "standard",
+        },
+        {
+          id: "assess",
+          label: "ASSESSMENT",
+          priceZar: 410,
+          headingGroup: "standard",
+        },
+        {
+          id: "contact",
+          label: "CONTACT DETAILS",
+          priceZar: 125,
+          headingGroup: "standard",
+        },
+        { id: "history", label: "HISTORY", priceZar: 240, headingGroup: "additional" },
+        {
+          id: "ultimate-holding",
+          label: "ULTIMATE HOLDING COMPANY",
+          priceZar: 185,
+          headingGroup: "additional",
+        },
+        {
+          id: "holding-co",
+          label: "HOLDING COMPANY",
+          priceZar: 165,
+          headingGroup: "additional",
+        },
+        {
+          id: "subsidiary",
+          label: "SUBSIDIARY / ASSOCIATE COMPANIES",
+          priceZar: 195,
+          headingGroup: "additional",
+        },
+        {
+          id: "active-principals",
+          label: "ACTIVE PRINCIPALS",
+          priceZar: 220,
+          headingGroup: "additional",
+        },
+        {
+          id: "prop-bonds-principal",
+          label: "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
+          priceZar: 275,
+          headingGroup: "additional",
+        },
+        {
+          id: "non-active-principals",
+          label: "NON-ACTIVE PRINCIPALS",
+          priceZar: 155,
+          headingGroup: "additional",
+        },
+        {
+          id: "prop-bonds-subject",
+          label: "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
+          priceZar: 275,
+          headingGroup: "additional",
+        },
+        {
+          id: "bankers",
+          label: "BANKERS DETAILS AND COMMENTS",
+          priceZar: 140,
+          headingGroup: "additional",
+        },
+        {
+          id: "prev-enquiries",
+          label: "PREVIOUS ENQUIRIES",
+          priceZar: 180,
+          headingGroup: "additional",
+        },
+        {
+          id: "court-records",
+          label: "COURT RECORDS TO DATE",
+          priceZar: 260,
+          headingGroup: "additional",
+        },
+        {
+          id: "business-rescue",
+          label: "BUSINESS RESCUE",
+          priceZar: 310,
+          headingGroup: "additional",
+        },
+        {
+          id: "payment-analysis",
+          label: "PAYMENT ANALYSIS REPORT",
+          priceZar: 195,
+          headingGroup: "additional",
+        },
+        {
+          id: "debtors-ledger",
+          label: "DEBTORS LEDGER (UNDER THE TRADE REFS)",
+          priceZar: 125,
+          headingGroup: "additional",
+        },
+        {
+          id: "risk-grade",
+          label: "RISK GRADE ANALYSIS",
+          priceZar: 170,
+          headingGroup: "additional",
+        },
+        {
+          id: "trade-ref-summary",
+          label: "TRADE REFERENCE SUMMARY",
+          priceZar: 145,
+          headingGroup: "additional",
+        },
+      ];
+
+      /** Demo package price (full catalogue) per standard product — not Customized */
+      const STANDARD_REPORT_PRODUCTS = [
+        { id: "bronze-pb", packagePriceZar: 2840 },
+        { id: "silver-pb", packagePriceZar: 3525 },
+        { id: "gold-sas", packagePriceZar: 4190 },
+        { id: "gold-hybrid", packagePriceZar: 4850 },
+      ];
+      const CUSTOMIZED_REPORT_ID = "customized";
+
+      function getStandardPackagePrice(productId) {
+        for (var i = 0; i < STANDARD_REPORT_PRODUCTS.length; i++) {
+          if (STANDARD_REPORT_PRODUCTS[i].id === productId) {
+            return STANDARD_REPORT_PRODUCTS[i].packagePriceZar;
+          }
+        }
+        return 0;
+      }
+
+      /** Customized report: fixed charge for standard headings (same demo value as Bronze P&B) */
+      const CUSTOMIZED_STANDARD_BASE_ZAR = getStandardPackagePrice("bronze-pb");
+
+      function syncStandardCatalogueLineDisplay(isCustom) {
+        var lines = document.querySelectorAll(
+          "#standard-pricing-lines .report-pricing-line-secondary",
+        );
+        lines.forEach(function (el) {
+          var p = Number(el.getAttribute("data-price"));
+          if (isCustom) {
+            el.textContent = formatZar(p);
+            el.className = "report-pricing-line-secondary report-pricing-line-price";
+          } else {
+            el.textContent = "Included";
+            el.className =
+              "report-pricing-line-secondary report-pricing-included";
+          }
+        });
+      }
+
+      function updateReportProductUI() {
+        var productEl = document.getElementById("report-product");
+        var cust = document.getElementById("custom-pricing-block");
+        var titleEl = document.getElementById("standard-pricing-title");
+        var packageTotalRow = document.getElementById("standard-package-total-row");
+        var standardTotalEl = document.getElementById("standard-pricing-total");
+        if (!productEl || !cust) return;
+        var v = productEl.value;
+        var isCustom = v === CUSTOMIZED_REPORT_ID;
+        cust.hidden = !isCustom;
+        if (titleEl) {
+          titleEl.textContent = isCustom
+            ? "Included sections (catalogue)"
+            : "Included sections (package)";
+        }
+        if (packageTotalRow) {
+          packageTotalRow.hidden = false;
+        }
+        syncStandardCatalogueLineDisplay(isCustom);
+        if (standardTotalEl) {
+          if (isCustom) {
+            standardTotalEl.textContent = formatZar(CUSTOMIZED_STANDARD_BASE_ZAR);
+          } else {
+            standardTotalEl.textContent = formatZar(getStandardPackagePrice(v));
+          }
+        }
+      }
+
+      function formatZar(amount) {
+        return (
+          "R " +
+          amount.toLocaleString("en-ZA", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        );
+      }
+
+      function initReportBuilder() {
+        var standardList = document.getElementById("standard-pricing-lines");
+        var customList = document.getElementById("custom-pricing-checklist");
+        var productEl = document.getElementById("report-product");
+        STANDARD_REPORT_SECTIONS.forEach(function (s) {
+          if (standardList) {
+            var li = document.createElement("li");
+            li.innerHTML =
+              "<span>" +
+              s.label +
+              '</span><span class="report-pricing-line-secondary report-pricing-included" data-price="' +
+              s.priceZar +
+              '">Included</span>';
+            standardList.appendChild(li);
+          }
+        });
+
+        if (customList) {
+          function recalcCustomTotal() {
+            var selectionsSum = 0;
+            customList.querySelectorAll('input[type="checkbox"]').forEach(
+              function (cb) {
+                if (!cb.checked) return;
+                var p = Number(cb.getAttribute("data-price"));
+                if (!isFinite(p) || p < 0) p = 0;
+                selectionsSum += p;
+              },
+            );
+            var base = CUSTOMIZED_STANDARD_BASE_ZAR;
+            var grandTotal = base + selectionsSum;
+            var elStd = document.getElementById("custom-total-standard-base");
+            var elAdd = document.getElementById("custom-total-additional");
+            var elGrand = document.getElementById("custom-pricing-grand-total");
+            if (elStd) elStd.textContent = formatZar(base);
+            if (elAdd) elAdd.textContent = formatZar(selectionsSum);
+            if (elGrand) elGrand.textContent = formatZar(grandTotal);
+          }
+          STANDARD_REPORT_SECTIONS.forEach(function (s, i) {
+            var li = document.createElement("li");
+            var label = document.createElement("label");
+            var cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.setAttribute("data-price", String(s.priceZar));
+            cb.setAttribute("data-idx", String(i));
+            cb.setAttribute(
+              "data-heading-group",
+              s.headingGroup === "standard" ? "standard" : "additional",
+            );
+            var spanText = document.createElement("span");
+            spanText.className = "rb-label-text";
+            spanText.textContent = s.label;
+            var spanPrice = document.createElement("span");
+            spanPrice.className = "rb-price";
+            spanPrice.textContent = formatZar(s.priceZar);
+            label.appendChild(cb);
+            label.appendChild(spanText);
+            label.appendChild(spanPrice);
+            li.appendChild(label);
+            customList.appendChild(li);
+          });
+          customList.addEventListener("change", recalcCustomTotal);
+          customList.addEventListener("input", recalcCustomTotal);
+          recalcCustomTotal();
+
+          var btnDeselect = document.getElementById("btn-deselect-all-sections");
+          if (btnDeselect) {
+            btnDeselect.addEventListener("click", function () {
+              customList
+                .querySelectorAll('input[type="checkbox"]')
+                .forEach(function (cb) {
+                  cb.checked = false;
+                });
+              recalcCustomTotal();
+            });
+          }
+        }
+
+        if (productEl) {
+          productEl.addEventListener("change", updateReportProductUI);
+        }
+        updateReportProductUI();
+      }
+
+      function enterReportView() {
+        var sel = document.getElementById("report-selection-screen");
+        var reportEl = document.getElementById("report");
+        var actions = document.getElementById("print-actions");
+        if (sel) sel.hidden = true;
+        if (reportEl) reportEl.hidden = false;
+        if (actions) actions.hidden = false;
+        document.body.classList.add("report-view-active");
+        renderReport();
+        window.scrollTo(0, 0);
+      }
+
+      function showSetupView() {
+        var sel = document.getElementById("report-selection-screen");
+        var reportEl = document.getElementById("report");
+        var actions = document.getElementById("print-actions");
+        if (sel) sel.hidden = false;
+        if (reportEl) reportEl.hidden = true;
+        if (actions) actions.hidden = true;
+        document.body.classList.remove("report-view-active");
+        window.scrollTo(0, 0);
+      }
+
+      function initReportApp() {
+        initReportBuilder();
+        var viewBtn = document.getElementById("btn-view-report");
+        var changeBtn = document.getElementById("btn-change-config");
+        if (viewBtn) viewBtn.addEventListener("click", enterReportView);
+        if (changeBtn) changeBtn.addEventListener("click", showSetupView);
+
+        if (new URLSearchParams(window.location.search).get("pdf") === "1") {
+          enterReportView();
+        } else {
+          showSetupView();
+        }
+      }
+
       function formatCurrency(num) {
         if (num == null) return "-";
         var formatted =
@@ -588,346 +977,11 @@
         return num < 0 ? "(" + formatted + ")" : formatted;
       }
 
-      function renderReport(designId) {
-        designId =
-          designId || document.getElementById("design-select").value || "1";
+      function renderReport() {
         const d = REPORT_DATA;
         const report = document.getElementById("report");
-        report.className = "report design-" + designId;
-
-        if (designId === "2") {
-          report.innerHTML = renderDesign2(d);
-          return;
-        }
-        if (designId === "3") {
-          report.innerHTML = renderDesign3(d);
-          return;
-        }
-
-        report.innerHTML = `
-        <header class="report-header">
-          <img src="assets/experian-logo.png" alt="Experian" class="logo">
-          <div class="report-meta">
-            <strong>${d.meta.reportType}</strong><br>
-            ${d.meta.bureau}<br>
-            KIM Number: ${d.meta.kimNumber} | Enquiry No: ${d.meta.enquiryNo}<br>
-            Updated: ${d.meta.updatedOn}
-          </div>
-        </header>
-
-        <section class="section subject-hero">
-          <h1>${d.subject.name}</h1>
-          <span class="company-status">${d.subject.companyStatus}</span>
-          <div class="key-value-grid">
-            <span class="key">Registration Number</span>
-            <span class="value">${d.subject.registrationNumber}</span>
-            <span class="key">Other Names</span>
-            <span class="value">${d.subject.otherNames}</span>
-          </div>
-          ${d.subject.incorporatesOperationsOf
-            .map(
-              (op) => `
-            <div class="key-value-grid">
-              <span class="key">${op.type || "Incorporates"}</span>
-              <span class="value">${op.name} (${op.date})</span>
-            </div>
-          `,
-            )
-            .join("")}
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Address Details</h2>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div class="address-block">
-              <div class="label">Physical Address</div>
-              <div class="content">${d.addressDetails.physical.unit}, ${d.addressDetails.physical.building}<br>${d.addressDetails.physical.street}<br>${d.addressDetails.physical.town} ${d.addressDetails.physical.postalCode}<br>${d.addressDetails.physical.province}<br>${d.addressDetails.physical.country}</div>
-            </div>
-            <div class="address-block">
-              <div class="label">Postal Address</div>
-              <div class="content">${d.addressDetails.postal.box}<br>${d.addressDetails.postal.town} ${d.addressDetails.postal.postalCode}<br>${d.addressDetails.postal.province}<br>${d.addressDetails.postal.country}</div>
-            </div>
-          </div>
-          ${d.addressDetails.additionalComments.length ? `<div class="mt-16 text-muted">${d.addressDetails.additionalComments.join("<br>")}</div>` : ""}
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Assessment</h2>
-          <div class="assessment-box">
-            <div class="enquiry-highlight">Your enquiry: ${formatCurrency(d.assessment.enquiry.amount)} | Terms: ${d.assessment.enquiry.terms} | Date: ${d.assessment.enquiry.date}</div>
-            <ul>${d.assessment.summary.map((s) => `<li>${s}</li>`).join("")}</ul>
-            <p>${d.assessment.recommendation}</p>
-            <p><strong>Profitability:</strong> ${d.assessment.profitability}</p>
-            <p><strong>Liquidity:</strong> ${d.assessment.liquidity}</p>
-            <p><strong>Solvency:</strong> ${d.assessment.solvency}</p>
-            <p class="disclaimer">${d.assessment.disclaimer}</p>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Contact Details</h2>
-          <div class="key-value-grid">
-            <span class="key">Telephone</span><span class="value">${d.contactDetails.telephone}</span>
-            <span class="key">Fax</span><span class="value">${d.contactDetails.fax}</span>
-            <span class="key">Cellphone</span><span class="value">${d.contactDetails.cellphone}</span>
-            <span class="key">Email</span><span class="value">${d.contactDetails.email}</span>
-            <span class="key">Web</span><span class="value">${d.contactDetails.web}</span>
-            <span class="key">VAT Number</span><span class="value">${d.contactDetails.vatNumber}</span>
-            <span class="key">Auditor</span><span class="value">${d.contactDetails.auditor}</span>
-          </div>
-          <p class="text-muted">${d.contactDetails.vatNote}</p>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Branches</h2>
-          ${d.branches
-            .map(
-              (b) => `
-            <div class="address-block">
-              <div class="label">${b.name}</div>
-              <div class="content">${b.address}, ${b.town} ${b.postalCode}, ${b.province}, ${b.country}</div>
-            </div>
-          `,
-            )
-            .join("")}
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">History</h2>
-          <div class="key-value-grid">
-            <span class="key">Incorporated on</span><span class="value">${d.history.incorporatedOn}</span>
-            <span class="key">Trading commenced on</span><span class="value">${d.history.tradingCommencedOn}</span>
-          </div>
-          <p class="mt-16">${d.history.narrative}</p>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Corporate Structure</h2>
-          <p>${d.corporateStructure.ultimateHoldingCompany}</p>
-          <div class="key-value-grid">
-            <span class="key">Holding Company</span><span class="value">${d.corporateStructure.holdingCompany.name} (${d.corporateStructure.holdingCompany.country}) - ${d.corporateStructure.holdingCompany.shareholding}%</span>
-            <span class="key">Associate Company</span><span class="value">${d.corporateStructure.associateCompany.name}</span>
-            <span class="key">Subsidiary Company</span><span class="value">${d.corporateStructure.subsidiaryCompany.name}</span>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Active Principals</h2>
-          ${d.activePrincipals
-            .map(
-              (p) => `
-            <div class="principal-card">
-              <div class="principal-name">${p.name} (${p.initials})</div>
-              <div class="principal-details">
-                <span>ID: ${p.idNumber}</span>
-                <span>DOB: ${p.dateOfBirth}</span>
-                <span>Role: ${p.areaOfResponsibility}</span>
-                <span>Share: ${p.sharePercent}%</span>
-                <span>Appointed: ${p.appointmentDate}</span>
-              </div>
-              <p class="text-muted mt-16">${p.courtRecords}</p>
-              <p class="text-muted">${p.currentBusinessInterests}</p>
-              <p class="text-muted">${p.propertiesAndBonds}</p>
-            </div>
-          `,
-            )
-            .join("")}
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Non-Active Principals</h2>
-          <table class="data-table">
-            <thead><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointment Date</th></tr></thead>
-            <tbody>
-              ${d.nonActivePrincipals
-                .map(
-                  (p) => `
-                <tr>
-                  <td>${p.name}</td><td>${p.initials}</td><td>${p.idNumber}</td>
-                  <td>${p.dateOfBirth}</td><td>${p.status}</td><td>${p.appointmentDate}</td>
-                </tr>
-              `,
-                )
-                .join("")}
-            </tbody>
-          </table>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Operations</h2>
-          <p>${d.operations.businessActivities}</p>
-          <p><strong>Major Clients:</strong> ${d.operations.majorClients}</p>
-          <p><strong>SIC Code:</strong> ${d.operations.majorSicCode.code} - ${d.operations.majorSicCode.description}</p>
-          <div class="key-value-grid">
-            <span class="key">Agencies Held</span><span class="value">${d.operations.agenciesHeld}</span>
-            <span class="key">Import/Export</span><span class="value">${d.operations.importExport}</span>
-            <span class="key">Fleet</span><span class="value">${d.operations.fleet.total} vehicles (${d.operations.fleet.cars} cars, ${d.operations.fleet.lightDeliveryVehicles} light delivery)</span>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Staff & B-BBEE</h2>
-          <div class="key-value-grid">
-            <span class="key">Total Staff</span><span class="value">${d.staff.total}</span>
-            <span class="key">Salaried</span><span class="value">${d.staff.salaried} (paid ${d.staff.salariedPaymentDay})</span>
-            <span class="key">Wages</span><span class="value">${d.staff.wages} (paid ${d.staff.wagesPaymentDay})</span>
-            <span class="key">B-BBEE Status</span><span class="value">${d.bbbee.status}</span>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Premises</h2>
-          <div class="key-value-grid">
-            <span class="key">Type</span><span class="value">${d.premises.type} - ${d.premises.location}</span>
-            <span class="key">Owned/Leased</span><span class="value">${d.premises.ownedLeased}</span>
-            <span class="key">Landlord</span><span class="value">${d.premises.landlord}</span>
-          </div>
-          <p class="text-muted">${d.premises.occupationNote}</p>
-          <p>${d.propertiesAndBonds}</p>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Financial Information</h2>
-          <p class="text-muted">Date obtained: ${d.financialInformation.dateObtained} | Currency: ${d.financialInformation.reportingCurrency}</p>
-          <div class="ratios-grid">
-            <div class="ratio-card">
-              <div class="ratio-label">Liquidity</div>
-              <div class="ratio-value">${d.financialInformation.ratios.liquidity.currentRatio}</div>
-              <div class="text-muted">Current Ratio</div>
-              <div class="ratio-value" style="font-size: 14px;">${d.financialInformation.ratios.liquidity.acidTestRatio}</div>
-              <div class="text-muted">Acid Test</div>
-            </div>
-            <div class="ratio-card">
-              <div class="ratio-label">Profitability</div>
-              <div class="ratio-value">${d.financialInformation.ratios.profitability.grossProfitMargin}%</div>
-              <div class="text-muted">Gross Profit Margin</div>
-              <div class="ratio-value" style="font-size: 14px;">${d.financialInformation.ratios.profitability.preTaxProfitMargin}%</div>
-              <div class="text-muted">Pre-Tax Profit Margin</div>
-            </div>
-            <div class="ratio-card">
-              <div class="ratio-label">Solvency</div>
-              <div class="ratio-value">${d.financialInformation.ratios.solvency.solvencyRatio}</div>
-              <div class="text-muted">Solvency Ratio</div>
-            </div>
-          </div>
-          <div class="key-value-grid">
-            <span class="key">Turnover FY 30 June 2024</span><span class="value">${formatCurrency(d.financialInformation.turnoverFY2024)}</span>
-            <span class="key">Estimated Cash</span><span class="value">${formatCurrency(d.financialInformation.estimatedCash)}</span>
-            <span class="key">Estimated Debtors</span><span class="value">${formatCurrency(d.financialInformation.estimatedDebtors)}</span>
-            <span class="key">Estimated Creditors</span><span class="value">${formatCurrency(d.financialInformation.estimatedCreditors)}</span>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Contracts</h2>
-          ${d.contracts
-            .map(
-              (c) => `
-            <div class="contract-card">
-              <div>
-                <span class="contract-name">${c.description}</span>
-                <span class="text-muted"> (${c.obtainedBy})</span>
-              </div>
-              <div class="contract-value">${formatCurrency(c.value)} ${c.currency}</div>
-            </div>
-            <p class="text-muted mb-0">${c.notes}</p>
-          `,
-            )
-            .join("")}
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Court Records</h2>
-          <p>${d.courtRecords.judgements}</p>
-          <p>${d.courtRecords.notarialBonds}</p>
-          <p>${d.courtRecords.businessRescue}</p>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Risk Grade Analysis</h2>
-          <div class="risk-grade-badge">
-            <div>
-              <div class="score">${d.riskGrade.score}</div>
-              <div class="score-label">out of ${d.riskGrade.maxScore}</div>
-            </div>
-            <div>
-              <div class="risk-level">${d.riskGrade.riskLevel}</div>
-              <div class="score-label">${d.riskGrade.model}</div>
-              <div class="score-label">${d.riskGrade.interpretation}</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Payment Analysis - Trade References</h2>
-          ${d.tradeReferences
-            .slice(0, 6)
-            .map(
-              (r) => `
-            <div class="trade-ref-row">
-              <span class="ref-number">Ref ${r.ref}</span>
-              <span>${r.dateChecked}</span> | ${r.yearsTrading} yrs | ${r.aveMonthlyPurchases ? formatCurrency(r.aveMonthlyPurchases) : "-"} | ${r.termsGiven || "-"} / ${r.termsTaken || "-"}
-              <div class="ref-comments">${r.comments}</div>
-            </div>
-          `,
-            )
-            .join("")}
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Trade Reference Summary</h2>
-          <table class="data-table">
-            <thead><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr></thead>
-            <tbody>
-              ${d.tradeReferenceSummary.bands
-                .map(
-                  (b) => `
-                <tr>
-                  <td>${b.size}</td>
-                  <td>R ${b.rangeStart?.toLocaleString()} - ${b.rangeEnd ? "R " + b.rangeEnd.toLocaleString() : "above"}</td>
-                  <td>${b.references}</td>
-                  <td>${b.yearsKnown}</td>
-                  <td>${b.termsGiven}</td>
-                  <td>${b.termsTaken}</td>
-                </tr>
-              `,
-                )
-                .join("")}
-            </tbody>
-          </table>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Company Benchmark</h2>
-          <p class="section-subtitle">SIC Code: ${d.industryOverview.sicCode} - Credit rating agency activities</p>
-          <table class="data-table">
-            <thead><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr></thead>
-            <tbody>
-              ${d.companyBenchmark.comparisons
-                .map(
-                  (c) => `
-                <tr><td>${c.metric}</td><td>${c.industry}</td><td>${c.subject}</td></tr>
-              `,
-                )
-                .join("")}
-            </tbody>
-          </table>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">Summary</h2>
-          <div class="summary-item"><div class="summary-label">Payment Trend</div><div class="summary-text">${d.summary.paymentTrend}</div></div>
-          <div class="summary-item"><div class="summary-label">Company Structure</div><div class="summary-text">${d.summary.companyStructure}</div></div>
-          <div class="summary-item"><div class="summary-label">Capacity</div><div class="summary-text">${d.summary.capacity}</div></div>
-          <div class="summary-item"><div class="summary-label">Historical</div><div class="summary-text">${d.summary.historical}</div></div>
-          <div class="summary-item"><div class="summary-label">Score</div><div class="summary-text">${d.summary.score}</div></div>
-        </section>
-
-        <footer class="report-footer">
-          <p>${d.constantUpdateNote}</p>
-          <p>Experian Confidential</p>
-        </footer>
-      `;
+        report.className = "report design-2";
+        report.innerHTML = renderDesign2(d);
       }
 
       function renderDesign2(d) {
@@ -950,13 +1004,13 @@
           { id: "sec-trade-references", title: "Trade References" },
           { id: "sec-media-press", title: "Media and Press Release" },
           { id: "sec-photos", title: "Photos of the Business" },
-          { id: "sec-risk-grade", title: "Risk Grade Analysis" },
+          { id: "sec-risk-grade", title: "RISK GRADE ANALYSIS" },
           { id: "sec-summary", title: "Summary" },
           { id: "sec-financial-statement", title: "Financial Statement" },
           { id: "sec-swot", title: "SWOT Analysis" },
           {
             id: "sec-trade-reference-summary",
-            title: "Trade Reference Summary",
+            title: "TRADE REFERENCE SUMMARY",
           },
           { id: "sec-company-benchmark", title: "Company Benchmark" },
         ];
@@ -1175,7 +1229,7 @@
               </div>
             </div>
             <div class="d2-card" id="sec-risk-grade">
-              <h3 class="d2-card-title">Risk Grade Analysis</h3>
+              <h3 class="d2-card-title">RISK GRADE ANALYSIS</h3>
               <div class="d2-risk-banner">
                 <div class="d2-risk-banner-score">
                   <span class="d2-risk-banner-number">${d.riskGrade.score}</span>
@@ -1235,7 +1289,7 @@
             </div>
         </div>
         <div class="d2-card" id="sec-trade-reference-summary">
-          <h3 class="d2-card-title">Trade Reference Summary</h3>
+          <h3 class="d2-card-title">TRADE REFERENCE SUMMARY</h3>
           <table class="d2-table"><thead><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr></thead><tbody>${d.tradeReferenceSummary.bands.map((b) => "<tr><td>" + b.size + "</td><td>R " + (b.rangeStart != null ? b.rangeStart.toLocaleString() : "-") + " - " + (b.rangeEnd != null ? "R " + b.rangeEnd.toLocaleString() : "above") + "</td><td>" + b.references + "</td><td>" + (b.yearsKnown || "-") + "</td><td>" + b.termsGiven + "</td><td>" + b.termsTaken + "</td></tr>").join("")}</tbody></table>
         </div>
         <div class="d2-card" id="sec-company-benchmark">
@@ -1247,253 +1301,15 @@
       `;
       }
 
-      function renderDesign3(d) {
-        const riskPct = Math.round(
-          (d.riskGrade.score / d.riskGrade.maxScore) * 100,
-        );
-        const liqPct = Math.round(
-          parseFloat(d.financialInformation.ratios.liquidity.currentRatio) * 33,
-        );
-        const profPct = Math.min(
-          100,
-          Math.round(
-            parseFloat(
-              d.financialInformation.ratios.profitability.grossProfitMargin,
-            ),
-          ),
-        );
-        return `
-        <div class="d3-cover">
-          <div class="d3-cover-pattern"></div>
-          <img src="assets/experian-logo.png" alt="Experian" class="d3-cover-logo">
-          <h1 class="d3-cover-title">Gold Report</h1>
-          <p class="d3-cover-subtitle">${d.subject.name}</p>
-          <p class="d3-cover-meta">${d.meta.bureau} | KIM ${d.meta.kimNumber} | ${d.meta.updatedOn}</p>
-        </div>
-        <div class="d3-content">
-          <header class="d3-header">
-            <img src="assets/experian-logo.png" alt="Experian" class="logo">
-            <span class="d3-report-title">Gold Report – ${d.subject.name}</span>
-          </header>
-          <section class="d3-section d3-subject">
-            <h1 class="d3-company-name">${d.subject.name}</h1>
-            <p class="d3-status">${d.subject.companyStatus}</p>
-            <div class="d3-kv-grid">
-              <span class="d3-kv-key">Registration Number</span>
-              <span class="d3-kv-value">${d.subject.registrationNumber}</span>
-              <span class="d3-kv-key">Other Names</span>
-              <span class="d3-kv-value">${d.subject.otherNames}</span>
-              ${d.subject.incorporatesOperationsOf.map((op) => '<span class="d3-kv-key">' + (op.type || "Incorporates") + '</span><span class="d3-kv-value">' + op.name + " (" + op.date + ")</span>").join("")}
-            </div>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Key Metrics</h2>
-            <div class="d3-metrics-grid">
-              <div class="d3-metric-card">
-                <div class="d3-metric-circle">
-                  <svg viewBox="0 0 36 36">
-                    <path class="d3-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                    <path class="d3-circle-fill" stroke-dasharray="${riskPct}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                  </svg>
-                  <span class="d3-circle-value">${riskPct}%</span>
-                </div>
-                <span class="d3-metric-label">Risk Score</span>
-              </div>
-              <div class="d3-metric-card">
-                <div class="d3-metric-circle">
-                  <svg viewBox="0 0 36 36">
-                    <path class="d3-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                    <path class="d3-circle-fill" stroke-dasharray="${liqPct}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                  </svg>
-                  <span class="d3-circle-value">${d.financialInformation.ratios.liquidity.currentRatio}</span>
-                </div>
-                <span class="d3-metric-label">Current Ratio</span>
-              </div>
-              <div class="d3-metric-card">
-                <div class="d3-metric-circle">
-                  <svg viewBox="0 0 36 36">
-                    <path class="d3-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                    <path class="d3-circle-fill" stroke-dasharray="${profPct}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                  </svg>
-                  <span class="d3-circle-value">${profPct}%</span>
-                </div>
-                <span class="d3-metric-label">Gross Profit</span>
-              </div>
-              <div class="d3-metric-card">
-                <div class="d3-metric-circle">
-                  <svg viewBox="0 0 36 36">
-                    <path class="d3-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                    <path class="d3-circle-fill" stroke-dasharray="${Math.min(100, Math.round(parseFloat(d.financialInformation.ratios.solvency.solvencyRatio) * 50))}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                  </svg>
-                  <span class="d3-circle-value">${d.financialInformation.ratios.solvency.solvencyRatio}</span>
-                </div>
-                <span class="d3-metric-label">Solvency</span>
-              </div>
-            </div>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Financial Information</h2>
-            <p class="d3-muted">Date obtained: ${d.financialInformation.dateObtained} | Currency: ${d.financialInformation.reportingCurrency}</p>
-            <p>Ratios: Current ${d.financialInformation.ratios.liquidity.currentRatio} | Acid Test ${d.financialInformation.ratios.liquidity.acidTestRatio} | Gross Profit ${d.financialInformation.ratios.profitability.grossProfitMargin}% | Pre-Tax ${d.financialInformation.ratios.profitability.preTaxProfitMargin}% | Solvency ${d.financialInformation.ratios.solvency.solvencyRatio}</p>
-            <h3 class="d3-title" style="margin-top: 16px;">Financial Summary</h3>
-            <div class="d3-financial-grid">
-              <div class="d3-fin-card">
-                <span class="d3-fin-label">Turnover FY 2024</span>
-                <span class="d3-fin-value">${formatCurrency(d.financialInformation.turnoverFY2024)}</span>
-              </div>
-              <div class="d3-fin-card">
-                <span class="d3-fin-label">Cash</span>
-                <span class="d3-fin-value">${formatCurrency(d.financialInformation.estimatedCash)}</span>
-              </div>
-              <div class="d3-fin-card">
-                <span class="d3-fin-label">Debtors</span>
-                <span class="d3-fin-value">${formatCurrency(d.financialInformation.estimatedDebtors)}</span>
-              </div>
-              <div class="d3-fin-card">
-                <span class="d3-fin-label">Creditors</span>
-                <span class="d3-fin-value">${formatCurrency(d.financialInformation.estimatedCreditors)}</span>
-              </div>
-            </div>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Assessment</h2>
-            <p><strong>Enquiry:</strong> ${formatCurrency(d.assessment.enquiry.amount)} | ${d.assessment.enquiry.terms} | ${d.assessment.enquiry.date}</p>
-            <p>${d.assessment.recommendation}</p>
-            <p><strong>Profitability:</strong> ${d.assessment.profitability}</p>
-            <p><strong>Liquidity:</strong> ${d.assessment.liquidity}</p>
-            <p><strong>Solvency:</strong> ${d.assessment.solvency}</p>
-            <p class="d3-muted">${d.assessment.disclaimer}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Address Details</h2>
-            <p><strong>Physical:</strong> ${d.addressDetails.physical.unit}, ${d.addressDetails.physical.building}, ${d.addressDetails.physical.street}, ${d.addressDetails.physical.town} ${d.addressDetails.physical.postalCode}, ${d.addressDetails.physical.province}, ${d.addressDetails.physical.country}</p>
-            <p><strong>Postal:</strong> ${d.addressDetails.postal.box}, ${d.addressDetails.postal.town} ${d.addressDetails.postal.postalCode}, ${d.addressDetails.postal.province}, ${d.addressDetails.postal.country}</p>
-            ${d.addressDetails.additionalComments.length ? '<p class="d3-muted">' + d.addressDetails.additionalComments.join("; ") + "</p>" : ""}
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Contact Details</h2>
-            <p>${d.contactDetails.telephone} | ${d.contactDetails.fax} | ${d.contactDetails.cellphone} | ${d.contactDetails.email} | ${d.contactDetails.web}</p>
-            <p>VAT: ${d.contactDetails.vatNumber} | Auditor: ${d.contactDetails.auditor}</p>
-            <p class="d3-muted">${d.contactDetails.vatNote}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Branches</h2>
-            ${d.branches.map((b) => "<p>" + b.name + ": " + b.address + ", " + b.town + " " + b.postalCode + ", " + b.province + ", " + b.country + "</p>").join("")}
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">History</h2>
-            <p>Incorporated: ${d.history.incorporatedOn} | Trading from: ${d.history.tradingCommencedOn}</p>
-            <p>${d.history.narrative}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Corporate Structure</h2>
-            <p>${d.corporateStructure.ultimateHoldingCompany}</p>
-            <p>Holding: ${d.corporateStructure.holdingCompany.name} (${d.corporateStructure.holdingCompany.country}) - ${d.corporateStructure.holdingCompany.shareholding}%</p>
-            <p>Associate: ${d.corporateStructure.associateCompany.name} | Subsidiary: ${d.corporateStructure.subsidiaryCompany.name}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Active Principals</h2>
-            ${d.activePrincipals.map((p) => "<p><strong>" + p.name + " (" + p.initials + ")</strong> – " + p.areaOfResponsibility + " (" + p.sharePercent + '%)<br><span class="d3-muted">ID: ' + p.idNumber + " | DOB: " + p.dateOfBirth + " | Appointed: " + p.appointmentDate + " | " + p.courtRecords + '</span><br><span class="d3-muted">' + p.currentBusinessInterests + '</span><br><span class="d3-muted">' + p.propertiesAndBonds + "</span></p>").join("")}
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Non-Active Principals</h2>
-            <table class="d3-table"><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointed</th></tr>${d.nonActivePrincipals.map((p) => "<tr><td>" + p.name + "</td><td>" + p.initials + "</td><td>" + p.idNumber + "</td><td>" + p.dateOfBirth + "</td><td>" + p.status + "</td><td>" + p.appointmentDate + "</td></tr>").join("")}</table>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Operations</h2>
-            <p>${d.operations.businessActivities}</p>
-            <p><strong>Major Clients:</strong> ${d.operations.majorClients}</p>
-            <p><strong>SIC Code:</strong> ${d.operations.majorSicCode.code} - ${d.operations.majorSicCode.description}</p>
-            <p>Agencies Held: ${d.operations.agenciesHeld} | Import/Export: ${d.operations.importExport}</p>
-            <p>Fleet: ${d.operations.fleet.total} vehicles (${d.operations.fleet.cars} cars, ${d.operations.fleet.lightDeliveryVehicles} light delivery)</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Staff & B-BBEE</h2>
-            <p>Total: ${d.staff.total} | Salaried: ${d.staff.salaried} (paid ${d.staff.salariedPaymentDay}) | Wages: ${d.staff.wages} (paid ${d.staff.wagesPaymentDay})</p>
-            <p>B-BBEE: ${d.bbbee.status}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Premises</h2>
-            <p>${d.premises.type} - ${d.premises.location} | ${d.premises.ownedLeased} | Landlord: ${d.premises.landlord}</p>
-            <p class="d3-muted">${d.premises.occupationNote}</p>
-            <p>${d.propertiesAndBonds}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Contracts</h2>
-            ${d.contracts.map((c) => "<p><strong>" + c.description + "</strong> – " + formatCurrency(c.value) + " (" + c.obtainedBy + ')<br><span class="d3-muted">' + c.notes + "</span></p>").join("")}
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Court Records</h2>
-            <p>${d.courtRecords.judgements} ${d.courtRecords.notarialBonds} ${d.courtRecords.businessRescue}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Risk Grade Analysis</h2>
-            <p><strong>${d.riskGrade.score}</strong> out of ${d.riskGrade.maxScore}</p>
-            <p>${d.riskGrade.riskLevel} – ${d.riskGrade.model}</p>
-            <p class="d3-muted">${d.riskGrade.interpretation}</p>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Trade References</h2>
-            ${d.tradeReferences
-              .slice(0, 6)
-              .map(
-                (r) =>
-                  "<p><strong>Ref " +
-                  r.ref +
-                  "</strong> " +
-                  r.dateChecked +
-                  " | " +
-                  (r.yearsTrading != null ? r.yearsTrading + " yrs" : "-") +
-                  " | " +
-                  (r.aveMonthlyPurchases
-                    ? formatCurrency(r.aveMonthlyPurchases)
-                    : "-") +
-                  " | " +
-                  (r.termsGiven || "-") +
-                  "/" +
-                  (r.termsTaken || "-") +
-                  '<br><span class="d3-muted">' +
-                  r.comments +
-                  "</span></p>",
-              )
-              .join("")}
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Trade Reference Summary</h2>
-            <table class="d3-table"><tr><th>Size</th><th>Range</th><th>Refs</th><th>Years Known</th><th>Terms Given</th><th>Terms Taken</th></tr>${d.tradeReferenceSummary.bands.map((b) => "<tr><td>" + b.size + "</td><td>R " + (b.rangeStart != null ? b.rangeStart.toLocaleString() : "-") + " - " + (b.rangeEnd != null ? "R " + b.rangeEnd.toLocaleString() : "above") + "</td><td>" + b.references + "</td><td>" + (b.yearsKnown || "-") + "</td><td>" + b.termsGiven + "</td><td>" + b.termsTaken + "</td></tr>").join("")}</table>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Company Benchmark</h2>
-            <p class="d3-muted">SIC Code: ${d.industryOverview.sicCode} - Credit rating agency activities</p>
-            <table class="d3-table"><tr><th>Metric</th><th>Industry</th><th>Subject</th></tr>${d.companyBenchmark.comparisons.map((c) => "<tr><td>" + c.metric + "</td><td>" + c.industry + "</td><td>" + c.subject + "</td></tr>").join("")}</table>
-          </section>
-          <section class="d3-section">
-            <h2 class="d3-title">Summary</h2>
-            <p><strong>Payment Trend:</strong> ${d.summary.paymentTrend}</p>
-            <p><strong>Company Structure:</strong> ${d.summary.companyStructure}</p>
-            <p><strong>Capacity:</strong> ${d.summary.capacity}</p>
-            <p><strong>Historical:</strong> ${d.summary.historical}</p>
-            <p><strong>Score:</strong> ${d.summary.score}</p>
-          </section>
-        </div>
-        <footer class="report-footer d3-footer"><p>${d.constantUpdateNote}</p><p>Experian Confidential</p></footer>
-      `;
-      }
 
-      document
-        .getElementById("design-select")
-        .addEventListener("change", function () {
-          renderReport(this.value);
-        });
-
-      renderReport();
+      initReportApp();
 
       // PDF export - no browser header/footer (date, title, URL), custom page numbers
       function restoreExportUI() {
         document.documentElement.classList.remove("pdf-export");
         document.body.classList.remove("pdf-export");
-        var actions = document.querySelector(".print-actions");
-        if (actions) actions.style.display = "";
+        var actions = document.getElementById("print-actions");
+        if (actions) actions.hidden = false;
         var btn = document.getElementById("export-pdf");
         if (btn) {
           btn.disabled = false;
@@ -1525,6 +1341,32 @@
         });
         return Promise.all(promises);
       }
+      function convertCoverBackgroundToBase64() {
+        var cover = document.querySelector(".d2-cover");
+        if (!cover) return Promise.resolve();
+        var bgUrl = new URL("assets/cover-background.png", window.location.href).href;
+        return fetch(bgUrl)
+          .then(function (r) {
+            return r.blob();
+          })
+          .then(function (blob) {
+            return new Promise(function (resolve, reject) {
+              var reader = new FileReader();
+              reader.onloadend = function () {
+                resolve(reader.result);
+              };
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          })
+          .then(function (dataUrl) {
+            cover.style.backgroundImage = "url(" + dataUrl + ")";
+            cover.style.backgroundSize = "cover";
+          })
+          .catch(function () {
+            /* ignore if fetch fails */
+          });
+      }
       document
         .getElementById("export-pdf")
         .addEventListener("click", function () {
@@ -1539,7 +1381,7 @@
           btn.textContent = "Generating...";
           document.documentElement.classList.add("pdf-export");
           document.body.classList.add("pdf-export");
-          document.querySelector(".print-actions").style.display = "none";
+          document.getElementById("print-actions").hidden = true;
           window.scrollTo(0, 0);
           const report = document.getElementById("report");
           report.scrollIntoView({ block: "start", behavior: "instant" });
@@ -1553,6 +1395,7 @@
             pagebreak: { mode: ["css", "legacy"], avoid: ".d2-card" },
           };
           convertImagesToBase64(report)
+            .then(convertCoverBackgroundToBase64)
             .then(function () {
               return html2pdf().set(opt).from(report).save();
             })
@@ -1577,9 +1420,10 @@
       document
         .getElementById("print-pdf")
         .addEventListener("click", function () {
-          document.querySelector(".print-actions").style.display = "none";
+          var pa = document.getElementById("print-actions");
+          if (pa) pa.hidden = true;
           window.print();
-          document.querySelector(".print-actions").style.display = "";
+          if (pa) pa.hidden = false;
         });
     </script>
   </body>

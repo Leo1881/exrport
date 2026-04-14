@@ -64,14 +64,12 @@ async function generatePdf() {
     browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
-    await page.goto(`http://localhost:${port}`, {
+    await page.goto(`http://localhost:${port}/?pdf=1`, {
       waitUntil: 'networkidle0',
       timeout: 15000,
     });
 
-    // Switch to Design 2 (Dashboard)
-    await page.select('#design-select', '2');
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 300));
 
     // Prepare for print
     await page.emulateMediaType('print');

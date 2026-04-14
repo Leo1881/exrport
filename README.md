@@ -6,7 +6,7 @@ A proof-of-concept redesign of the Experian Gold business credit report with imp
 
 **Option A – Browser (html2pdf.js)**
 1. Run `npx serve` and open http://localhost:3000
-2. Select Design 2 (Dashboard), then click **Export to PDF**
+2. Click **Export to PDF** or **Print to PDF** as needed
 
 **Option B – Puppeteer (recommended for best PDF quality)**
 1. `npm install`
