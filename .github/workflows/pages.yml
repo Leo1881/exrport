@@ -1,4 +1,6 @@
-# Deploy static site to GitHub Pages (Actions publishing source)
+# Deploy static site to GitHub Pages (Actions publishing source).
+# One-time: repo Settings → Pages → Build and deployment → Source: GitHub Actions.
+# configure-pages is omitted: it 404s until Pages exists; enablement needs a PAT, not GITHUB_TOKEN.
 name: Deploy GitHub Pages
 
 on:
@@ -33,9 +35,6 @@ jobs:
             --exclude='.github' \
             --exclude='node_modules' \
             ./ _site/
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
