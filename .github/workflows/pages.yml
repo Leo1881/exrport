@@ -1,12 +1,16 @@
 # Deploy static site to GitHub Pages (Actions publishing source).
-# One-time: repo Settings → Pages → Build and deployment → Source: GitHub Actions.
-# configure-pages is omitted: it 404s until Pages exists; enablement needs a PAT, not GITHUB_TOKEN.
+#
+# REQUIRED ONCE (or deploy always 404s): GitHub.com → repo → Settings → Pages →
+# Build and deployment → Source → select "GitHub Actions" → Save.
+# Until that is set, the Pages API does not exist and deploy-pages fails with 404.
+#
 name: Deploy GitHub Pages
 
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -37,10 +41,10 @@ jobs:
             ./ _site/
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
