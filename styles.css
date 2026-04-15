@@ -846,6 +846,16 @@ body.pdf-export .report.design-3 .d3-section {
   text-decoration: underline;
 }
 
+.report.design-2 .d2-media-thumb {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  margin-bottom: 12px;
+  display: block;
+}
+
 .report.design-2 .d2-media-item {
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border-light);

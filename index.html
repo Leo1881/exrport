@@ -44,10 +44,11 @@
             1. Report product
           </h2>
           <p class="d2-text d2-muted report-selection-hint">
-            Standard reports (Bronze and Silver) include every section in the
-            catalogue at a fixed package total. Only
-            <strong>Customized report</strong> lets you select individual
-            sections and build your own total.
+            <strong>Bronze P&amp;B</strong> includes all 14 Bronze catalogue
+            headings. <strong>Silver P&amp;B</strong> includes those plus every
+            Silver heading. <strong>Customized report</strong> always includes
+            the same 14 Bronze headings, and you add any extra headings you tick
+            below; the total is the Bronze base plus your add-ons.
           </p>
           <div class="report-selection-field">
             <select
@@ -88,13 +89,14 @@
             </button>
           </div>
           <p class="report-custom-section-subtitle">
-            Select additional catalogue headings to include in your report (not
-            included in the standard package above).
+            The 14 standard Bronze sections are always included. Tick any
+            additional catalogue headings (Silver extras and other options) to
+            add them to your report and to the total.
           </p>
           <ul class="report-pricing-custom" id="custom-pricing-checklist"></ul>
           <div class="report-pricing-custom-totals" id="custom-pricing-split-totals">
             <div class="report-pricing-subtotal">
-              <span>Total standard (fixed)</span>
+              <span>Total standard (14 Bronze headings)</span>
               <span id="custom-total-standard-base">R 0,00</span>
             </div>
             <div class="report-pricing-subtotal">
@@ -109,7 +111,12 @@
         </div>
 
         <div class="report-selection-actions">
-          <button type="button" class="btn-d2-primary" id="btn-view-report">
+          <button
+            type="button"
+            class="btn-d2-primary"
+            id="btn-view-report"
+            title="Opens the report in a new browser tab"
+          >
             View report
           </button>
         </div>
@@ -541,6 +548,7 @@
             title: "Credit Bureau Expands Services to Regional Markets",
             date: "2024/01/15",
             source: "Business Day",
+            imageUrl: "assets/media-press-1.jpg",
             summary:
               "New Market Decision Systems announced expansion of credit bureau services to regional markets, including bank notifications and data cleaning capabilities.",
           },
@@ -548,6 +556,7 @@
             title: "FY2024 Annual Results Press Release",
             date: "2024/03/01",
             source: "Company Press Release",
+            imageUrl: "assets/media-press-2.jpg",
             summary:
               "Financial results for the year ended June 2024 highlight strong performance in credit rating agency activities, with turnover exceeding R188 million.",
           },
@@ -555,33 +564,34 @@
             title: "Industry Recognition for Credit Data Excellence",
             date: "2023/11/20",
             source: "Credit Industry News",
+            imageUrl: "assets/media-press-3.jpg",
             summary:
               "The subject received recognition for excellence in credit data management and compliance with industry standards.",
           },
         ],
         photosOfBusiness: [
           {
-            url: "assets/photo-executive-office.png",
+            url: "assets/photo-executive-office.jpg",
             caption: "Executive office and meeting area",
           },
           {
-            url: "assets/photo-financial-office.png",
+            url: "assets/photo-financial-office.jpg",
             caption: "Financial department workspace",
           },
           {
-            url: "assets/photo-office-buildings.png",
+            url: "assets/photo-office-buildings.jpg",
             caption: "Office location and urban environment",
           },
           {
-            url: "assets/photo-city-square.png",
+            url: "assets/photo-city-square.jpg",
             caption: "Corporate headquarters plaza",
           },
           {
-            url: "assets/photo-team-collaboration.png",
+            url: "assets/photo-team-collaboration.jpg",
             caption: "Team collaboration and workspace",
           },
           {
-            url: "assets/photo-open-office.png",
+            url: "assets/photo-open-office.jpg",
             caption: "Open-plan office and breakout area",
           },
         ],
@@ -855,8 +865,8 @@
       );
 
       /**
-       * Customized optional add-ons: Silver-only headings plus legacy extended rows.
-       * ASSESSMENT appears once (Silver row); duplicate id "assess" from supplemental is omitted.
+       * Legacy / supplemental catalogue rows available as Customized add-ons only.
+       * ASSESSMENT is omitted from add-ons where it duplicates Silver's ASSESSMENT row.
        */
       const CUSTOMIZED_REPORT_SUPPLEMENTAL_SECTIONS = [
         {
@@ -915,7 +925,7 @@
         },
       ];
 
-      /** Extra layout sections only on Customized (optional checkboxes) */
+      /** Extra layout sections only on Customized (optional checkboxes; Bronze/Silver catalogue) */
       const CUSTOMIZED_EXTENDED_LAYOUT_SECTIONS = [
         {
           id: "custom-media-press",
@@ -1291,7 +1301,7 @@
         cust.hidden = !isCustom;
         if (titleEl) {
           titleEl.textContent = isCustom
-            ? "Included sections (catalogue)"
+            ? "Standard sections always included (Bronze catalogue)"
             : "Included sections (package)";
         }
         if (packageTotalRow) {
@@ -1430,15 +1440,104 @@
         window.scrollTo(0, 0);
       }
 
+      /** Apply ?product= & ?custom= from URL (used when report opens in a new tab). */
+      function applyReportConfigFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get("report") !== "1") {
+          return;
+        }
+        var productEl = document.getElementById("report-product");
+        var product = params.get("product");
+        if (
+          productEl &&
+          product &&
+          (product === "bronze-pb" ||
+            product === "silver-pb" ||
+            product === CUSTOMIZED_REPORT_ID)
+        ) {
+          productEl.value = product;
+        }
+        rebuildStandardPricingLines();
+        updateReportProductUI();
+        if (productEl && productEl.value === CUSTOMIZED_REPORT_ID) {
+          var custom = params.get("custom");
+          var checklist = document.getElementById("custom-pricing-checklist");
+          if (checklist) {
+            var selected = new Set();
+            if (custom) {
+              custom.split(",").forEach(function (part) {
+                var n = parseInt(String(part).trim(), 10);
+                if (isFinite(n)) {
+                  selected.add(n);
+                }
+              });
+            }
+            checklist
+              .querySelectorAll('input[type="checkbox"]')
+              .forEach(function (cb) {
+                var idx = parseInt(cb.getAttribute("data-idx"), 10);
+                cb.checked = selected.has(idx);
+              });
+            checklist.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+        }
+      }
+
+      function shouldAutoOpenReportFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        return params.get("report") === "1" || params.get("pdf") === "1";
+      }
+
+      /** Opens the same page in a new tab with the current product and custom picks. */
+      function openReportViewInNewTab() {
+        var productEl = document.getElementById("report-product");
+        var product = productEl ? productEl.value : "bronze-pb";
+        var url = new URL(window.location.href);
+        url.searchParams.set("report", "1");
+        url.searchParams.set("product", product);
+        url.searchParams.delete("pdf");
+        if (product === CUSTOMIZED_REPORT_ID) {
+          var indices = [];
+          var checklist = document.getElementById("custom-pricing-checklist");
+          if (checklist) {
+            checklist
+              .querySelectorAll('input[type="checkbox"]:checked')
+              .forEach(function (cb) {
+                indices.push(cb.getAttribute("data-idx"));
+              });
+          }
+          if (indices.length) {
+            url.searchParams.set("custom", indices.join(","));
+          } else {
+            url.searchParams.delete("custom");
+          }
+        } else {
+          url.searchParams.delete("custom");
+        }
+        window.open(url.toString(), "_blank", "noopener,noreferrer");
+      }
+
       function initReportApp() {
         initReportBuilder();
+        applyReportConfigFromUrl();
         var viewBtn = document.getElementById("btn-view-report");
         var changeBtn = document.getElementById("btn-change-config");
-        if (viewBtn) viewBtn.addEventListener("click", enterReportView);
+        if (viewBtn) viewBtn.addEventListener("click", openReportViewInNewTab);
         if (changeBtn) changeBtn.addEventListener("click", showSetupView);
 
-        if (new URLSearchParams(window.location.search).get("pdf") === "1") {
+        if (shouldAutoOpenReportFromUrl()) {
           enterReportView();
+          if (new URLSearchParams(window.location.search).get("report") === "1") {
+            try {
+              history.replaceState(
+                {},
+                "",
+                window.location.pathname + window.location.hash,
+              );
+            } catch (e) {
+              /* ignore */
+            }
+          }
         } else {
           showSetupView();
         }
@@ -1696,7 +1795,7 @@
             </div>
             <div class="d2-card" id="sec-media-press">
               <h3 class="d2-card-title">Media and Press Release</h3>
-              ${(d.mediaAndPressReleases || []).map((item) => '<div class="d2-media-item"><p class="d2-text"><strong>' + item.title + '</strong></p><p class="d2-text d2-muted">' + item.source + " | " + item.date + '</p><p class="d2-text">' + item.summary + "</p></div>").join("")}
+              ${(d.mediaAndPressReleases || []).map((item) => '<div class="d2-media-item">' + (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="" class="d2-media-thumb">' : "") + '<p class="d2-text"><strong>' + item.title + '</strong></p><p class="d2-text d2-muted">' + item.source + " | " + item.date + '</p><p class="d2-text">' + item.summary + "</p></div>").join("")}
             </div>
             <div class="d2-card" id="sec-photos">
               <h3 class="d2-card-title">Photos of the Business</h3>

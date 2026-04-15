@@ -396,5 +396,83 @@
     "capacity": "Employees, size of fleet and branches determine capacity of a company. This company has less than the norm for companies within this industry. This company operates outside of the same province as 65% of the companies within this industry. The average account size this company requires is higher than the norm for companies in this industry.",
     "historical": "Counting in favour of this company is that there is no adverse, judgements or refer to drawer cheques within the last 5 years, showing that this debt can be maintained if managed correctly.",
     "score": "This company's score reflects that the risk incurred would be similar to dealing with another company within this industry as 73% score within the average risk category."
+  },
+  "mediaAndPressReleases": [
+    {
+      "title": "Credit Bureau Expands Services to Regional Markets",
+      "date": "2024/01/15",
+      "source": "Business Day",
+      "imageUrl": "assets/media-press-1.jpg",
+      "summary": "New Market Decision Systems announced expansion of credit bureau services to regional markets, including bank notifications and data cleaning capabilities."
+    },
+    {
+      "title": "FY2024 Annual Results Press Release",
+      "date": "2024/03/01",
+      "source": "Company Press Release",
+      "imageUrl": "assets/media-press-2.jpg",
+      "summary": "Financial results for the year ended June 2024 highlight strong performance in credit rating agency activities, with turnover exceeding R188 million."
+    },
+    {
+      "title": "Industry Recognition for Credit Data Excellence",
+      "date": "2023/11/20",
+      "source": "Credit Industry News",
+      "imageUrl": "assets/media-press-3.jpg",
+      "summary": "The subject received recognition for excellence in credit data management and compliance with industry standards."
+    }
+  ],
+  "photosOfBusiness": [
+    { "url": "assets/photo-executive-office.jpg", "caption": "Executive office and meeting area" },
+    { "url": "assets/photo-financial-office.jpg", "caption": "Financial department workspace" },
+    { "url": "assets/photo-office-buildings.jpg", "caption": "Office location and urban environment" },
+    { "url": "assets/photo-city-square.jpg", "caption": "Corporate headquarters plaza" },
+    { "url": "assets/photo-team-collaboration.jpg", "caption": "Team collaboration and workspace" },
+    { "url": "assets/photo-open-office.jpg", "caption": "Open-plan office and breakout area" }
+  ],
+  "financialStatement": {
+    "period": "Year ended 30 June 2024",
+    "profitAndLoss": [
+      { "line": "Turnover", "amount": 188196113 },
+      { "line": "Cost of sales", "amount": -114100000 },
+      { "line": "Gross profit", "amount": 74096113 },
+      { "line": "Operating expenses", "amount": -55800000 },
+      { "line": "Operating profit", "amount": 18296113 },
+      { "line": "Finance cost", "amount": -1200000 },
+      { "line": "Profit before tax", "amount": 17096113 },
+      { "line": "Taxation", "amount": -4600000 },
+      { "line": "Profit after tax", "amount": 12496113 }
+    ],
+    "balanceSheet": [
+      { "line": "Total assets", "amount": 125000000 },
+      { "line": "Current assets", "amount": 95000000 },
+      { "line": "Non-current assets", "amount": 30000000 },
+      { "line": "Total liabilities", "amount": 65000000 },
+      { "line": "Current liabilities", "amount": 63000000 },
+      { "line": "Non-current liabilities", "amount": 2000000 },
+      { "line": "Shareholders' equity", "amount": 60000000 }
+    ]
+  },
+  "swotAnalysis": {
+    "strengths": [
+      "Well established with strong trading history since 1995",
+      "Strong financial position with satisfactory liquidity and solvency ratios",
+      "Account paid on due date with positive trade references",
+      "No judgements or adverse court records",
+      "Major clients include Absa, Nedbank and Woolworths"
+    ],
+    "weaknesses": [
+      "Non-compliant B-BBEE contributor",
+      "Below industry norm for employees and fleet size",
+      "Limited capacity compared to industry peers"
+    ],
+    "opportunities": [
+      "Expansion of credit bureau services to regional markets",
+      "Growth in demand for credit data and analytics",
+      "Potential to improve B-BBEE status"
+    ],
+    "threats": [
+      "Increased competition in credit rating sector",
+      "Regulatory changes affecting credit bureau operations",
+      "Economic conditions may impact client payment behaviour"
+    ]
   }
 }
