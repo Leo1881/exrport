@@ -314,6 +314,12 @@
   background: var(--bg-section);
   border-top: 1px solid var(--border-light);
 }
+
+/* Hide bottom action bar (Change configuration / Export / Print) — remove to show again */
+#print-actions {
+  display: none !important;
+}
+
 @media (max-width: 720px) {
   .report-pricing-lines,
   .report-pricing-custom {
@@ -370,9 +376,10 @@ body.pdf-export .report.design-3 .d3-cover {
 }
 
 /* PDF export - cover full bleed, extend to cancel report padding (sides/bottom only) */
+/* Use mm not 100vh — html2canvas often sees vh as 0 in the snapshot iframe → blank PDF */
 body.pdf-export .report.design-2 .d2-cover {
   margin: 0 -12mm -12mm -12mm !important;
-  min-height: 100vh;
+  min-height: 297mm;
   background-size: cover !important;
 }
 
@@ -751,6 +758,12 @@ body.pdf-export .report.design-3 .d3-section {
 .report.design-2 {
   padding: 16px;
   background: white;
+}
+
+/* Bronze P&B: match catalogue — no extra dashboard strip beyond the 14 sections */
+.report.design-2[data-report-product="bronze-pb"] .d2-metrics,
+.report.design-2[data-report-product="bronze-pb"] .d2-recommend {
+  display: none;
 }
 
 /* Design 2 – Cover page (SGPFLH style) */
@@ -1569,7 +1582,7 @@ body.pdf-export .report.design-3 .d3-section {
   }
   .report.design-2 .d2-cover {
     margin: 0 -12mm -12mm -12mm !important;
-    min-height: 100vh;
+    min-height: 297mm;
     background-size: cover !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
