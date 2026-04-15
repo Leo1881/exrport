@@ -44,8 +44,8 @@
             1. Report product
           </h2>
           <p class="d2-text d2-muted report-selection-hint">
-            Standard reports (Bronze through Gold Hybrid) include every section in
-            the catalogue at a fixed package total. Only
+            Standard reports (Bronze and Silver) include every section in the
+            catalogue at a fixed package total. Only
             <strong>Customized report</strong> lets you select individual
             sections and build your own total.
           </p>
@@ -58,8 +58,6 @@
             >
               <option value="bronze-pb">Bronze P&amp;B</option>
               <option value="silver-pb">Silver P&amp;B</option>
-              <option value="gold-sas">Gold SAS</option>
-              <option value="gold-hybrid">Gold Hybrid</option>
               <option value="customized">Customized report</option>
             </select>
           </div>
@@ -79,7 +77,7 @@
         <div id="custom-pricing-block" class="report-pricing-block d2-card" hidden>
           <div class="report-custom-section-head">
             <h3 class="d2-card-title report-custom-section-title">
-              Select sections (customized)
+              Customized report
             </h3>
             <button
               type="button"
@@ -89,6 +87,10 @@
               Deselect all
             </button>
           </div>
+          <p class="report-custom-section-subtitle">
+            Select additional catalogue headings to include in your report (not
+            included in the standard package above).
+          </p>
           <ul class="report-pricing-custom" id="custom-pricing-checklist"></ul>
           <div class="report-pricing-custom-totals" id="custom-pricing-split-totals">
             <div class="report-pricing-subtotal">
@@ -770,6 +772,354 @@
         },
       ];
 
+      /** Bronze P&B only — 14 headings; demo line prices sum to package total */
+      const BRONZE_REPORT_SECTIONS = [
+        {
+          id: "bronze-reg-info",
+          label: "BUSINESS REGISTRATION INFORMATION",
+          priceZar: 210,
+        },
+        { id: "bronze-biz-details", label: "BUSINESS DETAILS", priceZar: 310 },
+        {
+          id: "bronze-name-history",
+          label: "BUSINESS NAME HISTORY & CHANGE",
+          priceZar: 190,
+        },
+        {
+          id: "bronze-reg-contact",
+          label: "REGISTERED & OPERATIONAL CONTACT DETAILS",
+          priceZar: 210,
+        },
+        {
+          id: "bronze-principals-cipc",
+          label: "PRINCIPAL DETAILS BY CIPC",
+          priceZar: 210,
+        },
+        { id: "bronze-history", label: "HISTORY", priceZar: 230 },
+        {
+          id: "bronze-bank",
+          label: "BANK DETAILS AND COMMENTS",
+          priceZar: 140,
+        },
+        { id: "bronze-prev-enq", label: "PREVIOUS ENQUIRIES", priceZar: 180 },
+        { id: "bronze-court", label: "COURT RECORDS", priceZar: 250 },
+        { id: "bronze-rescue", label: "BUSINESS RESCUE", priceZar: 290 },
+        { id: "bronze-payment", label: "PAYMENT ANALYSIS", priceZar: 190 },
+        { id: "bronze-debtors", label: "DEBTORS' LEDGER", priceZar: 130 },
+        { id: "bronze-risk", label: "RISK GRADE SCORE", priceZar: 160 },
+        {
+          id: "bronze-trade-table",
+          label: "TRADE REFERENCE SUMMARY TABLE",
+          priceZar: 140,
+        },
+      ];
+
+      /** Silver P&B: same 14 headings as Bronze + Silver-only rows; demo line prices sum to package total */
+      const SILVER_REPORT_EXTRA_SECTIONS = [
+        { id: "silver-assessment", label: "ASSESSMENT", priceZar: 43 },
+        { id: "silver-branches", label: "BRANCHES", priceZar: 43 },
+        {
+          id: "silver-company-ops",
+          label: "COMPANY OPERATIONS AND DETAILS",
+          priceZar: 43,
+        },
+        { id: "silver-agencies-held", label: "AGENCIES HELD", priceZar: 43 },
+        { id: "silver-fleet", label: "FLEET", priceZar: 43 },
+        { id: "silver-staff", label: "STAFF", priceZar: 43 },
+        { id: "silver-bbbee", label: "B-BBEE DETAILS", priceZar: 43 },
+        { id: "silver-premises", label: "PREMISES", priceZar: 43 },
+        { id: "silver-property-bonds", label: "PROPERTY AND BONDS", priceZar: 43 },
+        { id: "silver-fraud-check", label: "FRAUD CHECK", priceZar: 43 },
+        {
+          id: "silver-financial-info",
+          label: "FINANCIAL INFORMATION",
+          priceZar: 42,
+        },
+        { id: "silver-ratios", label: "RATIOS", priceZar: 42 },
+        { id: "silver-contracts", label: "CONTRACTS", priceZar: 42 },
+        { id: "silver-client-refs", label: "CLIENT REFERENCES", priceZar: 43 },
+        {
+          id: "silver-subject-payment",
+          label: "SUBJECT PAYMENT PERFORMANCE PROFILE",
+          priceZar: 43,
+        },
+        {
+          id: "silver-top-industries",
+          label: "TOP INDUSTRIES BOUGHT FROM",
+          priceZar: 43,
+        },
+      ];
+
+      const SILVER_REPORT_SECTIONS = BRONZE_REPORT_SECTIONS.concat(
+        SILVER_REPORT_EXTRA_SECTIONS,
+      );
+
+      /**
+       * Customized optional add-ons: Silver-only headings plus legacy extended rows.
+       * ASSESSMENT appears once (Silver row); duplicate id "assess" from supplemental is omitted.
+       */
+      const CUSTOMIZED_REPORT_SUPPLEMENTAL_SECTIONS = [
+        {
+          id: "sum",
+          label: "SUMMARY",
+          priceZar: 175,
+          headingGroup: "additional",
+        },
+        {
+          id: "assess",
+          label: "ASSESSMENT",
+          priceZar: 410,
+          headingGroup: "additional",
+        },
+        {
+          id: "ultimate-holding",
+          label: "ULTIMATE HOLDING COMPANY",
+          priceZar: 185,
+          headingGroup: "additional",
+        },
+        {
+          id: "holding-co",
+          label: "HOLDING COMPANY",
+          priceZar: 165,
+          headingGroup: "additional",
+        },
+        {
+          id: "subsidiary",
+          label: "SUBSIDIARY / ASSOCIATE COMPANIES",
+          priceZar: 195,
+          headingGroup: "additional",
+        },
+        {
+          id: "active-principals",
+          label: "ACTIVE PRINCIPALS",
+          priceZar: 220,
+          headingGroup: "additional",
+        },
+        {
+          id: "prop-bonds-principal",
+          label: "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
+          priceZar: 275,
+          headingGroup: "additional",
+        },
+        {
+          id: "non-active-principals",
+          label: "NON-ACTIVE PRINCIPALS",
+          priceZar: 155,
+          headingGroup: "additional",
+        },
+        {
+          id: "prop-bonds-subject",
+          label: "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
+          priceZar: 275,
+          headingGroup: "additional",
+        },
+      ];
+
+      /** Extra layout sections only on Customized (optional checkboxes) */
+      const CUSTOMIZED_EXTENDED_LAYOUT_SECTIONS = [
+        {
+          id: "custom-media-press",
+          label: "MEDIA AND PRESS RELEASE",
+          priceZar: 125,
+        },
+        {
+          id: "custom-photos-business",
+          label: "PHOTOS OF THE BUSINESS",
+          priceZar: 115,
+        },
+        {
+          id: "custom-financial-statement",
+          label: "FINANCIAL STATEMENT",
+          priceZar: 195,
+        },
+        {
+          id: "custom-swot",
+          label: "SWOT ANALYSIS",
+          priceZar: 165,
+        },
+      ];
+
+      const CUSTOMIZED_ADDITIONAL_SECTIONS = (function () {
+        var suppNoDupAssess = CUSTOMIZED_REPORT_SUPPLEMENTAL_SECTIONS.filter(
+          function (s) {
+            return s.id !== "assess";
+          },
+        );
+        return SILVER_REPORT_EXTRA_SECTIONS.concat(suppNoDupAssess).concat(
+          CUSTOMIZED_EXTENDED_LAYOUT_SECTIONS,
+        );
+      })();
+
+      const CUSTOMIZED_REPORT_ID = "customized";
+
+      /** Canonical report body sections (order matches PDF layout) */
+      const REPORT_TOC_SECTIONS = [
+        { id: "sec-company-overview", title: "Company Overview" },
+        { id: "sec-assessment", title: "Assessment" },
+        { id: "sec-address-details", title: "Address Details" },
+        { id: "sec-contact-details", title: "Contact Details" },
+        { id: "sec-branches", title: "Branches" },
+        { id: "sec-history", title: "History" },
+        { id: "sec-corporate-structure", title: "Corporate Structure" },
+        { id: "sec-active-principals", title: "Active Principals" },
+        { id: "sec-non-active-principals", title: "Non-Active Principals" },
+        { id: "sec-operations", title: "Operations" },
+        { id: "sec-staff-bbee", title: "Staff & B-BBEE" },
+        { id: "sec-premises", title: "Premises" },
+        { id: "sec-financial-information", title: "Financial Information" },
+        { id: "sec-contracts", title: "Contracts" },
+        { id: "sec-court-records", title: "Court Records" },
+        { id: "sec-trade-references", title: "Trade References" },
+        { id: "sec-media-press", title: "Media and Press Release" },
+        { id: "sec-photos", title: "Photos of the Business" },
+        { id: "sec-risk-grade", title: "RISK GRADE ANALYSIS" },
+        { id: "sec-summary", title: "Summary" },
+        { id: "sec-financial-statement", title: "Financial Statement" },
+        { id: "sec-swot", title: "SWOT Analysis" },
+        {
+          id: "sec-trade-reference-summary",
+          title: "TRADE REFERENCE SUMMARY",
+        },
+        { id: "sec-company-benchmark", title: "Company Benchmark" },
+      ];
+
+      const ALL_RENDER_SECTION_IDS = REPORT_TOC_SECTIONS.map(function (s) {
+        return s.id;
+      });
+
+      /**
+       * Maps pricing catalogue row ids → report section ids (sec-*).
+       * One catalogue heading may map to multiple HTML sections.
+       */
+      const CATALOGUE_ID_TO_RENDER_SECTION_IDS = {
+        "bronze-reg-info": ["sec-company-overview"],
+        "bronze-biz-details": ["sec-company-overview"],
+        "bronze-name-history": ["sec-company-overview"],
+        "bronze-reg-contact": ["sec-address-details", "sec-contact-details"],
+        "bronze-principals-cipc": ["sec-active-principals"],
+        "bronze-history": ["sec-history"],
+        "bronze-bank": ["sec-financial-information"],
+        "bronze-prev-enq": ["sec-trade-references"],
+        "bronze-court": ["sec-court-records"],
+        "bronze-rescue": ["sec-court-records"],
+        "bronze-payment": ["sec-summary"],
+        "bronze-debtors": ["sec-trade-references"],
+        "bronze-risk": ["sec-risk-grade"],
+        "bronze-trade-table": ["sec-trade-reference-summary"],
+        "silver-assessment": ["sec-assessment"],
+        "silver-branches": ["sec-branches"],
+        "silver-company-ops": ["sec-operations"],
+        "silver-agencies-held": ["sec-operations"],
+        "silver-fleet": ["sec-operations"],
+        "silver-staff": ["sec-staff-bbee"],
+        "silver-bbbee": ["sec-staff-bbee"],
+        "silver-premises": ["sec-premises"],
+        "silver-property-bonds": ["sec-premises"],
+        "silver-fraud-check": ["sec-risk-grade"],
+        "silver-financial-info": ["sec-financial-information"],
+        "silver-ratios": ["sec-financial-information"],
+        "silver-contracts": ["sec-contracts"],
+        "silver-client-refs": ["sec-trade-references"],
+        "silver-subject-payment": [
+          "sec-trade-references",
+          "sec-trade-reference-summary",
+        ],
+        "silver-top-industries": ["sec-company-benchmark"],
+        sum: ["sec-summary"],
+        "ultimate-holding": ["sec-corporate-structure"],
+        "holding-co": ["sec-corporate-structure"],
+        subsidiary: ["sec-corporate-structure"],
+        "active-principals": ["sec-active-principals"],
+        "prop-bonds-principal": ["sec-active-principals"],
+        "non-active-principals": ["sec-non-active-principals"],
+        "prop-bonds-subject": ["sec-premises"],
+        "custom-media-press": ["sec-media-press"],
+        "custom-photos-business": ["sec-photos"],
+        "custom-financial-statement": ["sec-financial-statement"],
+        "custom-swot": ["sec-swot"],
+      };
+
+      function catalogueSectionsToRenderSectionIdSet(sections) {
+        var ids = new Set();
+        for (var i = 0; i < sections.length; i++) {
+          var cid = sections[i].id;
+          var mapped = CATALOGUE_ID_TO_RENDER_SECTION_IDS[cid];
+          if (!mapped) continue;
+          for (var j = 0; j < mapped.length; j++) {
+            ids.add(mapped[j]);
+          }
+        }
+        return ids;
+      }
+
+      function getIncludedRenderSectionIdsForCurrentSelection() {
+        var productEl = document.getElementById("report-product");
+        var productId = productEl ? productEl.value : "bronze-pb";
+        var sections = [];
+        if (productId === "bronze-pb") {
+          sections = BRONZE_REPORT_SECTIONS.slice();
+        } else if (productId === "silver-pb") {
+          sections = SILVER_REPORT_SECTIONS.slice();
+        } else if (productId === CUSTOMIZED_REPORT_ID) {
+          sections = BRONZE_REPORT_SECTIONS.slice();
+          var checklist = document.getElementById("custom-pricing-checklist");
+          if (checklist) {
+            checklist
+              .querySelectorAll('input[type="checkbox"]:checked')
+              .forEach(function (cb) {
+                var idx = Number(cb.getAttribute("data-idx"));
+                if (
+                  isFinite(idx) &&
+                  CUSTOMIZED_ADDITIONAL_SECTIONS[idx]
+                ) {
+                  sections.push(CUSTOMIZED_ADDITIONAL_SECTIONS[idx]);
+                }
+              });
+          }
+        } else {
+          return new Set(ALL_RENDER_SECTION_IDS);
+        }
+        return catalogueSectionsToRenderSectionIdSet(sections);
+      }
+
+      function applyReportSectionFilter(reportRoot, includeIds) {
+        if (!reportRoot || !includeIds || includeIds.size === 0) return;
+        var i;
+        for (i = 0; i < ALL_RENDER_SECTION_IDS.length; i++) {
+          var sid = ALL_RENDER_SECTION_IDS[i];
+          if (includeIds.has(sid)) continue;
+          var el = reportRoot.querySelector("#" + sid);
+          if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        }
+        var tocNav = reportRoot.querySelector(".d2-toc-nav");
+        if (!tocNav) return;
+        var ordered = REPORT_TOC_SECTIONS.filter(function (s) {
+          return includeIds.has(s.id);
+        });
+        tocNav.innerHTML = ordered
+          .map(function (s, idx) {
+            return (
+              '<a href="#' +
+              s.id +
+              '" class="d2-toc-link">' +
+              (idx + 1) +
+              ". " +
+              s.title +
+              "</a>"
+            );
+          })
+          .join("");
+      }
+
+      function getCatalogueSectionsForProduct(productId) {
+        if (productId === "bronze-pb") return BRONZE_REPORT_SECTIONS;
+        if (productId === "silver-pb") return SILVER_REPORT_SECTIONS;
+        if (productId === CUSTOMIZED_REPORT_ID) return BRONZE_REPORT_SECTIONS;
+        return STANDARD_REPORT_SECTIONS;
+      }
+
       /** Demo package price (full catalogue) per standard product — not Customized */
       const STANDARD_REPORT_PRODUCTS = [
         { id: "bronze-pb", packagePriceZar: 2840 },
@@ -777,7 +1127,6 @@
         { id: "gold-sas", packagePriceZar: 4190 },
         { id: "gold-hybrid", packagePriceZar: 4850 },
       ];
-      const CUSTOMIZED_REPORT_ID = "customized";
 
       function getStandardPackagePrice(productId) {
         for (var i = 0; i < STANDARD_REPORT_PRODUCTS.length; i++) {
@@ -846,22 +1195,28 @@
         );
       }
 
-      function initReportBuilder() {
+      function rebuildStandardPricingLines() {
         var standardList = document.getElementById("standard-pricing-lines");
+        var productEl = document.getElementById("report-product");
+        if (!standardList || !productEl) return;
+        var sections = getCatalogueSectionsForProduct(productEl.value);
+        standardList.innerHTML = "";
+        sections.forEach(function (s) {
+          var li = document.createElement("li");
+          li.innerHTML =
+            "<span>" +
+            s.label +
+            '</span><span class="report-pricing-line-secondary report-pricing-included" data-price="' +
+            s.priceZar +
+            '">Included</span>';
+          standardList.appendChild(li);
+        });
+      }
+
+      function initReportBuilder() {
         var customList = document.getElementById("custom-pricing-checklist");
         var productEl = document.getElementById("report-product");
-        STANDARD_REPORT_SECTIONS.forEach(function (s) {
-          if (standardList) {
-            var li = document.createElement("li");
-            li.innerHTML =
-              "<span>" +
-              s.label +
-              '</span><span class="report-pricing-line-secondary report-pricing-included" data-price="' +
-              s.priceZar +
-              '">Included</span>';
-            standardList.appendChild(li);
-          }
-        });
+        rebuildStandardPricingLines();
 
         if (customList) {
           function recalcCustomTotal() {
@@ -883,17 +1238,15 @@
             if (elAdd) elAdd.textContent = formatZar(selectionsSum);
             if (elGrand) elGrand.textContent = formatZar(grandTotal);
           }
-          STANDARD_REPORT_SECTIONS.forEach(function (s, i) {
+          CUSTOMIZED_ADDITIONAL_SECTIONS.forEach(function (s, i) {
             var li = document.createElement("li");
             var label = document.createElement("label");
             var cb = document.createElement("input");
             cb.type = "checkbox";
             cb.setAttribute("data-price", String(s.priceZar));
             cb.setAttribute("data-idx", String(i));
-            cb.setAttribute(
-              "data-heading-group",
-              s.headingGroup === "standard" ? "standard" : "additional",
-            );
+            cb.setAttribute("data-heading-group", "additional");
+            cb.checked = false;
             var spanText = document.createElement("span");
             spanText.className = "rb-label-text";
             spanText.textContent = s.label;
@@ -924,7 +1277,10 @@
         }
 
         if (productEl) {
-          productEl.addEventListener("change", updateReportProductUI);
+          productEl.addEventListener("change", function () {
+            rebuildStandardPricingLines();
+            updateReportProductUI();
+          });
         }
         updateReportProductUI();
       }
@@ -982,38 +1338,14 @@
         const report = document.getElementById("report");
         report.className = "report design-2";
         report.innerHTML = renderDesign2(d);
+        applyReportSectionFilter(
+          report,
+          getIncludedRenderSectionIdsForCurrentSelection(),
+        );
       }
 
       function renderDesign2(d) {
-        const tocSections = [
-          { id: "sec-company-overview", title: "Company Overview" },
-          { id: "sec-assessment", title: "Assessment" },
-          { id: "sec-address-details", title: "Address Details" },
-          { id: "sec-contact-details", title: "Contact Details" },
-          { id: "sec-branches", title: "Branches" },
-          { id: "sec-history", title: "History" },
-          { id: "sec-corporate-structure", title: "Corporate Structure" },
-          { id: "sec-active-principals", title: "Active Principals" },
-          { id: "sec-non-active-principals", title: "Non-Active Principals" },
-          { id: "sec-operations", title: "Operations" },
-          { id: "sec-staff-bbee", title: "Staff & B-BBEE" },
-          { id: "sec-premises", title: "Premises" },
-          { id: "sec-financial-information", title: "Financial Information" },
-          { id: "sec-contracts", title: "Contracts" },
-          { id: "sec-court-records", title: "Court Records" },
-          { id: "sec-trade-references", title: "Trade References" },
-          { id: "sec-media-press", title: "Media and Press Release" },
-          { id: "sec-photos", title: "Photos of the Business" },
-          { id: "sec-risk-grade", title: "RISK GRADE ANALYSIS" },
-          { id: "sec-summary", title: "Summary" },
-          { id: "sec-financial-statement", title: "Financial Statement" },
-          { id: "sec-swot", title: "SWOT Analysis" },
-          {
-            id: "sec-trade-reference-summary",
-            title: "TRADE REFERENCE SUMMARY",
-          },
-          { id: "sec-company-benchmark", title: "Company Benchmark" },
-        ];
+        const tocSections = REPORT_TOC_SECTIONS;
         return `
         <div class="d2-cover">
           <img src="assets/experian-logo.png" alt="Experian" class="d2-cover-logo">
