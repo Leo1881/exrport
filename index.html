@@ -126,22 +126,26 @@
         </div>
 
         <div class="report-selection-actions">
-          <button
-            type="button"
+          <a
             class="btn-d2-primary"
             id="btn-view-report"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
             title="Opens the report in a new browser tab"
           >
             View
-          </button>
-          <button
-            type="button"
+          </a>
+          <a
             class="btn-d2-secondary"
             id="btn-export-pdf-selection"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
             title="Opens a new tab and downloads the PDF (same report as View)"
           >
             Export
-          </button>
+          </a>
           <button
             type="button"
             class="btn-d2-secondary"
@@ -1571,8 +1575,14 @@
             li.appendChild(label);
             customList.appendChild(li);
           });
-          customList.addEventListener("change", recalcCustomTotal);
-          customList.addEventListener("input", recalcCustomTotal);
+          customList.addEventListener("change", function () {
+            recalcCustomTotal();
+            syncReportTabLinks();
+          });
+          customList.addEventListener("input", function () {
+            recalcCustomTotal();
+            syncReportTabLinks();
+          });
           recalcCustomTotal();
 
           var btnDeselect = document.getElementById("btn-deselect-all-sections");
@@ -1584,6 +1594,7 @@
                   cb.checked = false;
                 });
               recalcCustomTotal();
+              syncReportTabLinks();
             });
           }
         }
@@ -1592,9 +1603,11 @@
           productEl.addEventListener("change", function () {
             rebuildStandardPricingLines();
             updateReportProductUI();
+            syncReportTabLinks();
           });
         }
         updateReportProductUI();
+        syncReportTabLinks();
       }
 
       function enterReportView() {
@@ -1663,17 +1676,12 @@
       }
 
       /**
-       * Opens the report in a new tab with current product/custom.
+       * Builds the report URL for a new tab (View / Export). Uses real anchor links with
+       * target="_blank" so browsers do not treat it as a popup (window.open is often blocked off localhost).
        * @param {{ exportPdf?: boolean }} options - if exportPdf, tab auto-downloads PDF (html2pdf).
        */
-      function openReportInNewTab(options) {
+      function buildReportTabUrl(options) {
         options = options || {};
-        if (options.exportPdf && window.location.protocol === "file:") {
-          alert(
-            "PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.",
-          );
-          return;
-        }
         var productEl = document.getElementById("report-product");
         var product = productEl ? productEl.value : "bronze-pb";
         var url = new URL(window.location.href);
@@ -1703,15 +1711,36 @@
         } else {
           url.searchParams.delete("custom");
         }
-        window.open(url.toString(), "_blank", "noopener,noreferrer");
+        return url.toString();
       }
 
-      function openReportViewInNewTab() {
-        openReportInNewTab({ exportPdf: false });
+      function syncReportTabLinks() {
+        var viewLink = document.getElementById("btn-view-report");
+        var exportLink = document.getElementById("btn-export-pdf-selection");
+        if (viewLink) {
+          viewLink.href = buildReportTabUrl({ exportPdf: false });
+        }
+        if (exportLink) {
+          if (window.location.protocol === "file:") {
+            exportLink.href = "#";
+          } else {
+            exportLink.href = buildReportTabUrl({ exportPdf: true });
+          }
+        }
       }
 
-      function openExportPdfInNewTab() {
-        openReportInNewTab({ exportPdf: true });
+      function initReportTabLinkGuards() {
+        var exportLink = document.getElementById("btn-export-pdf-selection");
+        if (exportLink) {
+          exportLink.addEventListener("click", function (e) {
+            if (window.location.protocol === "file:") {
+              e.preventDefault();
+              alert(
+                "PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.",
+              );
+            }
+          });
+        }
       }
 
       function initReportApp() {
@@ -1719,9 +1748,8 @@
         var params = new URLSearchParams(window.location.search);
         var autoExportPdf = params.get("export") === "1";
         applyReportConfigFromUrl();
-        var viewBtn = document.getElementById("btn-view-report");
         var submitBtn = document.getElementById("btn-submit-report");
-        if (viewBtn) viewBtn.addEventListener("click", openReportViewInNewTab);
+        initReportTabLinkGuards();
         if (submitBtn) {
           submitBtn.addEventListener("click", function () {
             var productEl = document.getElementById("report-product");
@@ -2345,13 +2373,6 @@
         .addEventListener("click", function () {
           runExportPdfFlow();
         });
-
-      var btnExportSelection = document.getElementById("btn-export-pdf-selection");
-      if (btnExportSelection) {
-        btnExportSelection.addEventListener("click", function () {
-          openExportPdfInNewTab();
-        });
-      }
     </script>
   </body>
 </html>

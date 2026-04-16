@@ -304,6 +304,13 @@
   cursor: pointer;
   border: none;
 }
+a.btn-d2-primary,
+a.btn-d2-secondary,
+a.btn-d2-ghost {
+  display: inline-block;
+  text-decoration: none;
+  box-sizing: border-box;
+}
 .btn-d2-primary {
   background: var(--experian-blue);
   color: var(--white);
