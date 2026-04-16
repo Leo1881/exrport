@@ -1341,7 +1341,7 @@
             }
             return;
           }
-          /* bronze-risk + silver-fraud-check both map here — same body; do not clone twice */
+          /* bronze-risk + silver-fraud-check — same body; do not clone */
           if (secId === "sec-risk-grade") {
             var elRg = reportRoot.querySelector("#" + secId);
             if (elRg && elRg.parentNode) {
@@ -1977,7 +1977,7 @@
           </div>
         </div>
         <div class="d2-content">
-          <div class="d2-card" id="sec-company-overview">
+            <div class="d2-card" id="sec-company-overview">
               <h3 class="d2-card-title">Company Overview</h3>
               <h2 class="d2-company">${d.subject.name}</h2>
               <p class="d2-status-badge">${d.subject.companyStatus}</p>
