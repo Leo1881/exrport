@@ -1,4 +1,4 @@
-/* Experian Gold Report - Redesigned */
+/* Experian Business Credit Report - Redesigned */
 /* Color palette from Experian logo */
 :root {
   --experian-blue: #1a5f9e;
@@ -1233,57 +1233,164 @@ body.pdf-export .report.design-3 .d3-section {
   font-weight: 600;
 }
 
-.report.design-2 .d2-risk-banner {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  padding: 24px 32px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #1a5da4 0%, #6b56a5 100%);
-  color: white;
+/* Risk Grade Analysis – Commercial Delphi style */
+.report.design-2 .d2-risk-grade-panel {
+  border: 1px solid #1a1a1a;
+  background: #ececec;
+  padding: 20px 24px 24px;
+  border-radius: 2px;
 }
 
-.report.design-2 .d2-risk-banner-score {
-  flex: 0 0 auto;
-  text-align: center;
-  min-width: 80px;
-}
-
-.report.design-2 .d2-risk-banner-number {
-  display: block;
-  font-size: 48px;
+.report.design-2 .d2-risk-grade-heading {
+  margin: 0 0 8px 0;
+  font-size: 16px;
   font-weight: 700;
-  line-height: 1.1;
+  color: var(--experian-blue);
+  letter-spacing: 0.02em;
 }
 
-.report.design-2 .d2-risk-banner-label {
-  display: block;
-  font-size: 12px;
+.report.design-2 .d2-risk-grade-subtitle {
+  margin: 0 0 18px 0;
+  text-align: center;
+  font-size: 13px;
   font-weight: 400;
+  color: #111827;
+}
+
+.report.design-2 .d2-risk-scale {
+  margin-bottom: 22px;
+}
+
+.report.design-2 .d2-risk-scale-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.report.design-2 .d2-risk-scale-track {
+  position: relative;
+  height: 28px;
+  border-radius: 3px;
+  overflow: visible;
+}
+
+.report.design-2 .d2-risk-scale-gradient {
+  height: 100%;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: linear-gradient(
+    90deg,
+    #b91c1c 0%,
+    #dc2626 8%,
+    #ea580c 18%,
+    #f97316 30%,
+    #fb923c 42%,
+    #eab308 54%,
+    #bef264 64%,
+    #84cc16 74%,
+    #22c55e 86%,
+    #166534 100%
+  );
+}
+
+.report.design-2 .d2-risk-scale-marker {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 3px;
+  transform: translateX(-50%);
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+  border-radius: 1px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.report.design-2 .d2-risk-scale-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 6px;
+}
+
+.report.design-2 .d2-risk-grade-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.report.design-2 .d2-risk-score-box {
+  flex: 0 0 auto;
+  width: 112px;
+  min-height: 112px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #c9a227;
+  color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.report.design-2 .d2-risk-score-box-kicker {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.report.design-2 .d2-risk-score-box-num {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.report.design-2 .d2-risk-score-box-suffix {
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 6px;
   opacity: 0.95;
 }
 
-.report.design-2 .d2-risk-banner-desc {
+.report.design-2 .d2-risk-grade-copy {
   flex: 1;
-  min-width: 0;
+  min-width: 200px;
 }
 
-.report.design-2 .d2-risk-banner-level {
-  font-size: 18px;
+.report.design-2 .d2-risk-grade-p {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #111827;
+}
+
+.report.design-2 .d2-risk-grade-factors-title {
+  margin: 14px 0 6px 0;
+  font-size: 12px;
   font-weight: 700;
-  margin-bottom: 4px;
+  color: #111827;
 }
 
-.report.design-2 .d2-risk-banner-model {
+.report.design-2 .d2-risk-grade-factors {
+  margin: 0;
+  padding-left: 18px;
   font-size: 12px;
-  font-weight: 400;
-  margin-bottom: 4px;
+  line-height: 1.5;
+  color: #111827;
 }
 
-.report.design-2 .d2-risk-banner-interpretation {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
+.report.design-2 .d2-risk-grade-factors li {
+  margin-bottom: 2px;
 }
 
 .report.design-2 .d2-trade-ref {
@@ -1609,7 +1716,9 @@ body.pdf-export .report.design-3 .d3-section {
   .report.design-2 .d2-icon-magenta,
   .report.design-2 .d2-card#sec-assessment,
   .report.design-2 .d2-swot-box,
-  .report.design-2 .d2-risk-banner,
+  .report.design-2 .d2-risk-grade-panel,
+  .report.design-2 .d2-risk-scale-gradient,
+  .report.design-2 .d2-risk-score-box,
   .report.design-2 .d2-status-badge,
   .report.design-2 .d2-highlight,
   .report.design-2 .d2-rec-icon {

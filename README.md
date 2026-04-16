@@ -1,6 +1,6 @@
-# Experian Gold Report - Redesigned
+# Experian Business Credit Report - Redesigned
 
-A proof-of-concept redesign of the Experian Gold business credit report with improved hierarchy, layout, and Experian branding.
+A proof-of-concept redesign of the Experian business credit report with improved hierarchy, layout, and Experian branding.
 
 ## Quick Start
 
@@ -11,7 +11,7 @@ A proof-of-concept redesign of the Experian Gold business credit report with imp
 **Option B – Puppeteer (recommended for best PDF quality)**
 1. `npm install`
 2. `npm run generate-pdf`
-3. Opens a local server, generates `Gold-Report.pdf` with full-bleed cover and 10mm top margin on page 2+
+3. Opens a local server, generates `Business-Credit-Report.pdf` with full-bleed cover and 10mm top margin on page 2+
 
 ## Project Structure
 

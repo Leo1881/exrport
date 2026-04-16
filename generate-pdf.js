@@ -3,7 +3,7 @@
  * Uses real browser print – supports @page :first for full-bleed cover.
  *
  * Run: npm run generate-pdf
- * (Starts a local server automatically, then generates Gold-Report.pdf)
+ * (Starts a local server automatically, then generates Business-Credit-Report.pdf)
  */
 
 const puppeteer = require('puppeteer');
@@ -74,7 +74,7 @@ async function generatePdf() {
     // Prepare for print
     await page.emulateMediaType('print');
 
-    const pdfPath = path.join(ROOT, 'Gold-Report.pdf');
+    const pdfPath = path.join(ROOT, 'Business-Credit-Report.pdf');
     await page.pdf({
       path: pdfPath,
       format: 'A4',

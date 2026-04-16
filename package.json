@@ -1,7 +1,7 @@
 {
   "name": "gold-report",
   "version": "1.0.0",
-  "description": "Experian Gold business credit report",
+  "description": "Experian business credit report (demo)",
   "scripts": {
     "start": "npx serve -p 3000",
     "generate-pdf": "node generate-pdf.js",

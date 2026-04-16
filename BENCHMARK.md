@@ -1,4 +1,4 @@
-# Experian Gold Report – Benchmark
+# Experian Business Credit Report – Benchmark
 
 **Date:** March 2026  
 **Purpose:** Baseline of completed work. Use this to verify future changes don't break existing features.
@@ -23,7 +23,7 @@ Design 2 is the main design. All features below apply to it unless noted.
 
 - **Full-bleed background image** – `assets/cover-background.png` covers the full first page
 - **No margin on page 1** – Cover extends into top margin via `margin: -22mm -12mm -12mm -12mm` (PDF export)
-- **Content:** Experian logo, company name, Gold Report, KIM number, report date
+- **Content:** Experian logo, company name, Business Credit Report, KIM number, report date
 - **CSS:** `body.pdf-export .report.design-2 .d2-cover`
 
 ### 2. Table of Contents
@@ -121,6 +121,6 @@ To capture a reference PDF after changes:
 2. Open http://localhost:3000
 3. Select Design 2 – Dashboard
 4. Export to PDF
-5. Save as `BENCHMARK-Gold-Report-YYYY-MM-DD.pdf` in project root
+5. Save as `BENCHMARK-Business-Credit-Report-YYYY-MM-DD.pdf` in project root
 
 Compare new exports against this reference to catch regressions.

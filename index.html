@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gold Report</title>
+    <title>Business Credit Report</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -29,7 +29,7 @@
             class="report-selection-logo"
           />
           <div class="report-selection-head-text">
-            <h1 class="report-selection-title">Gold Report</h1>
+            <h1 class="report-selection-title">Business Credit Report</h1>
             <p class="report-selection-lead">
               Select a report product from the list, then continue to preview.
               Standard packages include the full section catalogue at a package
@@ -44,11 +44,11 @@
             1. Report product
           </h2>
           <p class="d2-text d2-muted report-selection-hint">
-            <strong>Bronze P&amp;B</strong> includes all 14 Bronze catalogue
-            headings. <strong>Silver P&amp;B</strong> includes those plus every
-            Silver heading. <strong>Customized report</strong> always includes
-            the same 14 Bronze headings, and you add any extra headings you tick
-            below; the total is the Bronze base plus your add-ons.
+            <strong>Base report</strong> includes all 14 base catalogue
+            headings. <strong>Gold report</strong> includes those plus every
+            Gold-tier heading. <strong>Customized report</strong> always includes
+            the same 14 base headings, and you add any extra headings you tick
+            below; the total is the base package plus your add-ons.
           </p>
           <div class="report-selection-field">
             <select
@@ -57,8 +57,8 @@
               autocomplete="off"
               aria-labelledby="report-product-heading"
             >
-              <option value="bronze-pb">Bronze P&amp;B</option>
-              <option value="silver-pb">Silver P&amp;B</option>
+              <option value="bronze-pb">Base report</option>
+              <option value="silver-pb">Gold report</option>
               <option value="customized">Customized report</option>
             </select>
           </div>
@@ -89,14 +89,14 @@
             </button>
           </div>
           <p class="report-custom-section-subtitle">
-            The 14 standard Bronze sections are always included. Tick any
-            additional catalogue headings (Silver extras and other options) to
+            The 14 standard base sections are always included. Tick any
+            additional catalogue headings (Gold extras and other options) to
             add them to your report and to the total.
           </p>
           <ul class="report-pricing-custom" id="custom-pricing-checklist"></ul>
           <div class="report-pricing-custom-totals" id="custom-pricing-split-totals">
             <div class="report-pricing-subtotal">
-              <span>Total standard (14 Bronze headings)</span>
+              <span>Total standard (14 base headings)</span>
               <span id="custom-total-standard-base">R 0,00</span>
             </div>
             <div class="report-pricing-subtotal">
@@ -146,7 +146,7 @@
       // Report data - in production this would be loaded from an API or file
       const REPORT_DATA = {
         meta: {
-          reportType: "Gold Report",
+          reportType: "Business Credit Report",
           bureau: "EXPERIAN BUREAU",
           kimNumber: "118428",
           updatedOn: "2025/02/04",
@@ -454,10 +454,25 @@
         riskGrade: {
           score: 65,
           maxScore: 100,
-          grade: "Maximum Risk",
+          scaleMin: 1,
+          scaleMax: 100,
+          scaleLabelTopLeft: "Maximum Risk",
+          scaleLabelTopRight: "Very Low Risk",
           riskLevel: "Very Low Risk",
           failureOdds: "52.4:1",
           model: "Commercial Delphi 4 - Researched Non SME",
+          paragraph1:
+            "The subject is considered a below average risk, with failure odds of 52.4:1. For every 1 bad company there are 52.4 good companies at this risk band.",
+          paragraph2:
+            "Commercial Delphi 4 is designed to predict the probability of business failure over a 12 month period using a combination of adverse, stability and where applicable relevant consumer information in the modelling process.",
+          paragraph3:
+            "The model is dynamic, recalculating as and when information affecting the risk grade changes.",
+          poorRiskHeading: "Areas influencing a poor risk grade can include:",
+          poorRiskFactors: [
+            "Adverse information",
+            "New business",
+            "Lack of information",
+          ],
           interpretation:
             "For every 1 bad company there are 52.4 good companies at this risk band.",
         },
@@ -640,6 +655,37 @@
             "Increased competition in credit rating sector",
             "Regulatory changes affecting credit bureau operations",
             "Economic conditions may impact client payment behaviour",
+          ],
+        },
+        amlScreening: {
+          status: "Clear – no adverse AML indicators identified",
+          lastScreenedOn: "2025/02/03",
+          summary:
+            "Customer due diligence and transaction monitoring screening completed against applicable AML requirements. No suspicious activity or structuring patterns identified for the subject entity.",
+          checks: [
+            { name: "Identity & ownership verification", result: "Complete" },
+            { name: "Source of funds (where applicable)", result: "Documented" },
+            { name: "Adverse media / watchlists (AML)", result: "No material matches" },
+          ],
+        },
+        pepsScreening: {
+          status: "No PEPs identified",
+          lastScreenedOn: "2025/02/03",
+          summary:
+            "Principals and known beneficial owners were screened against domestic and international PEP databases. No individuals were classified as politically exposed persons in terms of the assessed risk policy.",
+          principalsScreened: 2,
+          matches: [],
+        },
+        sanctionsScreening: {
+          status: "Clear – no sanctions matches",
+          lastScreenedOn: "2025/02/03",
+          summary:
+            "Screening performed against United Nations, major regional and industry sanctions lists. The subject and its principals did not appear on active sanctions or restricted-party lists at the time of enquiry.",
+          listsChecked: [
+            "UN Security Council",
+            "EU Consolidated",
+            "OFAC SDN (reference)",
+            "Domestic Treasury list",
           ],
         },
       };
@@ -870,45 +916,9 @@
        */
       const CUSTOMIZED_REPORT_SUPPLEMENTAL_SECTIONS = [
         {
-          id: "sum",
-          label: "SUMMARY",
-          priceZar: 175,
-          headingGroup: "additional",
-        },
-        {
           id: "assess",
           label: "ASSESSMENT",
           priceZar: 410,
-          headingGroup: "additional",
-        },
-        {
-          id: "ultimate-holding",
-          label: "ULTIMATE HOLDING COMPANY",
-          priceZar: 185,
-          headingGroup: "additional",
-        },
-        {
-          id: "holding-co",
-          label: "HOLDING COMPANY",
-          priceZar: 165,
-          headingGroup: "additional",
-        },
-        {
-          id: "subsidiary",
-          label: "SUBSIDIARY / ASSOCIATE COMPANIES",
-          priceZar: 195,
-          headingGroup: "additional",
-        },
-        {
-          id: "active-principals",
-          label: "ACTIVE PRINCIPALS",
-          priceZar: 220,
-          headingGroup: "additional",
-        },
-        {
-          id: "prop-bonds-principal",
-          label: "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
-          priceZar: 275,
           headingGroup: "additional",
         },
         {
@@ -947,6 +957,21 @@
           label: "SWOT ANALYSIS",
           priceZar: 165,
         },
+        {
+          id: "custom-aml",
+          label: "AML (ANTI-MONEY LAUNDERING)",
+          priceZar: 145,
+        },
+        {
+          id: "custom-peps",
+          label: "PEPs (POLITICALLY EXPOSED PERSONS)",
+          priceZar: 145,
+        },
+        {
+          id: "custom-sanctions",
+          label: "SANCTIONS",
+          priceZar: 145,
+        },
       ];
 
       const CUSTOMIZED_ADDITIONAL_SECTIONS = (function () {
@@ -982,10 +1007,16 @@
         { id: "sec-trade-references", title: "Trade References" },
         { id: "sec-media-press", title: "Media and Press Release" },
         { id: "sec-photos", title: "Photos of the Business" },
-        { id: "sec-risk-grade", title: "RISK GRADE ANALYSIS" },
+        { id: "sec-risk-grade", title: "Risk Grade Analysis" },
         { id: "sec-summary", title: "Summary" },
         { id: "sec-financial-statement", title: "Financial Statement" },
         { id: "sec-swot", title: "SWOT Analysis" },
+        {
+          id: "sec-aml",
+          title: "AML (Anti-Money Laundering)",
+        },
+        { id: "sec-peps", title: "PEPs (Politically Exposed Persons)" },
+        { id: "sec-sanctions", title: "Sanctions" },
         {
           id: "sec-trade-reference-summary",
           title: "TRADE REFERENCE SUMMARY",
@@ -1047,6 +1078,9 @@
         "custom-photos-business": ["sec-photos"],
         "custom-financial-statement": ["sec-financial-statement"],
         "custom-swot": ["sec-swot"],
+        "custom-aml": ["sec-aml"],
+        "custom-peps": ["sec-peps"],
+        "custom-sanctions": ["sec-sanctions"],
       };
 
       function catalogueSectionsToRenderSectionIdSet(sections) {
@@ -1301,7 +1335,7 @@
         cust.hidden = !isCustom;
         if (titleEl) {
           titleEl.textContent = isCustom
-            ? "Standard sections always included (Bronze catalogue)"
+            ? "Standard sections always included (base catalogue)"
             : "Included sections (package)";
         }
         if (packageTotalRow) {
@@ -1589,6 +1623,13 @@
 
       function renderDesign2(d) {
         const tocSections = REPORT_TOC_SECTIONS;
+        const rg = d.riskGrade || {};
+        const rgScaleMin = rg.scaleMin != null ? rg.scaleMin : 1;
+        const rgScaleMax = rg.scaleMax != null ? rg.scaleMax : 100;
+        const rgMarkerPct =
+          rgScaleMax > rgScaleMin
+            ? ((rg.score - rgScaleMin) / (rgScaleMax - rgScaleMin)) * 100
+            : 50;
         return `
         <div class="d2-cover">
           <img src="assets/experian-logo.png" alt="Experian" class="d2-cover-logo">
@@ -1804,16 +1845,40 @@
               </div>
             </div>
             <div class="d2-card" id="sec-risk-grade">
-              <h3 class="d2-card-title">RISK GRADE ANALYSIS</h3>
-              <div class="d2-risk-banner">
-                <div class="d2-risk-banner-score">
-                  <span class="d2-risk-banner-number">${d.riskGrade.score}</span>
-                  <span class="d2-risk-banner-label">out of ${d.riskGrade.maxScore}</span>
+              <div class="d2-risk-grade-panel">
+                <h3 class="d2-risk-grade-heading">Risk Grade Analysis</h3>
+                <p class="d2-risk-grade-subtitle">${rg.model || ""}</p>
+                <div class="d2-risk-scale" aria-hidden="true">
+                  <div class="d2-risk-scale-top">
+                    <span>${rg.scaleLabelTopLeft || "Maximum Risk"}</span>
+                    <span>${rg.scaleLabelTopRight || "Very Low Risk"}</span>
+                  </div>
+                  <div class="d2-risk-scale-track">
+                    <div class="d2-risk-scale-gradient"></div>
+                    <div class="d2-risk-scale-marker" style="left:${rgMarkerPct}%"></div>
+                  </div>
+                  <div class="d2-risk-scale-bottom">
+                    <span>${rgScaleMin}</span>
+                    <span>${rgScaleMax}</span>
+                  </div>
                 </div>
-                <div class="d2-risk-banner-desc">
-                  <div class="d2-risk-banner-level">${d.riskGrade.riskLevel}</div>
-                  <div class="d2-risk-banner-model">${d.riskGrade.model}</div>
-                  <div class="d2-risk-banner-interpretation">${d.riskGrade.interpretation}</div>
+                <div class="d2-risk-grade-body">
+                  <div class="d2-risk-score-box">
+                    <span class="d2-risk-score-box-kicker">Risk Grade</span>
+                    <span class="d2-risk-score-box-num">${rg.score}</span>
+                    <span class="d2-risk-score-box-suffix">out of ${rg.maxScore}</span>
+                  </div>
+                  <div class="d2-risk-grade-copy">
+                    <p class="d2-risk-grade-p">${rg.paragraph1 || ""}</p>
+                    <p class="d2-risk-grade-p">${rg.paragraph2 || ""}</p>
+                    <p class="d2-risk-grade-p">${rg.paragraph3 || ""}</p>
+                    <p class="d2-risk-grade-factors-title">${rg.poorRiskHeading || ""}</p>
+                    <ul class="d2-risk-grade-factors">
+                      ${(rg.poorRiskFactors || [])
+                        .map((f) => "<li>*" + f + "</li>")
+                        .join("")}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1861,6 +1926,33 @@
                   <ul class="d2-swot-list">${((d.swotAnalysis || {}).threats || []).map((t) => "<li>" + t + "</li>").join("")}</ul>
                 </div>
               </div>
+            </div>
+            <div class="d2-card" id="sec-aml">
+              <h3 class="d2-card-title">AML (Anti-Money Laundering)</h3>
+              <p class="d2-text d2-muted">Last screened: ${(d.amlScreening || {}).lastScreenedOn || "-"}</p>
+              <p class="d2-text"><strong>Outcome:</strong> ${(d.amlScreening || {}).status || "-"}</p>
+              <p class="d2-text">${(d.amlScreening || {}).summary || ""}</p>
+              <table class="d2-table">
+                <thead><tr><th>Check</th><th>Result</th></tr></thead>
+                <tbody>${((d.amlScreening || {}).checks || []).length ? ((d.amlScreening || {}).checks || []).map((c) => "<tr><td>" + c.name + "</td><td>" + c.result + "</td></tr>").join("") : '<tr><td colspan="2" class="d2-muted">No screening checks on file.</td></tr>'}</tbody>
+              </table>
+            </div>
+            <div class="d2-card" id="sec-peps">
+              <h3 class="d2-card-title">PEPs (Politically Exposed Persons)</h3>
+              <p class="d2-text d2-muted">Last screened: ${(d.pepsScreening || {}).lastScreenedOn || "-"}</p>
+              <p class="d2-text"><strong>Outcome:</strong> ${(d.pepsScreening || {}).status || "-"}</p>
+              <p class="d2-text">${(d.pepsScreening || {}).summary || ""}</p>
+              <p class="d2-text"><strong>Principals screened:</strong> ${(d.pepsScreening || {}).principalsScreened != null ? d.pepsScreening.principalsScreened : "-"}</p>
+              <p class="d2-text"><strong>Matches:</strong></p>
+              <ul class="d2-swot-list">${((d.pepsScreening || {}).matches || []).length ? ((d.pepsScreening || {}).matches || []).map((m) => "<li>" + (typeof m === "string" ? m : (m.description || m.name || JSON.stringify(m))) + "</li>").join("") : '<li class="d2-muted">No matches recorded.</li>'}</ul>
+            </div>
+            <div class="d2-card" id="sec-sanctions">
+              <h3 class="d2-card-title">Sanctions</h3>
+              <p class="d2-text d2-muted">Last screened: ${(d.sanctionsScreening || {}).lastScreenedOn || "-"}</p>
+              <p class="d2-text"><strong>Outcome:</strong> ${(d.sanctionsScreening || {}).status || "-"}</p>
+              <p class="d2-text">${(d.sanctionsScreening || {}).summary || ""}</p>
+              <p class="d2-text"><strong>Lists checked:</strong></p>
+              <ul class="d2-swot-list">${((d.sanctionsScreening || {}).listsChecked || []).length ? ((d.sanctionsScreening || {}).listsChecked || []).map((x) => "<li>" + x + "</li>").join("") : '<li class="d2-muted">No list data on file.</li>'}</ul>
             </div>
         </div>
         <div class="d2-card" id="sec-trade-reference-summary">
@@ -1954,7 +2046,7 @@
         report.scrollIntoView({ block: "start", behavior: "instant" });
         const opt = {
           margin: [0, 0, 0, 0],
-          filename: "Gold-Report.pdf",
+          filename: "Business-Credit-Report.pdf",
           image: { type: "jpeg", quality: 0.98 },
           html2canvas: {
             scale: 2,

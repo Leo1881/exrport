@@ -1,6 +1,6 @@
 {
   "meta": {
-    "reportType": "Gold Report",
+    "reportType": "Business Credit Report",
     "bureau": "EXPERIAN BUREAU",
     "kimNumber": "118428",
     "yourReference": "",
@@ -297,13 +297,19 @@
   "riskGrade": {
     "score": 65,
     "maxScore": 100,
-    "grade": "Maximum Risk",
+    "scaleMin": 1,
+    "scaleMax": 100,
+    "scaleLabelTopLeft": "Maximum Risk",
+    "scaleLabelTopRight": "Very Low Risk",
     "riskLevel": "Very Low Risk",
     "failureOdds": "52.4:1",
     "model": "Commercial Delphi 4 - Researched Non SME",
-    "modelDescription": "Commercial Delphi 4 is designed to predict the probability of business failure over a 12 month period using a combination of adverse, stability and where applicable relevant consumer information in the modelling process.",
-    "interpretation": "For every 1 bad company there are 52.4 good companies at this risk band.",
-    "poorRiskFactors": ["Lack of information", "New business", "Adverse information"]
+    "paragraph1": "The subject is considered a below average risk, with failure odds of 52.4:1. For every 1 bad company there are 52.4 good companies at this risk band.",
+    "paragraph2": "Commercial Delphi 4 is designed to predict the probability of business failure over a 12 month period using a combination of adverse, stability and where applicable relevant consumer information in the modelling process.",
+    "paragraph3": "The model is dynamic, recalculating as and when information affecting the risk grade changes.",
+    "poorRiskHeading": "Areas influencing a poor risk grade can include:",
+    "poorRiskFactors": ["Adverse information", "New business", "Lack of information"],
+    "interpretation": "For every 1 bad company there are 52.4 good companies at this risk band."
   },
   "tradeReferenceSummary": {
     "bands": [
@@ -473,6 +479,34 @@
       "Increased competition in credit rating sector",
       "Regulatory changes affecting credit bureau operations",
       "Economic conditions may impact client payment behaviour"
+    ]
+  },
+  "amlScreening": {
+    "status": "Clear – no adverse AML indicators identified",
+    "lastScreenedOn": "2025/02/03",
+    "summary": "Customer due diligence and transaction monitoring screening completed against applicable AML requirements. No suspicious activity or structuring patterns identified for the subject entity.",
+    "checks": [
+      { "name": "Identity & ownership verification", "result": "Complete" },
+      { "name": "Source of funds (where applicable)", "result": "Documented" },
+      { "name": "Adverse media / watchlists (AML)", "result": "No material matches" }
+    ]
+  },
+  "pepsScreening": {
+    "status": "No PEPs identified",
+    "lastScreenedOn": "2025/02/03",
+    "summary": "Principals and known beneficial owners were screened against domestic and international PEP databases. No individuals were classified as politically exposed persons in terms of the assessed risk policy.",
+    "principalsScreened": 2,
+    "matches": []
+  },
+  "sanctionsScreening": {
+    "status": "Clear – no sanctions matches",
+    "lastScreenedOn": "2025/02/03",
+    "summary": "Screening performed against United Nations, major regional and industry sanctions lists. The subject and its principals did not appear on active sanctions or restricted-party lists at the time of enquiry.",
+    "listsChecked": [
+      "UN Security Council",
+      "EU Consolidated",
+      "OFAC SDN (reference)",
+      "Domestic Treasury list"
     ]
   }
 }
