@@ -57,9 +57,24 @@
               autocomplete="off"
               aria-labelledby="report-product-heading"
             >
-              <option value="bronze-pb">Base report</option>
+              <option value="bronze-pb" selected>Base report</option>
               <option value="silver-pb">Gold report</option>
               <option value="customized">Customized report</option>
+              <option value="bronze">Bronze</option>
+              <option value="bronze-pb-catalog">Bronze P&amp;B</option>
+              <option value="silver">Silver</option>
+              <option value="silver-pb-catalog">Silver P&amp;B</option>
+              <option value="international">International</option>
+              <option value="platinum">Platinum</option>
+              <option value="platinum-hybrid-international">
+                Platinum Hybrid - International
+              </option>
+              <option value="platinum-hybrid-silver">
+                Platinum Hybrid - Silver
+              </option>
+              <option value="platinum-hybrid-gold">
+                Platinum Hybrid - Gold
+              </option>
             </select>
           </div>
         </div>
@@ -111,6 +126,14 @@
         </div>
 
         <div class="report-selection-actions">
+          <button
+            type="button"
+            class="btn-d2-secondary"
+            id="btn-submit-report"
+            title="Submit your report selection"
+          >
+            Submit
+          </button>
           <button
             type="button"
             class="btn-d2-primary"
@@ -767,12 +790,6 @@
           headingGroup: "additional",
         },
         {
-          id: "non-active-principals",
-          label: "NON-ACTIVE PRINCIPALS",
-          priceZar: 155,
-          headingGroup: "additional",
-        },
-        {
           id: "prop-bonds-subject",
           label: "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
           priceZar: 275,
@@ -872,37 +889,117 @@
 
       /** Silver P&B: same 14 headings as Bronze + Silver-only rows; demo line prices sum to package total */
       const SILVER_REPORT_EXTRA_SECTIONS = [
-        { id: "silver-assessment", label: "ASSESSMENT", priceZar: 43 },
-        { id: "silver-branches", label: "BRANCHES", priceZar: 43 },
+        {
+          id: "silver-assessment",
+          label: "ASSESSMENT",
+          priceZar: 43,
+          description:
+            "Credit assessment narrative for this enquiry: summary points, profitability, liquidity, solvency and recommendation.",
+        },
+        {
+          id: "silver-branches",
+          label: "BRANCHES",
+          priceZar: 43,
+          description:
+            "Other business locations on record: branch names, addresses and footprint beyond the main site.",
+        },
         {
           id: "silver-company-ops",
           label: "COMPANY OPERATIONS AND DETAILS",
           priceZar: 43,
+          description:
+            "What the business does day to day: activities, major clients, industry (SIC) and related operational detail.",
         },
-        { id: "silver-agencies-held", label: "AGENCIES HELD", priceZar: 43 },
-        { id: "silver-fleet", label: "FLEET", priceZar: 43 },
-        { id: "silver-staff", label: "STAFF", priceZar: 43 },
-        { id: "silver-bbbee", label: "B-BBEE DETAILS", priceZar: 43 },
-        { id: "silver-premises", label: "PREMISES", priceZar: 43 },
-        { id: "silver-property-bonds", label: "PROPERTY AND BONDS", priceZar: 43 },
-        { id: "silver-fraud-check", label: "FRAUD CHECK", priceZar: 43 },
+        {
+          id: "silver-agencies-held",
+          label: "AGENCIES HELD",
+          priceZar: 43,
+          description:
+            "Agency, distribution or franchise-type arrangements linked to the subject where disclosed.",
+        },
+        {
+          id: "silver-fleet",
+          label: "FLEET",
+          priceZar: 43,
+          description:
+            "Vehicles used in the business: counts by type (e.g. cars, light delivery) and total fleet size.",
+        },
+        {
+          id: "silver-staff",
+          label: "STAFF",
+          priceZar: 43,
+          description:
+            "Workforce size: salaried vs wages staff and typical pay-cycle information where held.",
+        },
+        {
+          id: "silver-bbbee",
+          label: "B-BBEE DETAILS",
+          priceZar: 43,
+          description:
+            "Broad-Based Black Economic Empowerment contributor status and related disclosure.",
+        },
+        {
+          id: "silver-premises",
+          label: "PREMISES",
+          priceZar: 43,
+          description:
+            "Occupied properties: type of premises, location, owned or leased and landlord where applicable.",
+        },
+        {
+          id: "silver-property-bonds",
+          label: "PROPERTY AND BONDS",
+          priceZar: 43,
+          description:
+            "Property and notarial bond information tied to the business operations on file.",
+        },
+        {
+          id: "silver-fraud-check",
+          label: "FRAUD CHECK",
+          priceZar: 43,
+          description:
+            "Fraud-related indicators or screening aligned to the enquiry and risk context.",
+        },
         {
           id: "silver-financial-info",
           label: "FINANCIAL INFORMATION",
           priceZar: 42,
+          description:
+            "Key figures from financials: turnover, cash, debtors, creditors and reporting currency.",
         },
-        { id: "silver-ratios", label: "RATIOS", priceZar: 42 },
-        { id: "silver-contracts", label: "CONTRACTS", priceZar: 42 },
-        { id: "silver-client-refs", label: "CLIENT REFERENCES", priceZar: 43 },
+        {
+          id: "silver-ratios",
+          label: "RATIOS",
+          priceZar: 42,
+          description:
+            "Derived ratios: liquidity (current, acid test), profitability and solvency from available statements.",
+        },
+        {
+          id: "silver-contracts",
+          label: "CONTRACTS",
+          priceZar: 42,
+          description:
+            "Notable contracts or obligations: description, value and how the information was obtained.",
+        },
+        {
+          id: "silver-client-refs",
+          label: "CLIENT REFERENCES",
+          priceZar: 43,
+          description:
+            "Named clients or counterparties and reference-style commentary on relationship or behaviour.",
+        },
         {
           id: "silver-subject-payment",
           label: "SUBJECT PAYMENT PERFORMANCE PROFILE",
           priceZar: 43,
+          description:
+            "How the subject pays suppliers: performance bands, exposure and terms where analysed.",
         },
         {
           id: "silver-top-industries",
           label: "TOP INDUSTRIES BOUGHT FROM",
           priceZar: 43,
+          description:
+            "Industries the subject purchases from most, by relative weight or value where available.",
         },
       ];
 
@@ -920,18 +1017,16 @@
           label: "ASSESSMENT",
           priceZar: 410,
           headingGroup: "additional",
-        },
-        {
-          id: "non-active-principals",
-          label: "NON-ACTIVE PRINCIPALS",
-          priceZar: 155,
-          headingGroup: "additional",
+          description:
+            "Extended assessment block where offered as an add-on (may overlap the Silver assessment row).",
         },
         {
           id: "prop-bonds-subject",
           label: "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
           priceZar: 275,
           headingGroup: "additional",
+          description:
+            "Immovable property and bond registrations recorded in the subject company’s name.",
         },
       ];
 
@@ -941,36 +1036,36 @@
           id: "custom-media-press",
           label: "MEDIA AND PRESS RELEASE",
           priceZar: 125,
+          description:
+            "News articles, press releases and public media mentions relevant to the subject, with optional thumbnails.",
         },
         {
           id: "custom-photos-business",
           label: "PHOTOS OF THE BUSINESS",
           priceZar: 115,
+          description:
+            "Visual context: offices, sites, signage or operations supplied for the report pack.",
         },
         {
           id: "custom-financial-statement",
           label: "FINANCIAL STATEMENT",
           priceZar: 195,
+          description:
+            "Structured profit-and-loss and balance-sheet lines for the stated reporting period.",
         },
         {
           id: "custom-swot",
           label: "SWOT ANALYSIS",
           priceZar: 165,
+          description:
+            "Strengths, weaknesses, opportunities and threats summarised for credit or relationship review.",
         },
         {
-          id: "custom-aml",
-          label: "AML (ANTI-MONEY LAUNDERING)",
-          priceZar: 145,
-        },
-        {
-          id: "custom-peps",
-          label: "PEPs (POLITICALLY EXPOSED PERSONS)",
-          priceZar: 145,
-        },
-        {
-          id: "custom-sanctions",
-          label: "SANCTIONS",
-          priceZar: 145,
+          id: "custom-aml-pep-sanctions",
+          label: "AML, PEPs & SANCTIONS",
+          priceZar: 395,
+          description:
+            "Anti-money laundering checks, politically exposed persons screening and sanctions list outcomes in one section.",
         },
       ];
 
@@ -987,6 +1082,35 @@
 
       const CUSTOMIZED_REPORT_ID = "customized";
 
+      /** Product lines with no demo catalogue yet — report body sections are hidden */
+      const PLACEHOLDER_REPORT_PRODUCT_IDS = [
+        "bronze",
+        "bronze-pb-catalog",
+        "silver",
+        "silver-pb-catalog",
+        "international",
+        "platinum",
+        "platinum-hybrid-international",
+        "platinum-hybrid-silver",
+        "platinum-hybrid-gold",
+      ];
+
+      function isPlaceholderReportProduct(productId) {
+        return PLACEHOLDER_REPORT_PRODUCT_IDS.indexOf(productId) !== -1;
+      }
+
+      function isKnownReportProductId(productId) {
+        if (!productId) return false;
+        if (
+          productId === "bronze-pb" ||
+          productId === "silver-pb" ||
+          productId === CUSTOMIZED_REPORT_ID
+        ) {
+          return true;
+        }
+        return isPlaceholderReportProduct(productId);
+      }
+
       /** Canonical report body sections (order matches PDF layout) */
       const REPORT_TOC_SECTIONS = [
         { id: "sec-company-overview", title: "Company Overview" },
@@ -997,7 +1121,6 @@
         { id: "sec-history", title: "History" },
         { id: "sec-corporate-structure", title: "Corporate Structure" },
         { id: "sec-active-principals", title: "Active Principals" },
-        { id: "sec-non-active-principals", title: "Non-Active Principals" },
         { id: "sec-operations", title: "Operations" },
         { id: "sec-staff-bbee", title: "Staff & B-BBEE" },
         { id: "sec-premises", title: "Premises" },
@@ -1012,11 +1135,9 @@
         { id: "sec-financial-statement", title: "Financial Statement" },
         { id: "sec-swot", title: "SWOT Analysis" },
         {
-          id: "sec-aml",
-          title: "AML (Anti-Money Laundering)",
+          id: "sec-aml-pep-sanctions",
+          title: "AML, PEPs & Sanctions",
         },
-        { id: "sec-peps", title: "PEPs (Politically Exposed Persons)" },
-        { id: "sec-sanctions", title: "Sanctions" },
         {
           id: "sec-trade-reference-summary",
           title: "TRADE REFERENCE SUMMARY",
@@ -1072,15 +1193,12 @@
         subsidiary: ["sec-corporate-structure"],
         "active-principals": ["sec-active-principals"],
         "prop-bonds-principal": ["sec-active-principals"],
-        "non-active-principals": ["sec-non-active-principals"],
         "prop-bonds-subject": ["sec-premises"],
         "custom-media-press": ["sec-media-press"],
         "custom-photos-business": ["sec-photos"],
         "custom-financial-statement": ["sec-financial-statement"],
         "custom-swot": ["sec-swot"],
-        "custom-aml": ["sec-aml"],
-        "custom-peps": ["sec-peps"],
-        "custom-sanctions": ["sec-sanctions"],
+        "custom-aml-pep-sanctions": ["sec-aml-pep-sanctions"],
       };
 
       function catalogueSectionsToRenderSectionIdSet(sections) {
@@ -1120,6 +1238,8 @@
                 }
               });
           }
+        } else if (isPlaceholderReportProduct(productId)) {
+          return new Set();
         } else {
           return new Set(ALL_RENDER_SECTION_IDS);
         }
@@ -1150,6 +1270,9 @@
               });
           }
           return s;
+        }
+        if (isPlaceholderReportProduct(productId)) {
+          return [];
         }
         return null;
       }
@@ -1240,7 +1363,11 @@
       /** Rebuild Table of Contents from catalogue labels; links use catalogue row ids (anchors on cards) */
       function rebuildReportTocFromCatalogue(reportRoot, catalogueSections) {
         var tocNav = reportRoot.querySelector(".d2-toc-nav");
-        if (!tocNav || !catalogueSections || catalogueSections.length === 0) {
+        if (!tocNav) {
+          return;
+        }
+        if (!catalogueSections || catalogueSections.length === 0) {
+          tocNav.innerHTML = "";
           return;
         }
         var parts = [];
@@ -1265,8 +1392,11 @@
       }
 
       function applyReportSectionFilter(reportRoot, includeIds) {
-        if (!reportRoot || !includeIds || includeIds.size === 0) {
+        if (!reportRoot) {
           return;
+        }
+        if (!includeIds) {
+          includeIds = new Set();
         }
         var i;
         for (i = 0; i < ALL_RENDER_SECTION_IDS.length; i++) {
@@ -1283,6 +1413,7 @@
         if (productId === "bronze-pb") return BRONZE_REPORT_SECTIONS;
         if (productId === "silver-pb") return SILVER_REPORT_SECTIONS;
         if (productId === CUSTOMIZED_REPORT_ID) return BRONZE_REPORT_SECTIONS;
+        if (isPlaceholderReportProduct(productId)) return [];
         return STANDARD_REPORT_SECTIONS;
       }
 
@@ -1299,6 +1430,9 @@
           if (STANDARD_REPORT_PRODUCTS[i].id === productId) {
             return STANDARD_REPORT_PRODUCTS[i].packagePriceZar;
           }
+        }
+        if (isPlaceholderReportProduct(productId)) {
+          return 0;
         }
         return 0;
       }
@@ -1419,9 +1553,24 @@
             var spanPrice = document.createElement("span");
             spanPrice.className = "rb-price";
             spanPrice.textContent = formatZar(s.priceZar);
+            var textCol = document.createElement("div");
+            textCol.className = "rb-custom-textcol";
+            textCol.appendChild(spanText);
+            if (s.description) {
+              var descEl = document.createElement("p");
+              descEl.className = "rb-label-description";
+              descEl.textContent = s.description;
+              textCol.appendChild(descEl);
+            }
+            var priceCol = document.createElement("div");
+            priceCol.className = "rb-custom-pricecol";
+            priceCol.appendChild(spanPrice);
+            var mainCol = document.createElement("div");
+            mainCol.className = "rb-custom-main";
+            mainCol.appendChild(textCol);
+            mainCol.appendChild(priceCol);
             label.appendChild(cb);
-            label.appendChild(spanText);
-            label.appendChild(spanPrice);
+            label.appendChild(mainCol);
             li.appendChild(label);
             customList.appendChild(li);
           });
@@ -1482,13 +1631,7 @@
         }
         var productEl = document.getElementById("report-product");
         var product = params.get("product");
-        if (
-          productEl &&
-          product &&
-          (product === "bronze-pb" ||
-            product === "silver-pb" ||
-            product === CUSTOMIZED_REPORT_ID)
-        ) {
+        if (productEl && product && isKnownReportProductId(product)) {
           productEl.value = product;
         }
         rebuildStandardPricingLines();
@@ -1555,8 +1698,31 @@
         initReportBuilder();
         applyReportConfigFromUrl();
         var viewBtn = document.getElementById("btn-view-report");
+        var submitBtn = document.getElementById("btn-submit-report");
         var changeBtn = document.getElementById("btn-change-config");
         if (viewBtn) viewBtn.addEventListener("click", openReportViewInNewTab);
+        if (submitBtn) {
+          submitBtn.addEventListener("click", function () {
+            var productEl = document.getElementById("report-product");
+            var productId = productEl ? productEl.value : "";
+            var detail = { productId: productId };
+            if (productId === CUSTOMIZED_REPORT_ID) {
+              var checklist = document.getElementById("custom-pricing-checklist");
+              var customIndices = [];
+              if (checklist) {
+                checklist
+                  .querySelectorAll('input[type="checkbox"]:checked')
+                  .forEach(function (cb) {
+                    customIndices.push(Number(cb.getAttribute("data-idx")));
+                  });
+              }
+              detail.customIndices = customIndices;
+            }
+            window.dispatchEvent(
+              new CustomEvent("report-selection-submit", { detail: detail }),
+            );
+          });
+        }
         if (changeBtn) changeBtn.addEventListener("click", showSetupView);
 
         if (shouldAutoOpenReportFromUrl()) {
@@ -1615,10 +1781,13 @@
         }
         applyReportSectionFilter(report, includeIds);
         var catalogue = getCatalogueSectionsForCurrentReport();
-        if (catalogue && catalogue.length > 0) {
-          alignReportCardsToCatalogue(report, catalogue);
-          rebuildReportTocFromCatalogue(report, catalogue);
+        if (catalogue == null) {
+          catalogue = [];
         }
+        if (catalogue.length > 0) {
+          alignReportCardsToCatalogue(report, catalogue);
+        }
+        rebuildReportTocFromCatalogue(report, catalogue);
       }
 
       function renderDesign2(d) {
@@ -1766,10 +1935,6 @@
             <div class="d2-card" id="sec-active-principals">
               <h3 class="d2-card-title">Active Principals</h3>
               ${d.activePrincipals.map((p) => '<div class="d2-principal"><strong>' + p.name + " (" + p.initials + ")</strong> – " + p.areaOfResponsibility + " (" + p.sharePercent + '%)<br><span class="d2-muted">ID: ' + p.idNumber + " | DOB: " + p.dateOfBirth + " | Appointed: " + p.appointmentDate + " | " + p.courtRecords + '</span><br><span class="d2-muted">' + p.currentBusinessInterests + '</span><br><span class="d2-muted">' + p.propertiesAndBonds + "</span></div>").join("")}
-            </div>
-            <div class="d2-card" id="sec-non-active-principals">
-              <h3 class="d2-card-title">Non-Active Principals</h3>
-              <table class="d2-table"><tr><th>Name</th><th>Initials</th><th>ID Number</th><th>DOB</th><th>Status</th><th>Appointment Date</th></tr>${d.nonActivePrincipals.map((p) => "<tr><td>" + p.name + "</td><td>" + p.initials + "</td><td>" + p.idNumber + "</td><td>" + p.dateOfBirth + "</td><td>" + p.status + "</td><td>" + p.appointmentDate + "</td></tr>").join("")}</table>
             </div>
             <div class="d2-card" id="sec-operations">
               <h3 class="d2-card-title">Operations</h3>
@@ -1927,32 +2092,35 @@
                 </div>
               </div>
             </div>
-            <div class="d2-card" id="sec-aml">
-              <h3 class="d2-card-title">AML (Anti-Money Laundering)</h3>
-              <p class="d2-text d2-muted">Last screened: ${(d.amlScreening || {}).lastScreenedOn || "-"}</p>
-              <p class="d2-text"><strong>Outcome:</strong> ${(d.amlScreening || {}).status || "-"}</p>
-              <p class="d2-text">${(d.amlScreening || {}).summary || ""}</p>
-              <table class="d2-table">
-                <thead><tr><th>Check</th><th>Result</th></tr></thead>
-                <tbody>${((d.amlScreening || {}).checks || []).length ? ((d.amlScreening || {}).checks || []).map((c) => "<tr><td>" + c.name + "</td><td>" + c.result + "</td></tr>").join("") : '<tr><td colspan="2" class="d2-muted">No screening checks on file.</td></tr>'}</tbody>
-              </table>
-            </div>
-            <div class="d2-card" id="sec-peps">
-              <h3 class="d2-card-title">PEPs (Politically Exposed Persons)</h3>
-              <p class="d2-text d2-muted">Last screened: ${(d.pepsScreening || {}).lastScreenedOn || "-"}</p>
-              <p class="d2-text"><strong>Outcome:</strong> ${(d.pepsScreening || {}).status || "-"}</p>
-              <p class="d2-text">${(d.pepsScreening || {}).summary || ""}</p>
-              <p class="d2-text"><strong>Principals screened:</strong> ${(d.pepsScreening || {}).principalsScreened != null ? d.pepsScreening.principalsScreened : "-"}</p>
-              <p class="d2-text"><strong>Matches:</strong></p>
-              <ul class="d2-swot-list">${((d.pepsScreening || {}).matches || []).length ? ((d.pepsScreening || {}).matches || []).map((m) => "<li>" + (typeof m === "string" ? m : (m.description || m.name || JSON.stringify(m))) + "</li>").join("") : '<li class="d2-muted">No matches recorded.</li>'}</ul>
-            </div>
-            <div class="d2-card" id="sec-sanctions">
-              <h3 class="d2-card-title">Sanctions</h3>
-              <p class="d2-text d2-muted">Last screened: ${(d.sanctionsScreening || {}).lastScreenedOn || "-"}</p>
-              <p class="d2-text"><strong>Outcome:</strong> ${(d.sanctionsScreening || {}).status || "-"}</p>
-              <p class="d2-text">${(d.sanctionsScreening || {}).summary || ""}</p>
-              <p class="d2-text"><strong>Lists checked:</strong></p>
-              <ul class="d2-swot-list">${((d.sanctionsScreening || {}).listsChecked || []).length ? ((d.sanctionsScreening || {}).listsChecked || []).map((x) => "<li>" + x + "</li>").join("") : '<li class="d2-muted">No list data on file.</li>'}</ul>
+            <div class="d2-card" id="sec-aml-pep-sanctions">
+              <h3 class="d2-card-title">AML, PEPs & Sanctions</h3>
+              <section class="d2-aml-pep-block">
+                <h4 class="d2-aml-pep-subtitle">AML (Anti-Money Laundering)</h4>
+                <p class="d2-text d2-muted">Last screened: ${(d.amlScreening || {}).lastScreenedOn || "-"}</p>
+                <p class="d2-text"><strong>Outcome:</strong> ${(d.amlScreening || {}).status || "-"}</p>
+                <p class="d2-text">${(d.amlScreening || {}).summary || ""}</p>
+                <table class="d2-table">
+                  <thead><tr><th>Check</th><th>Result</th></tr></thead>
+                  <tbody>${((d.amlScreening || {}).checks || []).length ? ((d.amlScreening || {}).checks || []).map((c) => "<tr><td>" + c.name + "</td><td>" + c.result + "</td></tr>").join("") : '<tr><td colspan="2" class="d2-muted">No screening checks on file.</td></tr>'}</tbody>
+                </table>
+              </section>
+              <section class="d2-aml-pep-block">
+                <h4 class="d2-aml-pep-subtitle">PEPs (Politically Exposed Persons)</h4>
+                <p class="d2-text d2-muted">Last screened: ${(d.pepsScreening || {}).lastScreenedOn || "-"}</p>
+                <p class="d2-text"><strong>Outcome:</strong> ${(d.pepsScreening || {}).status || "-"}</p>
+                <p class="d2-text">${(d.pepsScreening || {}).summary || ""}</p>
+                <p class="d2-text"><strong>Principals screened:</strong> ${(d.pepsScreening || {}).principalsScreened != null ? d.pepsScreening.principalsScreened : "-"}</p>
+                <p class="d2-text"><strong>Matches:</strong></p>
+                <ul class="d2-swot-list">${((d.pepsScreening || {}).matches || []).length ? ((d.pepsScreening || {}).matches || []).map((m) => "<li>" + (typeof m === "string" ? m : (m.description || m.name || JSON.stringify(m))) + "</li>").join("") : '<li class="d2-muted">No matches recorded.</li>'}</ul>
+              </section>
+              <section class="d2-aml-pep-block">
+                <h4 class="d2-aml-pep-subtitle">Sanctions</h4>
+                <p class="d2-text d2-muted">Last screened: ${(d.sanctionsScreening || {}).lastScreenedOn || "-"}</p>
+                <p class="d2-text"><strong>Outcome:</strong> ${(d.sanctionsScreening || {}).status || "-"}</p>
+                <p class="d2-text">${(d.sanctionsScreening || {}).summary || ""}</p>
+                <p class="d2-text"><strong>Lists checked:</strong></p>
+                <ul class="d2-swot-list">${((d.sanctionsScreening || {}).listsChecked || []).length ? ((d.sanctionsScreening || {}).listsChecked || []).map((x) => "<li>" + x + "</li>").join("") : '<li class="d2-muted">No list data on file.</li>'}</ul>
+              </section>
             </div>
         </div>
         <div class="d2-card" id="sec-trade-reference-summary">
