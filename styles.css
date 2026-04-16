@@ -288,7 +288,7 @@
 .report-selection-actions {
   margin-top: 8px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
@@ -346,8 +346,8 @@
   border-top: 1px solid var(--border-light);
 }
 
-/* Hide bottom action bar (Change configuration / Export / Print) — remove to show again */
-#print-actions {
+/* Hide bottom action bar on selection screen; show when report is visible */
+body:not(.report-view-active) #print-actions {
   display: none !important;
 }
 
@@ -783,6 +783,40 @@ body.pdf-export .report.design-2 .d2-card {
 body.pdf-export .report.design-3 .d3-section {
   break-inside: avoid;
   page-break-inside: avoid;
+}
+
+/*
+ * PDF export: html2canvas often does not paint box-shadow. Add borders so cards
+ * read like the web view (boxed panels with clear edges).
+ */
+body.pdf-export .report.design-2 .d2-card:not(#sec-assessment) {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+body.pdf-export .report.design-2 .d2-card#sec-assessment {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--experian-purple);
+}
+body.pdf-export .report.design-2 .d2-header,
+body.pdf-export .report.design-2 .d2-metric-card,
+body.pdf-export .report.design-2 .d2-recommend,
+body.pdf-export .report.design-2 .d2-footer {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+body.pdf-export .report.design-2 .d2-swot-box {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+body.pdf-export .report-footer {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+body.pdf-export .report .principal-card,
+body.pdf-export .report .contract-card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+body.pdf-export .report .ratio-card {
+  border: 1px solid var(--border-light);
+  border-top: 3px solid var(--experian-blue);
 }
 
 /* ========== Design 2 – Dashboard Style ========== */

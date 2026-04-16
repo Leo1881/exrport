@@ -128,19 +128,27 @@
         <div class="report-selection-actions">
           <button
             type="button"
+            class="btn-d2-primary"
+            id="btn-view-report"
+            title="Opens the report in a new browser tab"
+          >
+            View
+          </button>
+          <button
+            type="button"
+            class="btn-d2-secondary"
+            id="btn-export-pdf-selection"
+            title="Opens a new tab and downloads the PDF (same report as View)"
+          >
+            Export
+          </button>
+          <button
+            type="button"
             class="btn-d2-secondary"
             id="btn-submit-report"
             title="Submit your report selection"
           >
             Submit
-          </button>
-          <button
-            type="button"
-            class="btn-d2-primary"
-            id="btn-view-report"
-            title="Opens the report in a new browser tab"
-          >
-            View report
           </button>
         </div>
       </div>
@@ -149,19 +157,8 @@
     <div class="report design-2" id="report" hidden></div>
 
     <div class="print-actions" id="print-actions" hidden>
-      <button type="button" class="btn-d2-ghost" id="btn-change-config">
-        Change configuration
-      </button>
       <button type="button" class="btn-d2-primary" id="export-pdf">
-        Export to PDF
-      </button>
-      <button
-        type="button"
-        class="btn-d2-secondary"
-        id="print-pdf"
-        title="Uses browser print — ToC links work within the PDF"
-      >
-        Print to PDF
+        Export
       </button>
     </div>
 
@@ -1665,14 +1662,29 @@
         return params.get("report") === "1" || params.get("pdf") === "1";
       }
 
-      /** Opens the same page in a new tab with the current product and custom picks. */
-      function openReportViewInNewTab() {
+      /**
+       * Opens the report in a new tab with current product/custom.
+       * @param {{ exportPdf?: boolean }} options - if exportPdf, tab auto-downloads PDF (html2pdf).
+       */
+      function openReportInNewTab(options) {
+        options = options || {};
+        if (options.exportPdf && window.location.protocol === "file:") {
+          alert(
+            "PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.",
+          );
+          return;
+        }
         var productEl = document.getElementById("report-product");
         var product = productEl ? productEl.value : "bronze-pb";
         var url = new URL(window.location.href);
         url.searchParams.set("report", "1");
         url.searchParams.set("product", product);
         url.searchParams.delete("pdf");
+        if (options.exportPdf) {
+          url.searchParams.set("export", "1");
+        } else {
+          url.searchParams.delete("export");
+        }
         if (product === CUSTOMIZED_REPORT_ID) {
           var indices = [];
           var checklist = document.getElementById("custom-pricing-checklist");
@@ -1694,12 +1706,21 @@
         window.open(url.toString(), "_blank", "noopener,noreferrer");
       }
 
+      function openReportViewInNewTab() {
+        openReportInNewTab({ exportPdf: false });
+      }
+
+      function openExportPdfInNewTab() {
+        openReportInNewTab({ exportPdf: true });
+      }
+
       function initReportApp() {
         initReportBuilder();
+        var params = new URLSearchParams(window.location.search);
+        var autoExportPdf = params.get("export") === "1";
         applyReportConfigFromUrl();
         var viewBtn = document.getElementById("btn-view-report");
         var submitBtn = document.getElementById("btn-submit-report");
-        var changeBtn = document.getElementById("btn-change-config");
         if (viewBtn) viewBtn.addEventListener("click", openReportViewInNewTab);
         if (submitBtn) {
           submitBtn.addEventListener("click", function () {
@@ -1723,11 +1744,10 @@
             );
           });
         }
-        if (changeBtn) changeBtn.addEventListener("click", showSetupView);
 
         if (shouldAutoOpenReportFromUrl()) {
           enterReportView();
-          if (new URLSearchParams(window.location.search).get("report") === "1") {
+          if (params.get("report") === "1") {
             try {
               history.replaceState(
                 {},
@@ -1740,6 +1760,16 @@
           }
         } else {
           showSetupView();
+        }
+
+        if (
+          autoExportPdf &&
+          document.body.classList.contains("report-view-active") &&
+          params.get("pdf") !== "1"
+        ) {
+          setTimeout(function () {
+            runExportPdfFlow();
+          }, 250);
         }
       }
 
@@ -2148,7 +2178,12 @@
         var btn = document.getElementById("export-pdf");
         if (btn) {
           btn.disabled = false;
-          btn.textContent = "Export to PDF";
+          btn.textContent = "Export";
+        }
+        var btnSel = document.getElementById("btn-export-pdf-selection");
+        if (btnSel) {
+          btnSel.disabled = false;
+          btnSel.textContent = "Export";
         }
       }
       function convertImagesToBase64(element) {
@@ -2248,63 +2283,75 @@
           });
       }
 
+      function runExportPdfFlow() {
+        if (window.location.protocol === "file:") {
+          alert(
+            "PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.",
+          );
+          return;
+        }
+        if (!document.body.classList.contains("report-view-active")) {
+          enterReportView();
+        }
+        var btnReport = document.getElementById("export-pdf");
+        var btnSel = document.getElementById("btn-export-pdf-selection");
+        if (btnReport) {
+          btnReport.disabled = true;
+          btnReport.textContent = "Generating...";
+        }
+        if (btnSel) {
+          btnSel.disabled = true;
+          btnSel.textContent = "Generating...";
+        }
+        document.documentElement.classList.add("pdf-export");
+        document.body.classList.add("pdf-export");
+        document.getElementById("print-actions").hidden = true;
+        window.scrollTo(0, 0);
+        const report = document.getElementById("report");
+        report.removeAttribute("hidden");
+        report.style.display = "block";
+        var fontsReady = document.fonts && document.fonts.ready
+          ? document.fonts.ready
+          : Promise.resolve();
+        fontsReady
+          .then(function () {
+            return new Promise(function (resolve) {
+              setTimeout(resolve, 150);
+            });
+          })
+          .then(function () {
+            return runPdfExport();
+          })
+          .then(function () {
+            restoreExportUI();
+          })
+          .catch(function (err) {
+            console.error("PDF export failed:", err);
+            restoreExportUI();
+            if (window.location.protocol === "file:") {
+              alert(
+                "PDF export requires a local server.\n\nRun: npx serve\nThen open http://localhost:3000",
+              );
+            } else {
+              alert(
+                "PDF export failed. Try again, or use a local server (npx serve) and reload.",
+              );
+            }
+          });
+      }
+
       document
         .getElementById("export-pdf")
         .addEventListener("click", function () {
-          if (window.location.protocol === "file:") {
-            alert(
-              "PDF export does not work when opening the file directly.\n\nRun in terminal: npx serve\nThen open http://localhost:3000 in your browser.",
-            );
-            return;
-          }
-          const btn = document.getElementById("export-pdf");
-          btn.disabled = true;
-          btn.textContent = "Generating...";
-          document.documentElement.classList.add("pdf-export");
-          document.body.classList.add("pdf-export");
-          document.getElementById("print-actions").hidden = true;
-          window.scrollTo(0, 0);
-          const report = document.getElementById("report");
-          report.removeAttribute("hidden");
-          report.style.display = "block";
-          var fontsReady = document.fonts && document.fonts.ready
-            ? document.fonts.ready
-            : Promise.resolve();
-          fontsReady
-            .then(function () {
-              return new Promise(function (resolve) {
-                setTimeout(resolve, 150);
-              });
-            })
-            .then(function () {
-              return runPdfExport();
-            })
-            .then(function () {
-              restoreExportUI();
-            })
-            .catch(function (err) {
-              console.error("PDF export failed:", err);
-              restoreExportUI();
-              if (window.location.protocol === "file:") {
-                alert(
-                  "PDF export requires a local server.\n\nRun: npx serve\nThen open http://localhost:3000",
-                );
-              } else {
-                alert(
-                  'PDF export failed. Use Print (Ctrl/Cmd+P) and choose "Save as PDF" instead.',
-                );
-              }
-            });
+          runExportPdfFlow();
         });
 
-      document
-        .getElementById("print-pdf")
-        .addEventListener("click", function () {
-          var pa = document.getElementById("print-actions");
-          if (pa) pa.hidden = true;
-          window.print();
-          if (pa) pa.hidden = false;
+      var btnExportSelection = document.getElementById("btn-export-pdf-selection");
+      if (btnExportSelection) {
+        btnExportSelection.addEventListener("click", function () {
+          openExportPdfInNewTab();
         });
+      }
     </script>
   </body>
 </html>
