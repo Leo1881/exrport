@@ -1341,6 +1341,22 @@
             }
             return;
           }
+          /* bronze-risk + silver-fraud-check both map here — same body; do not clone twice */
+          if (secId === "sec-risk-grade") {
+            var elRg = reportRoot.querySelector("#" + secId);
+            if (elRg && elRg.parentNode) {
+              elRg.id = rows[0].id;
+              var rgHeading = elRg.querySelector(".d2-risk-grade-heading");
+              if (rgHeading) {
+                rgHeading.textContent = rows
+                  .map(function (r) {
+                    return r.label;
+                  })
+                  .join(" · ");
+              }
+            }
+            return;
+          }
           var el = reportRoot.querySelector("#" + secId);
           if (!el || !el.parentNode) {
             return;
@@ -1371,6 +1387,14 @@
           tocNav.innerHTML = "";
           return;
         }
+        var canonicalRiskGradeId = null;
+        for (var gi = 0; gi < catalogueSections.length; gi++) {
+          var gm = CATALOGUE_ID_TO_RENDER_SECTION_IDS[catalogueSections[gi].id];
+          if (gm && gm.length === 1 && gm[0] === "sec-risk-grade") {
+            canonicalRiskGradeId = catalogueSections[gi].id;
+            break;
+          }
+        }
         var parts = [];
         for (var i = 0; i < catalogueSections.length; i++) {
           var row = catalogueSections[i];
@@ -1378,7 +1402,15 @@
           if (!mapped || !mapped.length) {
             continue;
           }
-          var href = "#" + row.id;
+          var anchorId = row.id;
+          if (
+            canonicalRiskGradeId &&
+            mapped.length === 1 &&
+            mapped[0] === "sec-risk-grade"
+          ) {
+            anchorId = canonicalRiskGradeId;
+          }
+          var href = "#" + anchorId;
           parts.push(
             '<a href="' +
               href +
