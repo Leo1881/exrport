@@ -722,127 +722,154 @@
           label: "SUMMARY",
           priceZar: 175,
           headingGroup: "standard",
+          description: "High-level summary of key findings and overall risk view.",
         },
         {
           id: "biz",
           label: "BUSINESS DETAILS",
           priceZar: 320,
           headingGroup: "standard",
+          description: "Core registered details: status, industry (SIC) and key identifiers on file.",
         },
         {
           id: "names",
           label: "NAME CHANGES",
           priceZar: 95,
           headingGroup: "standard",
+          description: "Recorded company name changes with effective dates.",
         },
         {
           id: "other-names",
           label: "OTHER NAMES BY WHICH BUSINESS IS KNOWN",
           priceZar: 110,
           headingGroup: "standard",
+          description: "Alternative business names or trade styles linked to the subject.",
         },
         {
           id: "addr",
           label: "ADDRESS DETAILS",
           priceZar: 145,
           headingGroup: "standard",
+          description: "Registered, physical and postal addresses with any supporting notes.",
         },
         {
           id: "assess",
           label: "ASSESSMENT",
           priceZar: 410,
           headingGroup: "standard",
+          description: "Credit assessment narrative: enquiry context, ratios and recommendation.",
         },
         {
           id: "contact",
           label: "CONTACT DETAILS",
           priceZar: 125,
           headingGroup: "standard",
+          description: "Telephone, email and other contact identifiers on record.",
         },
-        { id: "history", label: "HISTORY", priceZar: 240, headingGroup: "additional" },
+        {
+          id: "history",
+          label: "HISTORY",
+          priceZar: 240,
+          headingGroup: "additional",
+          description: "Company timeline: establishment, conversions, name changes and related milestones.",
+        },
         {
           id: "ultimate-holding",
           label: "ULTIMATE HOLDING COMPANY",
           priceZar: 185,
           headingGroup: "additional",
+          description: "Ultimate parent entity details where recorded.",
         },
         {
           id: "holding-co",
           label: "HOLDING COMPANY",
           priceZar: 165,
           headingGroup: "additional",
+          description: "Immediate holding company details where applicable.",
         },
         {
           id: "subsidiary",
           label: "SUBSIDIARY / ASSOCIATE COMPANIES",
           priceZar: 195,
           headingGroup: "additional",
+          description: "Subsidiary and associate entities linked to the subject on file.",
         },
         {
           id: "active-principals",
           label: "ACTIVE PRINCIPALS",
           priceZar: 220,
           headingGroup: "additional",
+          description: "Current principals/directors and key profile indicators where available.",
         },
         {
           id: "prop-bonds-principal",
           label: "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
           priceZar: 275,
           headingGroup: "additional",
+          description: "Property and bond records identified in a principal’s name, where applicable.",
         },
         {
           id: "prop-bonds-subject",
           label: "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
           priceZar: 275,
           headingGroup: "additional",
+          description: "Immovable property and bond registrations recorded in the subject’s name.",
         },
         {
           id: "bankers",
           label: "BANKERS DETAILS AND COMMENTS",
           priceZar: 140,
           headingGroup: "additional",
+          description: "Banking details and related facility/security notes where disclosed.",
         },
         {
           id: "prev-enquiries",
           label: "PREVIOUS ENQUIRIES",
           priceZar: 180,
           headingGroup: "additional",
+          description: "Previous credit enquiries recorded over the last 3 years.",
         },
         {
           id: "court-records",
           label: "COURT RECORDS TO DATE",
           priceZar: 260,
           headingGroup: "additional",
+          description: "Court record summary: judgements, bonds and other adverse items where recorded.",
         },
         {
           id: "business-rescue",
           label: "BUSINESS RESCUE",
           priceZar: 310,
           headingGroup: "additional",
+          description: "Whether Business Rescue or Debt Review proceedings are currently in place.",
         },
         {
           id: "payment-analysis",
           label: "PAYMENT ANALYSIS REPORT",
           priceZar: 195,
           headingGroup: "additional",
+          description: "Payment behaviour overview: trends, days-to-pay and overdue behaviour where available.",
         },
         {
           id: "debtors-ledger",
           label: "DEBTORS LEDGER (UNDER THE TRADE REFS)",
           priceZar: 125,
           headingGroup: "additional",
+          description: "Debtors ledger snapshot: exposure, overdue amounts and ageing distribution by period.",
         },
         {
           id: "risk-grade",
           label: "RISK GRADE ANALYSIS",
           priceZar: 170,
           headingGroup: "additional",
+          description: "Risk score, banding and interpretation from the bureau model.",
         },
         {
           id: "trade-ref-summary",
           label: "TRADE REFERENCE SUMMARY",
           priceZar: 145,
           headingGroup: "additional",
+          description: "Consolidated trade reference view: terms and payment performance summary.",
         },
       ];
 
@@ -852,39 +879,85 @@
           id: "bronze-reg-info",
           label: "BUSINESS REGISTRATION INFORMATION",
           priceZar: 210,
+          description: "Registered company identifiers: name, trade style, registration number and company status.",
         },
-        { id: "bronze-biz-details", label: "BUSINESS DETAILS", priceZar: 310 },
+        {
+          id: "bronze-biz-details",
+          label: "BUSINESS DETAILS",
+          priceZar: 310,
+          description: "Core business profile: status, SIC code and description, and VAT registration where applicable.",
+        },
         {
           id: "bronze-name-history",
           label: "BUSINESS NAME HISTORY & CHANGE",
           priceZar: 190,
+          description: "Name history: recorded name changes and other business names with effective dates.",
         },
         {
           id: "bronze-reg-contact",
           label: "REGISTERED & OPERATIONAL CONTACT DETAILS",
           priceZar: 210,
+          description: "Registered and operating contact details: addresses, channels and any verification notes on file.",
         },
         {
           id: "bronze-principals-cipc",
           label: "PRINCIPAL DETAILS BY CIPC",
           priceZar: 210,
+          description: "CIPC principal details: active principals, business interests, court indicators and share structure.",
         },
-        { id: "bronze-history", label: "HISTORY", priceZar: 230 },
+        {
+          id: "bronze-history",
+          label: "HISTORY",
+          priceZar: 230,
+          description: "Registration timeline: establishment, incorporations, name changes, conversions and share structure notes.",
+        },
         {
           id: "bronze-bank",
           label: "BANK DETAILS AND COMMENTS",
           priceZar: 140,
+          description: "Banking details and related comments or facility/security notes where disclosed.",
         },
-        { id: "bronze-prev-enq", label: "PREVIOUS ENQUIRIES", priceZar: 180 },
-        { id: "bronze-court", label: "COURT RECORDS", priceZar: 250 },
-        { id: "bronze-rescue", label: "BUSINESS RESCUE", priceZar: 290 },
-        { id: "bronze-payment", label: "PAYMENT ANALYSIS", priceZar: 190 },
-        { id: "bronze-debtors", label: "DEBTORS' LEDGER", priceZar: 130 },
-        { id: "bronze-risk", label: "RISK GRADE SCORE", priceZar: 160 },
+        {
+          id: "bronze-prev-enq",
+          label: "PREVIOUS ENQUIRIES",
+          priceZar: 180,
+          description: "Previous enquiries recorded over the last 3 years.",
+        },
+        {
+          id: "bronze-court",
+          label: "COURT RECORDS",
+          priceZar: 250,
+          description: "Court record summary for the subject: judgements, bonds and other adverse items where recorded.",
+        },
+        {
+          id: "bronze-rescue",
+          label: "BUSINESS RESCUE",
+          priceZar: 290,
+          description: "Whether Business Rescue or Debt Review proceedings are currently instituted against the entity.",
+        },
+        {
+          id: "bronze-payment",
+          label: "PAYMENT ANALYSIS",
+          priceZar: 190,
+          description: "Payment behaviour overview: trends, days-to-pay and overdue behaviour where available.",
+        },
+        {
+          id: "bronze-debtors",
+          label: "DEBTORS' LEDGER",
+          priceZar: 130,
+          description: "Debtors ledger snapshot: outstanding exposure and ageing distribution across periods.",
+        },
+        {
+          id: "bronze-risk",
+          label: "RISK GRADE SCORE",
+          priceZar: 160,
+          description: "Risk grade score and banding used to interpret overall risk level.",
+        },
         {
           id: "bronze-trade-table",
           label: "TRADE REFERENCE SUMMARY TABLE",
           priceZar: 140,
+          description: "Consolidated trade reference view: terms, payment performance and exposure bands.",
         },
       ];
 
@@ -1536,12 +1609,24 @@
         standardList.innerHTML = "";
         sections.forEach(function (s) {
           var li = document.createElement("li");
-          li.innerHTML =
-            "<span>" +
-            s.label +
-            '</span><span class="report-pricing-line-secondary report-pricing-included" data-price="' +
-            s.priceZar +
-            '">Included</span>';
+          var textCol = document.createElement("div");
+          textCol.className = "rb-standard-textcol";
+          var titleEl = document.createElement("span");
+          titleEl.textContent = s.label;
+          textCol.appendChild(titleEl);
+          if (s.description) {
+            var descEl = document.createElement("p");
+            descEl.className = "rb-label-description";
+            descEl.textContent = s.description;
+            textCol.appendChild(descEl);
+          }
+          var includedEl = document.createElement("span");
+          includedEl.className =
+            "report-pricing-line-secondary report-pricing-included";
+          includedEl.setAttribute("data-price", String(s.priceZar));
+          includedEl.textContent = "Included";
+          li.appendChild(textCol);
+          li.appendChild(includedEl);
           standardList.appendChild(li);
         });
       }
