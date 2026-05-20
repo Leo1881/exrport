@@ -1929,6 +1929,192 @@
         return num < 0 ? "(" + formatted + ")" : formatted;
       }
 
+      function formatCoverReportDate(raw) {
+        if (!raw) {
+          return new Date().toLocaleDateString("en-ZA", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
+        }
+        var m = String(raw)
+          .trim()
+          .match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+        if (!m) return raw;
+        var months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        return (
+          parseInt(m[3], 10) +
+          " " +
+          months[parseInt(m[2], 10) - 1] +
+          " " +
+          m[1]
+        );
+      }
+
+      function getCoverRenderMode() {
+        var params = new URLSearchParams(window.location.search);
+        var cover = params.get("cover");
+        if (cover === "light" || cover === "gradient" || cover === "both") {
+          return cover;
+        }
+        /* Default both so you can compare cover styles (use ?cover=light or ?cover=gradient to show one). */
+        return "both";
+      }
+
+      function insight360CoverDecoTr(uid) {
+        return (
+          '<svg class="d2-cover-insight-deco d2-cover-insight-deco--tr" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          "<defs>" +
+          '<linearGradient id="trArcBlue-' +
+          uid +
+          '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+          '<stop offset="0%" stop-color="#0070e0" stop-opacity="0.4"/>' +
+          '<stop offset="100%" stop-color="#0070e0" stop-opacity="0.06"/>' +
+          "</linearGradient>" +
+          '<linearGradient id="trArcPink-' +
+          uid +
+          '" x1="0%" y1="100%" x2="100%" y2="0%">' +
+          '<stop offset="0%" stop-color="#e0208c" stop-opacity="0.35"/>' +
+          '<stop offset="100%" stop-color="#e0208c" stop-opacity="0.05"/>' +
+          "</linearGradient>" +
+          "</defs>" +
+          '<path d="M 140 380 A 260 260 0 0 1 380 140" fill="none" stroke="url(#trArcBlue-' +
+          uid +
+          ')" stroke-width="2.5"/>' +
+          '<path d="M 100 400 A 300 300 0 0 1 400 100" fill="none" stroke="url(#trArcPink-' +
+          uid +
+          ')" stroke-width="2" stroke-dasharray="3 9"/>' +
+          '<path d="M 60 420 A 340 340 0 0 1 420 60" fill="none" stroke="#b84d8a" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="2 6"/>' +
+          '<path d="M 180 360 A 220 220 0 0 1 360 180" fill="none" stroke="#2d7ab8" stroke-opacity="0.15" stroke-width="1"/>' +
+          "</svg>"
+        );
+      }
+
+      function insight360CoverRing(uid) {
+        return (
+          '<svg class="d2-cover-insight-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          "<defs>" +
+          '<linearGradient id="ringGrad-' +
+          uid +
+          '" x1="0%" y1="0%" x2="0%" y2="100%">' +
+          '<stop offset="0%" stop-color="#0070e0"/>' +
+          '<stop offset="52%" stop-color="#0070e0"/>' +
+          '<stop offset="52%" stop-color="#e0208c"/>' +
+          '<stop offset="100%" stop-color="#e0208c"/>' +
+          "</linearGradient>" +
+          "</defs>" +
+          '<path d="M 175 42 A 78 78 0 1 0 175 178" fill="none" stroke="url(#ringGrad-' +
+          uid +
+          ')" stroke-width="11" stroke-linecap="round"/>' +
+          "</svg>"
+        );
+      }
+
+      function insight360CoverDecoGradient(uid) {
+        return (
+          '<svg class="d2-cover-insight-deco d2-cover-insight-deco--gradient" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          "<defs>" +
+          '<linearGradient id="gArcCyan-' +
+          uid +
+          '" x1="0%" y1="100%" x2="100%" y2="0%">' +
+          '<stop offset="0%" stop-color="#00d4ff"/>' +
+          '<stop offset="100%" stop-color="#0070e0"/>' +
+          "</linearGradient>" +
+          '<linearGradient id="gArcPink-' +
+          uid +
+          '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+          '<stop offset="0%" stop-color="#ff6eb4"/>' +
+          '<stop offset="100%" stop-color="#e0208c"/>' +
+          "</linearGradient>" +
+          "</defs>" +
+          '<circle cx="120" cy="120" r="40" fill="none" stroke="#fff" stroke-opacity="0.08" stroke-width="1" stroke-dasharray="2 6"/>' +
+          '<circle cx="120" cy="120" r="80" fill="none" stroke="#fff" stroke-opacity="0.06" stroke-width="1" stroke-dasharray="2 8"/>' +
+          '<circle cx="120" cy="120" r="120" fill="none" stroke="#fff" stroke-opacity="0.05" stroke-width="1" stroke-dasharray="3 10"/>' +
+          '<path d="M 520 620 A 280 280 0 0 1 720 220" fill="none" stroke="url(#gArcCyan-' +
+          uid +
+          ')" stroke-width="14" stroke-linecap="round"/>' +
+          '<path d="M 480 640 A 300 300 0 0 1 740 200" fill="none" stroke="url(#gArcPink-' +
+          uid +
+          ')" stroke-width="6" stroke-opacity="0.85" stroke-linecap="round"/>' +
+          '<path d="M 540 600 A 260 260 0 0 1 700 240" fill="none" stroke="#fff" stroke-opacity="0.25" stroke-width="2" stroke-dasharray="4 10"/>' +
+          "</svg>"
+        );
+      }
+
+      function renderInsight360Cover(d, variant) {
+        var uid = variant;
+        var reportType =
+          d.meta && d.meta.reportType ? d.meta.reportType : "Gold Report";
+        var dateStr = formatCoverReportDate(d.meta && d.meta.updatedOn);
+        var isGradient = variant === "gradient";
+        var deco = isGradient
+          ? insight360CoverDecoGradient(uid)
+          : insight360CoverDecoTr(uid);
+        var ring = isGradient ? "" : insight360CoverRing(uid);
+        var logoClass =
+          "d2-cover-insight-logo" +
+          (isGradient ? " d2-cover-insight-logo--white" : "");
+        var variantClass = isGradient
+          ? "d2-cover-insight--gradient"
+          : "d2-cover-insight--light";
+        return (
+          '<div class="d2-cover d2-cover-insight ' +
+          variantClass +
+          '" data-cover-variant="' +
+          variant +
+          '">' +
+          deco +
+          '<img src="assets/experian-logo.png" alt="Experian" class="' +
+          logoClass +
+          '">' +
+          '<div class="d2-cover-insight-body">' +
+          '<div class="d2-cover-insight-main">' +
+          '<h1 class="d2-cover-insight-title">' +
+          '<span class="d2-cover-insight-insight">Insight</span><span class="d2-cover-insight-360">360</span>' +
+          "</h1>" +
+          '<p class="d2-cover-insight-subtitle">Credit Report</p>' +
+          ring +
+          "</div>" +
+          '<div class="d2-cover-insight-footer">' +
+          '<p class="d2-cover-insight-report-type">' +
+          reportType +
+          "</p>" +
+          '<p class="d2-cover-insight-date">' +
+          dateStr +
+          "</p>" +
+          "</div>" +
+          "</div>" +
+          "</div>"
+        );
+      }
+
+      function renderCoversForExport(d) {
+        var mode = getCoverRenderMode();
+        if (mode === "both") {
+          return (
+            renderInsight360Cover(d, "light") +
+            renderInsight360Cover(d, "gradient")
+          );
+        }
+        if (mode === "gradient") {
+          return renderInsight360Cover(d, "gradient");
+        }
+        return renderInsight360Cover(d, "light");
+      }
+
       function renderReport() {
         const d = REPORT_DATA;
         const report = document.getElementById("report");
@@ -1975,17 +2161,7 @@
             ? ((rg.score - rgScaleMin) / (rgScaleMax - rgScaleMin)) * 100
             : 50;
         return `
-        <div class="d2-cover">
-          <img src="assets/experian-logo.png" alt="Experian" class="d2-cover-logo">
-          <div class="d2-cover-bottom">
-            <div class="d2-cover-info">
-              <h1 class="d2-cover-company">${d.subject.name}</h1>
-              <p class="d2-cover-report-type">${d.meta.reportType}</p>
-              <p class="d2-cover-kim">KIM ${d.meta.kimNumber}</p>
-              <p class="d2-cover-date">Report Date: ${d.meta.updatedOn}</p>
-            </div>
-          </div>
-        </div>
+        ${renderCoversForExport(d)}
         <div class="page-top-spacer"></div>
         <div class="d2-card d2-toc-card">
           <h3 class="d2-card-title">Table of Contents</h3>
@@ -2357,30 +2533,7 @@
         return Promise.all(promises);
       }
       function convertCoverBackgroundToBase64() {
-        var cover = document.querySelector(".d2-cover");
-        if (!cover) return Promise.resolve();
-        var bgUrl = new URL("assets/cover-background.png", window.location.href).href;
-        return fetch(bgUrl)
-          .then(function (r) {
-            return r.blob();
-          })
-          .then(function (blob) {
-            return new Promise(function (resolve, reject) {
-              var reader = new FileReader();
-              reader.onloadend = function () {
-                resolve(reader.result);
-              };
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            });
-          })
-          .then(function (dataUrl) {
-            cover.style.backgroundImage = "url(" + dataUrl + ")";
-            cover.style.backgroundSize = "cover";
-          })
-          .catch(function () {
-            /* ignore if fetch fails */
-          });
+        return Promise.resolve();
       }
       function runPdfExport() {
         const report = document.getElementById("report");
@@ -2411,10 +2564,9 @@
                 cloneReport.style.display = "block";
                 cloneReport.style.visibility = "visible";
               }
-              var cover = clonedDoc.querySelector(".d2-cover");
-              if (cover) {
+              clonedDoc.querySelectorAll(".d2-cover-insight").forEach(function (cover) {
                 cover.style.minHeight = "297mm";
-              }
+              });
             },
           },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },

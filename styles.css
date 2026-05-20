@@ -430,10 +430,17 @@ body.pdf-export .report.design-3 .d3-cover {
 
 /* PDF export - cover full bleed, extend to cancel report padding (sides/bottom only) */
 /* Use mm not 100vh — html2canvas often sees vh as 0 in the snapshot iframe → blank PDF */
-body.pdf-export .report.design-2 .d2-cover {
-  margin: 0 -12mm -12mm -12mm !important;
+body.pdf-export .report.design-2 .d2-cover,
+body.pdf-export .report.design-2 .d2-cover-insight {
+  margin: 0 -12mm 0 -12mm !important;
   min-height: 297mm;
+  width: calc(100% + 24mm);
+  box-sizing: border-box;
   background-size: cover !important;
+  page-break-after: always;
+}
+body.pdf-export .report.design-2 .d2-cover-insight:last-of-type {
+  margin-bottom: -12mm !important;
 }
 
 /* Top spacer – 10mm after cover (page 2+), appears right after .d2-cover */
@@ -853,63 +860,158 @@ body.pdf-export .report .ratio-card {
   display: none;
 }
 
-/* Design 2 – Cover page (SGPFLH style) */
-.report.design-2 .d2-cover {
+/* Design 2 – Insight360 cover (light + gradient variants) */
+.report.design-2 .d2-cover-insight {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #f5f5f8 url('assets/cover-background.png') no-repeat top right;
-  background-size: cover;
-  margin: -16px -16px 24px -16px;
-  padding: 48px;
+  margin: -16px -16px 0 -16px;
+  padding: 0;
   page-break-after: always;
   position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.report.design-2 .d2-cover-logo {
-  height: 80px;
+.report.design-2 .d2-cover-insight--light {
+  background: #ffffff;
+  color: #1a2b56;
+}
+
+.report.design-2 .d2-cover-insight--gradient {
+  background: linear-gradient(
+    128deg,
+    #d81b8c 0%,
+    #a8329a 22%,
+    #5c4d9e 48%,
+    #1a4fad 72%,
+    #0066ff 100%
+  );
+  color: #ffffff;
+}
+
+.report.design-2 .d2-cover-insight-deco {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+.report.design-2 .d2-cover-insight-deco--tr {
+  top: -40px;
+  right: -60px;
+  width: min(55vw, 480px);
+  height: auto;
+}
+
+.report.design-2 .d2-cover-insight-deco--gradient {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.report.design-2 .d2-cover-insight-logo {
+  position: relative;
+  z-index: 2;
+  height: 52px;
   width: auto;
-  align-self: flex-start;
+  margin: 48px 0 0 48px;
+  display: block;
 }
 
-.report.design-2 .d2-cover-bottom {
+.report.design-2 .d2-cover-insight-logo--white {
+  filter: brightness(0) invert(1);
+}
+
+.report.design-2 .d2-cover-insight-body {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 48px 48px;
+  box-sizing: border-box;
+}
+
+.report.design-2 .d2-cover-insight-main {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 72%;
+  padding-left: 8px;
+}
+
+.report.design-2 .d2-cover-insight-title {
+  margin: 0;
+  font-size: clamp(48px, 9vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.report.design-2 .d2-cover-insight-insight {
+  color: #e0208c;
+}
+
+.report.design-2 .d2-cover-insight--gradient .d2-cover-insight-insight,
+.report.design-2 .d2-cover-insight--gradient .d2-cover-insight-360 {
+  color: #ffffff;
+}
+
+.report.design-2 .d2-cover-insight-360 {
+  color: #0070e0;
+}
+
+.report.design-2 .d2-cover-insight-subtitle {
+  margin: 12px 0 0 0;
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 500;
+  color: #1a2b56;
+  letter-spacing: 0.01em;
+}
+
+.report.design-2 .d2-cover-insight--gradient .d2-cover-insight-subtitle {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.report.design-2 .d2-cover-insight-ring {
+  position: absolute;
+  right: -8%;
+  top: 50%;
+  transform: translateY(-42%);
+  width: min(38vw, 200px);
+  height: auto;
+  pointer-events: none;
+}
+
+.report.design-2 .d2-cover-insight-footer {
+  align-self: flex-end;
+  text-align: right;
   margin-top: auto;
   padding-top: 24px;
 }
 
-.report.design-2 .d2-cover-info {
-  text-align: left;
-  margin-bottom: 2cm;
-}
-
-.report.design-2 .d2-cover-company {
-  font-size: 28px;
+.report.design-2 .d2-cover-insight-report-type {
+  margin: 0 0 6px 0;
+  font-size: clamp(18px, 3vw, 24px);
   font-weight: 700;
-  color: var(--experian-blue);
-  margin: 0 0 8px 0;
-  line-height: 1.3;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #c9941a;
+  letter-spacing: 0.02em;
 }
 
-.report.design-2 .d2-cover-report-type {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 4px 0;
-  letter-spacing: 1px;
+.report.design-2 .d2-cover-insight--gradient .d2-cover-insight-report-type {
+  color: #ffcc00;
 }
 
-.report.design-2 .d2-cover-kim {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: 0 0 4px 0;
-}
-
-.report.design-2 .d2-cover-date {
-  font-size: 13px;
-  color: var(--text-secondary);
+.report.design-2 .d2-cover-insight-date {
   margin: 0;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 500;
+  color: #1a2b56;
+}
+
+.report.design-2 .d2-cover-insight--gradient .d2-cover-insight-date {
+  color: #ffffff;
 }
 
 
@@ -1803,12 +1905,16 @@ body.pdf-export .report .ratio-card {
   .report.design-2 {
     padding: 0 12mm 12mm 12mm;
   }
-  .report.design-2 .d2-cover {
-    margin: 0 -12mm -12mm -12mm !important;
+  .report.design-2 .d2-cover,
+  .report.design-2 .d2-cover-insight {
+    margin: 0 -12mm 0 -12mm !important;
     min-height: 297mm;
-    background-size: cover !important;
+    width: calc(100% + 24mm);
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+  .report.design-2 .d2-cover-insight:last-of-type {
+    margin-bottom: -12mm !important;
   }
   .report.design-2 .d2-card,
   .report.design-2 .d2-recommend {

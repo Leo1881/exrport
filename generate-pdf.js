@@ -64,7 +64,7 @@ async function generatePdf() {
     browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
-    await page.goto(`http://localhost:${port}/?pdf=1`, {
+    await page.goto(`http://localhost:${port}/?pdf=1&cover=both`, {
       waitUntil: 'networkidle0',
       timeout: 15000,
     });
