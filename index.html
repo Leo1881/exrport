@@ -31,10 +31,10 @@
           <div class="report-selection-head-text">
             <h1 class="report-selection-title">Business Credit Report</h1>
             <p class="report-selection-lead">
-              Select a report product from the list, then continue to preview.
-              Standard packages include the full section catalogue at a package
-              rate; choose <strong>Customized report</strong> to pick sections
-              individually. Amounts shown are demo pricing in ZAR.
+              Select one of the seven report products to preview its section
+              catalogue. <strong>Customized</strong> always includes the
+              <strong>Bronze</strong> base, plus any extra <strong>Gold</strong>
+              headings you tick below.
             </p>
           </div>
         </header>
@@ -44,11 +44,9 @@
             1. Report product
           </h2>
           <p class="d2-text d2-muted report-selection-hint">
-            <strong>Base report</strong> includes all 14 base catalogue
-            headings. <strong>Gold report</strong> includes those plus every
-            Gold-tier heading. <strong>Customized report</strong> always includes
-            the same 14 base headings, and you add any extra headings you tick
-            below; the total is the base package plus your add-ons.
+            Each report has a fixed set of section headings. This screen is a
+            catalogue preview — full report layout and PDF content for each
+            product will follow once headings are confirmed for all six.
           </p>
           <div class="report-selection-field">
             <select
@@ -57,35 +55,25 @@
               autocomplete="off"
               aria-labelledby="report-product-heading"
             >
-              <option value="bronze-pb" selected>Base report</option>
-              <option value="silver-pb">Gold report</option>
-              <option value="customized">Customized report</option>
+              <option value="platinum" selected>Platinum</option>
+              <option value="platinum-hybrid">Platinum Hybrid</option>
               <option value="bronze">Bronze</option>
-              <option value="bronze-pb-catalog">Bronze P&amp;B</option>
+              <option value="customized">Customized</option>
               <option value="silver">Silver</option>
-              <option value="silver-pb-catalog">Silver P&amp;B</option>
+              <option value="gold">Gold</option>
               <option value="international">International</option>
-              <option value="platinum">Platinum</option>
-              <option value="platinum-hybrid-international">
-                Platinum Hybrid - International
-              </option>
-              <option value="platinum-hybrid-silver">
-                Platinum Hybrid - Silver
-              </option>
-              <option value="platinum-hybrid-gold">
-                Platinum Hybrid - Gold
-              </option>
             </select>
           </div>
         </div>
 
         <div id="standard-pricing-block" class="report-pricing-block d2-card">
           <h3 class="d2-card-title" id="standard-pricing-title">
-            Included sections (package)
+            Section catalogue
           </h3>
+          <p class="d2-text d2-muted" id="catalogue-preview-note"></p>
           <ul class="report-pricing-lines" id="standard-pricing-lines"></ul>
-          <p class="report-pricing-total" id="standard-package-total-row">
-            <strong>Package total</strong>
+          <p class="report-pricing-total" id="standard-package-total-row" hidden>
+            <strong>Section count</strong>
             <span id="standard-pricing-total"></span>
           </p>
         </div>
@@ -104,18 +92,17 @@
             </button>
           </div>
           <p class="report-custom-section-subtitle">
-            The 14 standard base sections are always included. Tick any
-            additional catalogue headings (Gold extras and other options) to
-            add them to your report and to the total.
+            The Bronze base sections are always included. Tick any additional
+            Gold headings below to add them to your customized report.
           </p>
           <ul class="report-pricing-custom" id="custom-pricing-checklist"></ul>
           <div class="report-pricing-custom-totals" id="custom-pricing-split-totals">
             <div class="report-pricing-subtotal">
-              <span>Total standard (14 base headings)</span>
+              <span>Bronze base (always included)</span>
               <span id="custom-total-standard-base">R 0,00</span>
             </div>
             <div class="report-pricing-subtotal">
-              <span>Additional catalogue headings</span>
+              <span>Additional Gold headings selected</span>
               <span id="custom-total-additional">R 0,00</span>
             </div>
             <p class="report-pricing-total report-pricing-total--grand">
@@ -1077,7 +1064,7 @@
         },
       ];
 
-      const SILVER_REPORT_SECTIONS = BRONZE_REPORT_SECTIONS.concat(
+      const SILVER_PB_SECTIONS = BRONZE_REPORT_SECTIONS.concat(
         SILVER_REPORT_EXTRA_SECTIONS,
       );
 
@@ -1143,31 +1130,875 @@
         },
       ];
 
-      const CUSTOMIZED_ADDITIONAL_SECTIONS = (function () {
-        var suppNoDupAssess = CUSTOMIZED_REPORT_SUPPLEMENTAL_SECTIONS.filter(
-          function (s) {
-            return s.id !== "assess";
-          },
-        );
-        return SILVER_REPORT_EXTRA_SECTIONS.concat(suppNoDupAssess).concat(
-          CUSTOMIZED_EXTENDED_LAYOUT_SECTIONS,
-        );
-      })();
-
       const CUSTOMIZED_REPORT_ID = "customized";
 
-      /** Product lines with no demo catalogue yet — report body sections are hidden */
-      const PLACEHOLDER_REPORT_PRODUCT_IDS = [
-        "bronze",
-        "bronze-pb-catalog",
-        "silver",
-        "silver-pb-catalog",
-        "international",
+      const REPORT_PRODUCT_IDS = [
         "platinum",
-        "platinum-hybrid-international",
-        "platinum-hybrid-silver",
-        "platinum-hybrid-gold",
+        "platinum-hybrid",
+        "bronze",
+        "customized",
+        "silver",
+        "gold",
+        "international",
       ];
+
+      function makeCatalogueHeading(id, label, description, options) {
+        options = options || {};
+        return {
+          id: id,
+          label: label,
+          priceZar: 0,
+          description: description || "",
+          isSubItem: !!options.isSubItem,
+          isPlaceholder: !!options.isPlaceholder,
+        };
+      }
+
+      const PLATINUM_REPORT_SECTIONS = [
+        makeCatalogueHeading(
+          "pt-analyst-comments",
+          "ANALYST COMMENTS AND RECOMMENDATIONS",
+          "Analyst narrative, recommendations and enquiry context.",
+        ),
+        makeCatalogueHeading(
+          "pt-financial-highlights",
+          "FINANCIAL HIGHLIGHTS",
+          "Key financial highlights and headline metrics from available statements.",
+        ),
+        makeCatalogueHeading(
+          "pt-financial-ratios",
+          "FINANCIAL RATIOS",
+          "Derived liquidity, profitability and solvency ratios.",
+        ),
+        makeCatalogueHeading(
+          "pt-bank-reference",
+          "BANK REFERENCE (BANKING DETAILS)",
+          "Banking details and related reference or facility notes.",
+        ),
+        makeCatalogueHeading(
+          "pt-assets-securities",
+          "ASSETS SECURITIES AND ENCUMBRANCES",
+          "Security, encumbrances and pledged assets where disclosed.",
+        ),
+        makeCatalogueHeading(
+          "pt-judgement-info",
+          "JUDGEMENT INFORMATION",
+          "Judgements and related court indicators on record.",
+        ),
+        makeCatalogueHeading(
+          "pt-principal-summary",
+          "SUMMARY: ACTIVE PRINCIPAL INFORMATION",
+          "Summary view of active principals and key governance indicators.",
+        ),
+        makeCatalogueHeading(
+          "pt-operations-desc",
+          "DESCRIPTION OF OPERATIONS",
+          "What the business does and how it operates day to day.",
+        ),
+        makeCatalogueHeading(
+          "pt-business-info",
+          "BUSINESS INFORMATION",
+          "Core registered and operational business identifiers.",
+        ),
+        makeCatalogueHeading(
+          "pt-business-background",
+          "BUSINESS BACKGROUND",
+          "Trading history, milestones and background context.",
+        ),
+        makeCatalogueHeading(
+          "pt-corporate-profile",
+          "CORPORATE PROFILE",
+          "Corporate profile and positioning of the subject entity.",
+        ),
+        makeCatalogueHeading(
+          "pt-workforce-metrics",
+          "WORKFORCE METRICS",
+          "Staffing levels and workforce-related metrics.",
+        ),
+        makeCatalogueHeading(
+          "pt-risk-governance",
+          "RISK AND GOVERNANCE MEASURES",
+          "Risk, governance and control measures relevant to credit assessment.",
+        ),
+        makeCatalogueHeading(
+          "pt-media-statutory",
+          "MEDIA AND STATUTORY INFORMATION",
+          "Media mentions and statutory disclosures on file.",
+        ),
+        makeCatalogueHeading(
+          "pt-corporate-imagery",
+          "CORPORATE IMAGERY",
+          "Visual context: offices, sites or corporate imagery supplied.",
+        ),
+        makeCatalogueHeading(
+          "pt-statutory-registration",
+          "STATUTORY AND REGISTRATION INFORMATION",
+          "CIPC and other statutory registration details.",
+        ),
+        makeCatalogueHeading(
+          "pt-shareholding-organogram",
+          "SHAREHOLDING ORGANOGRAM",
+          "Ownership structure and shareholding relationships.",
+        ),
+        makeCatalogueHeading(
+          "pt-active-principals",
+          "ACTIVE PRINCIPAL INFORMATION",
+          "Detailed active principal profiles and appointments.",
+        ),
+        makeCatalogueHeading(
+          "pt-financial-information",
+          "FINANCIAL INFORMATION",
+          "Financial figures, turnover and balance-sheet orientation.",
+        ),
+        makeCatalogueHeading(
+          "pt-financial-analysis",
+          "FINANCIAL ANALYSIS",
+          "Analytical commentary on financial performance and position.",
+        ),
+        makeCatalogueHeading(
+          "pt-swot",
+          "SWOT ANALYSIS",
+          "Strengths, weaknesses, opportunities and threats summary.",
+        ),
+        makeCatalogueHeading(
+          "pt-trade-references",
+          "TRADE REFERENCES",
+          "Supplier references and observed payment behaviour.",
+        ),
+        makeCatalogueHeading(
+          "pt-appendices",
+          "APPENDICES",
+          "Supporting appendix material.",
+        ),
+        makeCatalogueHeading(
+          "pt-economic-indicators",
+          "ECONOMIC INDICATORS",
+          "Macro and economic context supporting the assessment.",
+        ),
+      ];
+
+      const PLATINUM_HYBRID_REPORT_SECTIONS = [
+        makeCatalogueHeading(
+          "ph-executive-summary",
+          "EXECUTIVE SUMMARY",
+          "High-level summary of findings and overall risk view.",
+        ),
+        makeCatalogueHeading(
+          "ph-company-information",
+          "COMPANY INFORMATION",
+          "Core company identifiers and registration details.",
+        ),
+        makeCatalogueHeading(
+          "ph-experian-scorecard",
+          "EXPERIAN SCORE CARD",
+          "Experian scorecard outcome and interpretation.",
+        ),
+        makeCatalogueHeading(
+          "ph-comments-suggestions",
+          "COMMENTS AND SUGGESTIONS",
+          "Analyst comments and suggestions for the enquiry.",
+        ),
+        makeCatalogueHeading(
+          "ph-business-profile",
+          "BUSINESS PROFILE",
+          "Business profile, activities and operating context.",
+        ),
+        makeCatalogueHeading(
+          "ph-financial-ratios",
+          "FINANCIAL RATIOS",
+          "Key financial ratios from available statements.",
+        ),
+        makeCatalogueHeading(
+          "ph-cipc-related",
+          "CIPC AND RELATED BUSINESS INFORMATION",
+          "CIPC records and related business information.",
+        ),
+        makeCatalogueHeading(
+          "ph-financial-related",
+          "FINANCIAL AND RELATED INFORMATION",
+          "Financial data and related disclosure on file.",
+        ),
+        makeCatalogueHeading(
+          "ph-financial-statements",
+          "FINANCIAL STATEMENTS",
+          "Structured profit-and-loss and balance-sheet lines.",
+        ),
+        makeCatalogueHeading(
+          "ph-swot",
+          "SWOT ANALYSIS",
+          "SWOT overview for credit or relationship review.",
+        ),
+        makeCatalogueHeading(
+          "ph-strengths-weaknesses",
+          "STRENGTHS/WEAKNESSES",
+          "Strengths and weaknesses identified for the subject.",
+        ),
+        makeCatalogueHeading(
+          "ph-opportunities-threats",
+          "OPPORTUNITIES/THREATS",
+          "Opportunities and threats affecting outlook or risk.",
+        ),
+        makeCatalogueHeading(
+          "ph-appendices",
+          "APPENDICES",
+          "Supporting appendix material.",
+        ),
+        makeCatalogueHeading(
+          "ph-economic-indicators",
+          "ECONOMIC INDICATORS",
+          "Economic indicators and macro context.",
+        ),
+      ];
+
+      const INTERNATIONAL_REPORT_SECTIONS = [
+        makeCatalogueHeading(
+          "int-address",
+          "ADDRESS",
+          "Registered, physical and postal addresses on record.",
+        ),
+        makeCatalogueHeading(
+          "int-credit-risk-rating",
+          "CREDIT RISK RATING",
+          "Credit risk rating and banding for the subject.",
+        ),
+        makeCatalogueHeading(
+          "int-corporate-data",
+          "CORPORATE DATA",
+          "Core corporate registration and identity data.",
+        ),
+        makeCatalogueHeading(
+          "int-analysis-assessment",
+          "ANALYSIS/ ASSESSMENT",
+          "Assessment narrative and analytical commentary.",
+        ),
+        makeCatalogueHeading(
+          "int-legal-notice",
+          "LEGAL NOTICE",
+          "Legal notices and confidentiality disclaimers.",
+        ),
+        makeCatalogueHeading(
+          "int-financials",
+          "FINANCIALS",
+          "Financial summary and key figures on file.",
+        ),
+        makeCatalogueHeading(
+          "int-current-directors",
+          "CURRENT DIRECTORS",
+          "Current directors and their roles.",
+        ),
+        makeCatalogueHeading(
+          "int-management-team",
+          "MANAGEMENT TEAM",
+          "Management team and key responsible persons.",
+        ),
+        makeCatalogueHeading(
+          "int-share-structure",
+          "SHARE STRUCTURE",
+          "Ownership and shareholding structure.",
+        ),
+        makeCatalogueHeading(
+          "int-corporate-structure",
+          "CORPORATE STRUCTURE",
+          "Group structure: holdings, subsidiaries and associates.",
+        ),
+        makeCatalogueHeading(
+          "int-banking-details",
+          "BANKING DETAILS",
+          "Banking details and related comments where disclosed.",
+        ),
+        makeCatalogueHeading(
+          "int-operations-history",
+          "OPERATIONS AND HISTORY",
+          "Operations overview and company history.",
+        ),
+        makeCatalogueHeading(
+          "int-property-assets",
+          "PROPERTY ASSETS",
+          "Property and asset information on record.",
+        ),
+        makeCatalogueHeading(
+          "int-payment-profile",
+          "PAYMENT PROFILE / REFS",
+          "Payment profile and trade reference summary.",
+        ),
+        makeCatalogueHeading(
+          "int-industry-codes",
+          "INDUSTRY CODES",
+          "Industry classification codes and descriptions.",
+        ),
+      ];
+
+      const BRONZE_PRODUCT_SECTIONS = [
+        makeCatalogueHeading(
+          "br-reg-info",
+          "BUSINESS REGISTRATION INFORMATION",
+          "Registered company identifiers: name, trade style, registration number and status.",
+        ),
+        makeCatalogueHeading(
+          "br-summary",
+          "SUMMARY",
+          "High-level summary of key findings and overall risk view.",
+        ),
+        makeCatalogueHeading(
+          "br-business-details",
+          "BUSINESS DETAILS",
+          "Core business profile: status, SIC code and key identifiers on file.",
+        ),
+        makeCatalogueHeading(
+          "br-name-changes",
+          "NAME CHANGES",
+          "Recorded company name changes with effective dates.",
+        ),
+        makeCatalogueHeading(
+          "br-address",
+          "ADDRESS DETAILS",
+          "Registered, physical and postal addresses with supporting notes.",
+        ),
+        makeCatalogueHeading(
+          "br-contact",
+          "CONTACT DETAILS",
+          "Telephone, email and other contact identifiers on record.",
+        ),
+        makeCatalogueHeading(
+          "br-history",
+          "HISTORY",
+          "Company timeline: establishment, conversions and name changes.",
+        ),
+        makeCatalogueHeading(
+          "br-active-principals",
+          "ACTIVE PRINCIPALS",
+          "Current principals/directors and key profile indicators.",
+        ),
+        makeCatalogueHeading(
+          "br-prop-bonds-principal",
+          "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
+          "Property and bond records identified in a principal's name.",
+        ),
+        makeCatalogueHeading(
+          "br-non-active-principals",
+          "NON-ACTIVE PRINCIPALS",
+          "Former principals and recorded status changes.",
+        ),
+        makeCatalogueHeading(
+          "br-operations",
+          "OPERATIONS",
+          "What the business does: activities, clients and operational detail.",
+        ),
+        makeCatalogueHeading(
+          "br-prop-bonds-subject",
+          "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
+          "Property and bond registrations recorded in the subject's name.",
+        ),
+        makeCatalogueHeading(
+          "br-judgments",
+          "JUDGMENTS",
+          "Judgement information recorded against the subject or principals.",
+        ),
+        makeCatalogueHeading(
+          "br-bankers",
+          "BANKERS DETAILS AND COMMENTS",
+          "Banking details and related facility or security notes.",
+        ),
+        makeCatalogueHeading(
+          "br-prev-enquiries",
+          "PREVIOUS ENQUIRIES",
+          "Previous credit enquiries recorded over the last 3 years.",
+        ),
+        makeCatalogueHeading(
+          "br-court-records",
+          "COURT RECORDS TO DATE",
+          "Court record summary: judgements, bonds and adverse items.",
+        ),
+        makeCatalogueHeading(
+          "br-business-rescue",
+          "BUSINESS RESCUE",
+          "Business Rescue or Debt Review proceedings (may sit under History).",
+        ),
+        makeCatalogueHeading(
+          "br-payment-analysis",
+          "PAYMENT ANALYSIS REPORT",
+          "Payment behaviour: trends, days-to-pay and overdue patterns.",
+        ),
+        makeCatalogueHeading(
+          "br-debtors-ledger",
+          "DEBTORS LEDGER (UNDER THE TRADE REFS)",
+          "Debtors ledger snapshot: exposure and ageing by period.",
+        ),
+        makeCatalogueHeading(
+          "br-risk-grade",
+          "RISK GRADE ANALYSIS",
+          "Risk score, banding and interpretation from the bureau model.",
+        ),
+        makeCatalogueHeading(
+          "br-trade-ref-summary",
+          "TRADE REFERENCE SUMMARY",
+          "Consolidated trade reference terms and payment performance.",
+        ),
+      ];
+
+      const SILVER_REPORT_SECTIONS = [
+        makeCatalogueHeading(
+          "silver-reg-info",
+          "BUSINESS REGISTRATION INFORMATION",
+          "Registered company identifiers: name, trade style, registration number and status.",
+        ),
+        makeCatalogueHeading(
+          "silver-name-changes",
+          "NAME CHANGES",
+          "Recorded company name changes with effective dates.",
+        ),
+        makeCatalogueHeading(
+          "silver-address",
+          "ADDRESS DETAILS",
+          "Registered, physical and postal addresses with supporting notes.",
+        ),
+        makeCatalogueHeading(
+          "silver-assessment",
+          "ASSESSMENT",
+          "Credit assessment narrative with update status and detail that follows.",
+        ),
+        makeCatalogueHeading(
+          "silver-contact",
+          "CONTACT DETAILS",
+          "Telephone, email and other contact identifiers on record.",
+        ),
+        makeCatalogueHeading(
+          "silver-branches",
+          "BRANCHES",
+          "Other business locations beyond the main site.",
+        ),
+        makeCatalogueHeading(
+          "silver-history",
+          "HISTORY",
+          "Company timeline: establishment, conversions and name changes.",
+        ),
+        makeCatalogueHeading(
+          "silver-ultimate-holding",
+          "ULTIMATE HOLDING COMPANY",
+          "Ultimate parent entity details where recorded.",
+        ),
+        makeCatalogueHeading(
+          "silver-holding",
+          "HOLDING COMPANY",
+          "Immediate holding company details where applicable.",
+        ),
+        makeCatalogueHeading(
+          "silver-subsidiary",
+          "SUBSIDIARY / ASSOCIATE COMPANIES",
+          "Subsidiary and associate entities linked to the subject.",
+        ),
+        makeCatalogueHeading(
+          "silver-active-principals",
+          "ACTIVE PRINCIPALS",
+          "Current principals/directors and key profile indicators.",
+        ),
+        makeCatalogueHeading(
+          "silver-prop-bonds-principal",
+          "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
+          "Property and bond records identified in a principal's name.",
+        ),
+        makeCatalogueHeading(
+          "silver-non-active-principals",
+          "NON-ACTIVE PRINCIPALS",
+          "Former principals and recorded status changes.",
+        ),
+        makeCatalogueHeading(
+          "silver-operations",
+          "OPERATIONS",
+          "What the business does: activities, clients and operational detail.",
+        ),
+        makeCatalogueHeading(
+          "silver-agencies-held",
+          "AGENCIES HELD",
+          "Agency, distribution or franchise arrangements where disclosed.",
+        ),
+        makeCatalogueHeading(
+          "silver-imports-exports",
+          "IMPORTS AND EXPORTS",
+          "Import and export activity where applicable.",
+        ),
+        makeCatalogueHeading(
+          "silver-clearing-forwarding",
+          "CLEARING AND FORWARDING AGENT",
+          "Clearing and forwarding agency arrangements on file.",
+        ),
+        makeCatalogueHeading(
+          "silver-fleet",
+          "FLEET",
+          "Vehicles used in the business by type and total fleet size.",
+        ),
+        makeCatalogueHeading(
+          "silver-staff",
+          "STAFF",
+          "Workforce size and pay-cycle information where held.",
+        ),
+        makeCatalogueHeading(
+          "silver-bbbee",
+          "B-BBEE DETAILS",
+          "B-BBEE contributor status and related disclosure.",
+        ),
+        makeCatalogueHeading(
+          "silver-premises",
+          "PREMISES",
+          "Occupied properties: type, location, owned or leased.",
+        ),
+        makeCatalogueHeading(
+          "silver-prop-bonds-subject",
+          "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
+          "Property and bond registrations recorded in the subject's name.",
+        ),
+        makeCatalogueHeading(
+          "silver-divisions",
+          "DIVISIONS",
+          "Business divisions or operating units where supplied.",
+        ),
+        makeCatalogueHeading(
+          "silver-financial-info",
+          "FINANCIAL INFORMATION",
+          "Key financial figures: turnover, cash, debtors, creditors and currency.",
+        ),
+        makeCatalogueHeading(
+          "silver-ratios",
+          "RATIOS",
+          "Derived ratio groups from available financial statements.",
+        ),
+        makeCatalogueHeading(
+          "silver-liquidity-ratios",
+          "LIQUIDITY RATIOS",
+          "",
+          { isSubItem: true },
+        ),
+        makeCatalogueHeading(
+          "silver-profitability-ratios",
+          "PROFITABILITY RATIOS",
+          "",
+          { isSubItem: true },
+        ),
+        makeCatalogueHeading(
+          "silver-solvency-ratios",
+          "SOLVENCY RATIOS",
+          "",
+          { isSubItem: true },
+        ),
+        makeCatalogueHeading(
+          "silver-contracts",
+          "CONTRACTS",
+          "Notable contracts or obligations where existing on file.",
+        ),
+        makeCatalogueHeading(
+          "silver-bankers",
+          "BANKERS DETAILS AND COMMENTS",
+          "Banking details and related facility or security notes.",
+        ),
+        makeCatalogueHeading(
+          "silver-prev-enquiries",
+          "PREVIOUS ENQUIRIES",
+          "Previous credit enquiries recorded over the last 3 years.",
+        ),
+        makeCatalogueHeading(
+          "silver-court-records",
+          "COURT RECORDS TO DATE",
+          "Court record summary: judgements, bonds and adverse items.",
+        ),
+        makeCatalogueHeading(
+          "silver-business-rescue",
+          "BUSINESS RESCUE",
+          "Business Rescue or Debt Review proceedings (may sit under History).",
+        ),
+        makeCatalogueHeading(
+          "silver-payment-analysis",
+          "PAYMENT ANALYSIS REPORT",
+          "Payment behaviour: trends, days-to-pay and overdue patterns.",
+        ),
+        makeCatalogueHeading(
+          "silver-debtors-ledger",
+          "DEBTORS LEDGER (UNDER THE TRADE REFS)",
+          "Debtors ledger snapshot: exposure and ageing by period.",
+        ),
+        makeCatalogueHeading(
+          "silver-risk-grade",
+          "RISK GRADE ANALYSIS",
+          "Risk score, banding and interpretation from the bureau model.",
+        ),
+        makeCatalogueHeading(
+          "silver-trade-ref-summary",
+          "TRADE REFERENCE SUMMARY",
+          "Consolidated trade reference terms and payment performance.",
+        ),
+        makeCatalogueHeading(
+          "silver-subject-payment",
+          "SUBJECT PAYMENT PERFORMANCE PROFILE",
+          "How the subject pays suppliers: performance bands and exposure.",
+        ),
+        makeCatalogueHeading(
+          "silver-top-industries",
+          "TOP INDUSTRIES BOUGHT FROM / GRAPH",
+          "Industries the subject purchases from most, with graphic view.",
+        ),
+        makeCatalogueHeading(
+          "silver-subject-exposure",
+          "SUBJECT INDUSTRY / SUBJECT EXPOSURE LEVELS",
+          "Industry context and subject exposure levels versus peers.",
+        ),
+        makeCatalogueHeading(
+          "silver-disclosure",
+          "DISCLOSURE REPORT",
+          "Disclosure and confidentiality statements for the report pack.",
+        ),
+      ];
+
+      const GOLD_REPORT_SECTIONS = [
+        makeCatalogueHeading(
+          "gold-reg-info",
+          "BUSINESS REGISTRATION INFORMATION",
+          "Registered company identifiers: name, trade style, registration number and status.",
+        ),
+        makeCatalogueHeading(
+          "gold-name-changes",
+          "NAME CHANGES",
+          "Recorded company name changes with effective dates.",
+        ),
+        makeCatalogueHeading(
+          "gold-address",
+          "ADDRESS DETAILS",
+          "Registered, physical and postal addresses with supporting notes.",
+        ),
+        makeCatalogueHeading(
+          "gold-assessment",
+          "ASSESSMENT",
+          "Credit assessment narrative with optional visit remarks and outcome.",
+        ),
+        makeCatalogueHeading(
+          "gold-contact",
+          "CONTACT DETAILS",
+          "Telephone, email and other contact identifiers on record.",
+        ),
+        makeCatalogueHeading(
+          "gold-branches",
+          "BRANCHES",
+          "Other business locations beyond the main site.",
+        ),
+        makeCatalogueHeading(
+          "gold-history",
+          "HISTORY",
+          "Company timeline: establishment, conversions and name changes.",
+        ),
+        makeCatalogueHeading(
+          "gold-ultimate-holding",
+          "ULTIMATE HOLDING COMPANY",
+          "Ultimate parent entity details where recorded.",
+        ),
+        makeCatalogueHeading(
+          "gold-holding",
+          "HOLDING COMPANY",
+          "Immediate holding company details where applicable.",
+        ),
+        makeCatalogueHeading(
+          "gold-subsidiary",
+          "SUBSIDIARY / ASSOCIATE COMPANIES",
+          "Subsidiary and associate entities linked to the subject.",
+        ),
+        makeCatalogueHeading(
+          "gold-active-principals",
+          "ACTIVE PRINCIPALS",
+          "Current principals/directors and key profile indicators.",
+        ),
+        makeCatalogueHeading(
+          "gold-prop-bonds-principal",
+          "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
+          "Property and bond records identified in a principal's name.",
+        ),
+        makeCatalogueHeading(
+          "gold-non-active-principals",
+          "NON-ACTIVE PRINCIPALS",
+          "Former principals and recorded status changes.",
+        ),
+        makeCatalogueHeading(
+          "gold-directors",
+          "DIRECTORS",
+          "Director appointments and related CIPC detail.",
+        ),
+        makeCatalogueHeading(
+          "gold-agencies-held",
+          "AGENCIES HELD",
+          "Agency, distribution or franchise arrangements where disclosed.",
+        ),
+        makeCatalogueHeading(
+          "gold-imports-exports",
+          "IMPORTS AND EXPORTS",
+          "Import and export activity where applicable.",
+        ),
+        makeCatalogueHeading(
+          "gold-clearing-forwarding",
+          "CLEARING AND FORWARDING AGENT",
+          "Clearing and forwarding agency arrangements on file.",
+        ),
+        makeCatalogueHeading(
+          "gold-fleet",
+          "FLEET",
+          "Vehicles used in the business by type and total fleet size.",
+        ),
+        makeCatalogueHeading(
+          "gold-staff",
+          "STAFF",
+          "Workforce size and pay-cycle information where held.",
+        ),
+        makeCatalogueHeading(
+          "gold-bbbee",
+          "B-BBEE DETAILS",
+          "B-BBEE level rating with optional certificate capture and attachment.",
+        ),
+        makeCatalogueHeading(
+          "gold-premises",
+          "PREMISES",
+          "Occupied properties: type, location, owned or leased.",
+        ),
+        makeCatalogueHeading(
+          "gold-prop-bonds-subject",
+          "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
+          "Property and bond registrations recorded in the subject's name.",
+        ),
+        makeCatalogueHeading(
+          "gold-divisions",
+          "DIVISIONS",
+          "Business divisions or operating units where supplied.",
+        ),
+        makeCatalogueHeading(
+          "gold-financial-info",
+          "FINANCIAL INFORMATION",
+          "Key financial figures: turnover, cash, debtors, creditors and currency.",
+        ),
+        makeCatalogueHeading(
+          "gold-liquidity-ratios",
+          "LIQUIDITY RATIOS",
+          "Current and acid-test liquidity ratios from available statements.",
+        ),
+        makeCatalogueHeading(
+          "gold-profitability-ratios",
+          "PROFITABILITY RATIOS",
+          "Gross and operating profitability ratios where available.",
+        ),
+        makeCatalogueHeading(
+          "gold-solvency-ratios",
+          "SOLVENCY RATIOS",
+          "Solvency and leverage ratios from available statements.",
+        ),
+        makeCatalogueHeading(
+          "gold-contracts",
+          "CONTRACTS",
+          "Notable contracts or obligations including website-sourced detail.",
+        ),
+        makeCatalogueHeading(
+          "gold-bankers",
+          "BANKERS DETAILS AND COMMENTS",
+          "Banking details and related facility or security notes.",
+        ),
+        makeCatalogueHeading(
+          "gold-prev-enquiries",
+          "PREVIOUS ENQUIRIES",
+          "Previous credit enquiries recorded over the last 3 years.",
+        ),
+        makeCatalogueHeading(
+          "gold-court-records",
+          "COURT RECORDS TO DATE",
+          "Court record summary: judgements, bonds and adverse items.",
+        ),
+        makeCatalogueHeading(
+          "gold-business-rescue",
+          "BUSINESS RESCUE",
+          "Business Rescue or Debt Review proceedings (may sit under History).",
+        ),
+        makeCatalogueHeading(
+          "gold-payment-analysis",
+          "PAYMENT ANALYSIS REPORT",
+          "Payment behaviour: trends, days-to-pay and overdue patterns.",
+        ),
+        makeCatalogueHeading(
+          "gold-debtors-ledger",
+          "DEBTORS LEDGER (UNDER THE TRADE REFS)",
+          "Debtors ledger snapshot: exposure and ageing by period.",
+        ),
+        makeCatalogueHeading(
+          "gold-risk-credit",
+          "RISK CREDIT ANALYSIS",
+          "Risk score, banding and credit analysis interpretation.",
+        ),
+        makeCatalogueHeading(
+          "gold-trade-ref-summary",
+          "TRADE REFERENCE SUMMARY",
+          "Consolidated trade reference terms and payment performance.",
+        ),
+        makeCatalogueHeading(
+          "gold-subject-payment",
+          "SUBJECT PAYMENT PERFORMANCE PROFILE",
+          "How the subject pays suppliers: performance bands and exposure.",
+        ),
+        makeCatalogueHeading(
+          "gold-top-industries",
+          "TOP INDUSTRIES BOUGHT FROM / GRAPH",
+          "Industries the subject purchases from most, with graphic view.",
+        ),
+        makeCatalogueHeading(
+          "gold-subject-exposure",
+          "SUBJECT INDUSTRY / SUBJECT EXPOSURE LEVELS",
+          "Industry context and subject exposure levels versus peers.",
+        ),
+        makeCatalogueHeading(
+          "gold-disclosure",
+          "DISCLOSURE REPORT",
+          "Disclosure and confidentiality statements for the report pack.",
+        ),
+      ];
+
+      function normalizeCatalogueLabel(label) {
+        return String(label || "").trim().toUpperCase();
+      }
+
+      /** Gold headings not present in the Bronze catalogue — optional Customized add-ons */
+      function buildGoldOnlyAddOnSections() {
+        var bronzeLabels = {};
+        BRONZE_PRODUCT_SECTIONS.forEach(function (s) {
+          if (s.isSubItem || s.isPlaceholder) return;
+          bronzeLabels[normalizeCatalogueLabel(s.label)] = true;
+        });
+        return GOLD_REPORT_SECTIONS.filter(function (s) {
+          if (s.isSubItem || s.isPlaceholder) return false;
+          return !bronzeLabels[normalizeCatalogueLabel(s.label)];
+        });
+      }
+
+      const CUSTOMIZED_ADDITIONAL_SECTIONS = buildGoldOnlyAddOnSections();
+
+      function getSelectedCustomizedAddOns() {
+        var checklist = document.getElementById("custom-pricing-checklist");
+        var selected = [];
+        if (!checklist) return selected;
+        checklist
+          .querySelectorAll('input[type="checkbox"]:checked')
+          .forEach(function (cb) {
+            var idx = parseInt(cb.getAttribute("data-idx"), 10);
+            if (isFinite(idx) && CUSTOMIZED_ADDITIONAL_SECTIONS[idx]) {
+              selected.push(CUSTOMIZED_ADDITIONAL_SECTIONS[idx]);
+            }
+          });
+        return selected;
+      }
+
+      function getFullCustomizedCatalogue() {
+        return BRONZE_PRODUCT_SECTIONS.concat(getSelectedCustomizedAddOns());
+      }
+
+      const PENDING_HEADINGS_PLACEHOLDER = [
+        makeCatalogueHeading(
+          "pending-headings",
+          "HEADINGS PENDING",
+          "Share your heading list for this report to complete the catalogue preview.",
+          { isPlaceholder: true },
+        ),
+      ];
+
+      /** Report bodies not built yet for the six-product catalogue preview */
+      const PLACEHOLDER_REPORT_PRODUCT_IDS = REPORT_PRODUCT_IDS.slice();
 
       function isPlaceholderReportProduct(productId) {
         return PLACEHOLDER_REPORT_PRODUCT_IDS.indexOf(productId) !== -1;
@@ -1175,14 +2006,11 @@
 
       function isKnownReportProductId(productId) {
         if (!productId) return false;
-        if (
-          productId === "bronze-pb" ||
-          productId === "silver-pb" ||
-          productId === CUSTOMIZED_REPORT_ID
-        ) {
-          return true;
-        }
-        return isPlaceholderReportProduct(productId);
+        return REPORT_PRODUCT_IDS.indexOf(productId) !== -1;
+      }
+
+      function hasCataloguePreview(productId) {
+        return REPORT_PRODUCT_IDS.indexOf(productId) !== -1;
       }
 
       /** Canonical report body sections (order matches PDF layout) */
@@ -1295,23 +2123,11 @@
         if (productId === "bronze-pb") {
           sections = BRONZE_REPORT_SECTIONS.slice();
         } else if (productId === "silver-pb") {
-          sections = SILVER_REPORT_SECTIONS.slice();
+          sections = SILVER_PB_SECTIONS.slice();
+        } else if (productId === "bronze") {
+          sections = BRONZE_PRODUCT_SECTIONS.slice();
         } else if (productId === CUSTOMIZED_REPORT_ID) {
-          sections = BRONZE_REPORT_SECTIONS.slice();
-          var checklist = document.getElementById("custom-pricing-checklist");
-          if (checklist) {
-            checklist
-              .querySelectorAll('input[type="checkbox"]:checked')
-              .forEach(function (cb) {
-                var idx = Number(cb.getAttribute("data-idx"));
-                if (
-                  isFinite(idx) &&
-                  CUSTOMIZED_ADDITIONAL_SECTIONS[idx]
-                ) {
-                  sections.push(CUSTOMIZED_ADDITIONAL_SECTIONS[idx]);
-                }
-              });
-          }
+          sections = getFullCustomizedCatalogue();
         } else if (isPlaceholderReportProduct(productId)) {
           return new Set();
         } else {
@@ -1328,22 +2144,20 @@
           return BRONZE_REPORT_SECTIONS.slice();
         }
         if (productId === "silver-pb") {
-          return SILVER_REPORT_SECTIONS.slice();
+          return SILVER_PB_SECTIONS.slice();
         }
         if (productId === CUSTOMIZED_REPORT_ID) {
-          var s = BRONZE_REPORT_SECTIONS.slice();
-          var checklist = document.getElementById("custom-pricing-checklist");
-          if (checklist) {
-            checklist
-              .querySelectorAll('input[type="checkbox"]:checked')
-              .forEach(function (cb) {
-                var idx = Number(cb.getAttribute("data-idx"));
-                if (isFinite(idx) && CUSTOMIZED_ADDITIONAL_SECTIONS[idx]) {
-                  s.push(CUSTOMIZED_ADDITIONAL_SECTIONS[idx]);
-                }
-              });
-          }
-          return s;
+          return getFullCustomizedCatalogue();
+        }
+        if (
+          productId === "bronze" ||
+          productId === "silver" ||
+          productId === "gold" ||
+          productId === "platinum" ||
+          productId === "platinum-hybrid" ||
+          productId === "international"
+        ) {
+          return getCatalogueSectionsForProduct(productId).slice();
         }
         if (isPlaceholderReportProduct(productId)) {
           return [];
@@ -1516,9 +2330,18 @@
       }
 
       function getCatalogueSectionsForProduct(productId) {
+        if (productId === "platinum") return PLATINUM_REPORT_SECTIONS;
+        if (productId === "platinum-hybrid") {
+          return PLATINUM_HYBRID_REPORT_SECTIONS;
+        }
+        if (productId === "international") return INTERNATIONAL_REPORT_SECTIONS;
+        if (productId === "silver") return SILVER_REPORT_SECTIONS;
+        if (productId === "gold") return GOLD_REPORT_SECTIONS;
+        if (productId === "bronze" || productId === CUSTOMIZED_REPORT_ID) {
+          return BRONZE_PRODUCT_SECTIONS;
+        }
         if (productId === "bronze-pb") return BRONZE_REPORT_SECTIONS;
-        if (productId === "silver-pb") return SILVER_REPORT_SECTIONS;
-        if (productId === CUSTOMIZED_REPORT_ID) return BRONZE_REPORT_SECTIONS;
+        if (productId === "silver-pb") return SILVER_PB_SECTIONS;
         if (isPlaceholderReportProduct(productId)) return [];
         return STANDARD_REPORT_SECTIONS;
       }
@@ -1569,25 +2392,41 @@
         var titleEl = document.getElementById("standard-pricing-title");
         var packageTotalRow = document.getElementById("standard-package-total-row");
         var standardTotalEl = document.getElementById("standard-pricing-total");
-        if (!productEl || !cust) return;
+        var previewNote = document.getElementById("catalogue-preview-note");
+        if (!productEl) return;
         var v = productEl.value;
         var isCustom = v === CUSTOMIZED_REPORT_ID;
-        cust.hidden = !isCustom;
+        if (cust) cust.hidden = !isCustom;
+        var sections = getCatalogueSectionsForProduct(v);
+        var realSections = sections.filter(function (s) {
+          return !s.isPlaceholder && !s.isSubItem;
+        });
         if (titleEl) {
           titleEl.textContent = isCustom
-            ? "Standard sections always included (base catalogue)"
-            : "Included sections (package)";
+            ? "Sections always included (Bronze base)"
+            : "Section catalogue";
+        }
+        if (previewNote) {
+          if (isCustom) {
+            previewNote.textContent =
+              realSections.length +
+              " Bronze headings always included. Select from " +
+              CUSTOMIZED_ADDITIONAL_SECTIONS.length +
+              " additional Gold headings below.";
+          } else if (hasCataloguePreview(v)) {
+            previewNote.textContent =
+              realSections.length +
+              " main headings for this report (sub-items shown indented where applicable). Full report PDF layout is not wired yet.";
+          } else {
+            previewNote.textContent = "";
+          }
         }
         if (packageTotalRow) {
-          packageTotalRow.hidden = false;
+          packageTotalRow.hidden = isCustom || !hasCataloguePreview(v);
         }
         syncStandardCatalogueLineDisplay(isCustom);
-        if (standardTotalEl) {
-          if (isCustom) {
-            standardTotalEl.textContent = formatZar(CUSTOMIZED_STANDARD_BASE_ZAR);
-          } else {
-            standardTotalEl.textContent = formatZar(getStandardPackagePrice(v));
-          }
+        if (standardTotalEl && hasCataloguePreview(v) && !isCustom) {
+          standardTotalEl.textContent = String(realSections.length);
         }
       }
 
@@ -1609,9 +2448,15 @@
         standardList.innerHTML = "";
         sections.forEach(function (s) {
           var li = document.createElement("li");
+          if (s.isSubItem) {
+            li.className = "report-pricing-line-sub";
+          }
           var textCol = document.createElement("div");
           textCol.className = "rb-standard-textcol";
           var titleEl = document.createElement("span");
+          titleEl.className = s.isSubItem
+            ? "rb-label-text rb-label-text--sub"
+            : "rb-label-text";
           titleEl.textContent = s.label;
           textCol.appendChild(titleEl);
           if (s.description) {
@@ -1620,13 +2465,15 @@
             descEl.textContent = s.description;
             textCol.appendChild(descEl);
           }
-          var includedEl = document.createElement("span");
-          includedEl.className =
-            "report-pricing-line-secondary report-pricing-included";
-          includedEl.setAttribute("data-price", String(s.priceZar));
-          includedEl.textContent = "Included";
           li.appendChild(textCol);
-          li.appendChild(includedEl);
+          if (!s.isPlaceholder && !s.isSubItem && hasCataloguePreview(productEl.value)) {
+            var includedEl = document.createElement("span");
+            includedEl.className =
+              "report-pricing-line-secondary report-pricing-included";
+            includedEl.setAttribute("data-price", String(s.priceZar));
+            includedEl.textContent = "Included";
+            li.appendChild(includedEl);
+          }
           standardList.appendChild(li);
         });
       }
@@ -1637,6 +2484,7 @@
         rebuildStandardPricingLines();
 
         if (customList) {
+          customList.innerHTML = "";
           function recalcCustomTotal() {
             var selectionsSum = 0;
             customList.querySelectorAll('input[type="checkbox"]').forEach(
@@ -1695,10 +2543,12 @@
           customList.addEventListener("change", function () {
             recalcCustomTotal();
             syncReportTabLinks();
+            rebuildStandardPricingLines();
           });
           customList.addEventListener("input", function () {
             recalcCustomTotal();
             syncReportTabLinks();
+            rebuildStandardPricingLines();
           });
           recalcCustomTotal();
 
@@ -1831,25 +2681,58 @@
         return url.toString();
       }
 
+      function isCataloguePreviewOnly() {
+        return true;
+      }
+
       function syncReportTabLinks() {
         var viewLink = document.getElementById("btn-view-report");
         var exportLink = document.getElementById("btn-export-pdf-selection");
+        var previewOnly = isCataloguePreviewOnly();
         if (viewLink) {
-          viewLink.href = buildReportTabUrl({ exportPdf: false });
+          if (previewOnly) {
+            viewLink.href = "#";
+            viewLink.title = "Report body preview coming after all six catalogues are confirmed";
+          } else {
+            viewLink.href = buildReportTabUrl({ exportPdf: false });
+            viewLink.title = "Opens the report in a new browser tab";
+          }
         }
         if (exportLink) {
-          if (window.location.protocol === "file:") {
+          if (previewOnly || window.location.protocol === "file:") {
             exportLink.href = "#";
+            exportLink.title = previewOnly
+              ? "PDF export will be enabled once report layouts are built"
+              : "Opens a new tab and downloads the PDF (same report as View)";
           } else {
             exportLink.href = buildReportTabUrl({ exportPdf: true });
+            exportLink.title =
+              "Opens a new tab and downloads the PDF (same report as View)";
           }
         }
       }
 
       function initReportTabLinkGuards() {
+        var viewLink = document.getElementById("btn-view-report");
         var exportLink = document.getElementById("btn-export-pdf-selection");
+        if (viewLink) {
+          viewLink.addEventListener("click", function (e) {
+            if (!isCataloguePreviewOnly()) return;
+            e.preventDefault();
+            alert(
+              "This screen is a section catalogue preview only.\n\nView and Export will be enabled once we wire the full report layout for each product.",
+            );
+          });
+        }
         if (exportLink) {
           exportLink.addEventListener("click", function (e) {
+            if (isCataloguePreviewOnly()) {
+              e.preventDefault();
+              alert(
+                "This screen is a section catalogue preview only.\n\nView and Export will be enabled once we wire the full report layout for each product.",
+              );
+              return;
+            }
             if (window.location.protocol === "file:") {
               e.preventDefault();
               alert(
@@ -2130,14 +3013,15 @@
           );
         } else if (includeIds.size === 0 && productId === "silver-pb") {
           includeIds = catalogueSectionsToRenderSectionIdSet(
-            SILVER_REPORT_SECTIONS,
+            SILVER_PB_SECTIONS,
           );
-        } else if (
-          includeIds.size === 0 &&
-          productId === CUSTOMIZED_REPORT_ID
-        ) {
+        } else if (includeIds.size === 0 && productId === "bronze") {
           includeIds = catalogueSectionsToRenderSectionIdSet(
-            BRONZE_REPORT_SECTIONS,
+            BRONZE_PRODUCT_SECTIONS,
+          );
+        } else if (includeIds.size === 0 && productId === CUSTOMIZED_REPORT_ID) {
+          includeIds = catalogueSectionsToRenderSectionIdSet(
+            getFullCustomizedCatalogue(),
           );
         }
         applyReportSectionFilter(report, includeIds);

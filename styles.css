@@ -160,6 +160,21 @@
   flex-direction: column;
   gap: 4px;
 }
+.report-pricing-lines .rb-label-text {
+  display: block;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.report-pricing-lines .rb-label-text--sub {
+  font-weight: 500;
+  padding-left: 14px;
+  font-size: 11px;
+}
+.report-pricing-lines .report-pricing-line-sub {
+  border-bottom-style: dashed;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
 .report-pricing-lines .rb-label-description {
   margin: 0;
   padding: 0;
