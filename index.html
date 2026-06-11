@@ -31,10 +31,11 @@
           <div class="report-selection-head-text">
             <h1 class="report-selection-title">Business Credit Report</h1>
             <p class="report-selection-lead">
-              Select one of the seven report products to preview its section
-              catalogue. <strong>Customized</strong> always includes the
-              <strong>Bronze</strong> base, plus any extra <strong>Gold</strong>
-              headings you tick below.
+              Select one of the eight report products to preview its section
+              catalogue. <strong>Bronze P&amp;B</strong> includes all
+              <strong>Bronze</strong> headings plus Properties and Bonds.
+              <strong>Customized</strong> uses the Bronze base plus optional
+              Gold add-ons.
             </p>
           </div>
         </header>
@@ -58,6 +59,7 @@
               <option value="platinum" selected>Platinum</option>
               <option value="platinum-hybrid">Platinum Hybrid</option>
               <option value="bronze">Bronze</option>
+              <option value="bronze-pb">Bronze P&amp;B</option>
               <option value="customized">Customized</option>
               <option value="silver">Silver</option>
               <option value="gold">Gold</option>
@@ -1136,6 +1138,7 @@
         "platinum",
         "platinum-hybrid",
         "bronze",
+        "bronze-pb",
         "customized",
         "silver",
         "gold",
@@ -1525,6 +1528,32 @@
           "Consolidated trade reference terms and payment performance.",
         ),
       ];
+
+      const BRONZE_PB_PRODUCT_SECTIONS = (function () {
+        var sections = [];
+        BRONZE_PRODUCT_SECTIONS.forEach(function (s) {
+          sections.push(s);
+          if (s.id === "br-active-principals") {
+            sections.push(
+              makeCatalogueHeading(
+                "brpb-prop-bonds-principal",
+                "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
+                "Property and bond records identified in a principal's name.",
+              ),
+            );
+          }
+          if (s.id === "br-operations") {
+            sections.push(
+              makeCatalogueHeading(
+                "brpb-prop-bonds-subject",
+                "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
+                "Property and bond registrations recorded in the subject's name.",
+              ),
+            );
+          }
+        });
+        return sections;
+      })();
 
       const SILVER_REPORT_SECTIONS = [
         makeCatalogueHeading(
@@ -2092,7 +2121,7 @@
         var productId = productEl ? productEl.value : "bronze-pb";
         var sections = [];
         if (productId === "bronze-pb") {
-          sections = BRONZE_REPORT_SECTIONS.slice();
+          sections = BRONZE_PB_PRODUCT_SECTIONS.slice();
         } else if (productId === "silver-pb") {
           sections = SILVER_PB_SECTIONS.slice();
         } else if (productId === "bronze") {
@@ -2112,7 +2141,7 @@
         var productEl = document.getElementById("report-product");
         var productId = productEl ? productEl.value : "bronze-pb";
         if (productId === "bronze-pb") {
-          return BRONZE_REPORT_SECTIONS.slice();
+          return BRONZE_PB_PRODUCT_SECTIONS.slice();
         }
         if (productId === "silver-pb") {
           return SILVER_PB_SECTIONS.slice();
@@ -2122,6 +2151,7 @@
         }
         if (
           productId === "bronze" ||
+          productId === "bronze-pb" ||
           productId === "silver" ||
           productId === "gold" ||
           productId === "platinum" ||
@@ -2311,7 +2341,7 @@
         if (productId === "bronze" || productId === CUSTOMIZED_REPORT_ID) {
           return BRONZE_PRODUCT_SECTIONS;
         }
-        if (productId === "bronze-pb") return BRONZE_REPORT_SECTIONS;
+        if (productId === "bronze-pb") return BRONZE_PB_PRODUCT_SECTIONS;
         if (productId === "silver-pb") return SILVER_PB_SECTIONS;
         if (isPlaceholderReportProduct(productId)) return [];
         return STANDARD_REPORT_SECTIONS;
@@ -2980,7 +3010,7 @@
         var includeIds = getIncludedRenderSectionIdsForCurrentSelection();
         if (includeIds.size === 0 && productId === "bronze-pb") {
           includeIds = catalogueSectionsToRenderSectionIdSet(
-            BRONZE_REPORT_SECTIONS,
+            BRONZE_PB_PRODUCT_SECTIONS,
           );
         } else if (includeIds.size === 0 && productId === "silver-pb") {
           includeIds = catalogueSectionsToRenderSectionIdSet(
