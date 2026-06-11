@@ -1470,11 +1470,6 @@
           "Current principals/directors and key profile indicators.",
         ),
         makeCatalogueHeading(
-          "br-prop-bonds-principal",
-          "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL",
-          "Property and bond records identified in a principal's name.",
-        ),
-        makeCatalogueHeading(
           "br-non-active-principals",
           "NON-ACTIVE PRINCIPALS",
           "Former principals and recorded status changes.",
@@ -1483,11 +1478,6 @@
           "br-operations",
           "OPERATIONS",
           "What the business does: activities, clients and operational detail.",
-        ),
-        makeCatalogueHeading(
-          "br-prop-bonds-subject",
-          "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT",
-          "Property and bond registrations recorded in the subject's name.",
         ),
         makeCatalogueHeading(
           "br-judgments",
@@ -1521,7 +1511,7 @@
         ),
         makeCatalogueHeading(
           "br-debtors-ledger",
-          "DEBTORS LEDGER (UNDER THE TRADE REFS)",
+          "DEBTORS LEDGER",
           "Debtors ledger snapshot: exposure and ageing by period.",
         ),
         makeCatalogueHeading(
@@ -1660,25 +1650,7 @@
         makeCatalogueHeading(
           "silver-ratios",
           "RATIOS",
-          "Derived ratio groups from available financial statements.",
-        ),
-        makeCatalogueHeading(
-          "silver-liquidity-ratios",
-          "LIQUIDITY RATIOS",
-          "",
-          { isSubItem: true },
-        ),
-        makeCatalogueHeading(
-          "silver-profitability-ratios",
-          "PROFITABILITY RATIOS",
-          "",
-          { isSubItem: true },
-        ),
-        makeCatalogueHeading(
-          "silver-solvency-ratios",
-          "SOLVENCY RATIOS",
-          "",
-          { isSubItem: true },
+          "Liquidity, profitability and solvency ratios from available financial statements.",
         ),
         makeCatalogueHeading(
           "silver-contracts",
@@ -1869,19 +1841,9 @@
           "Key financial figures: turnover, cash, debtors, creditors and currency.",
         ),
         makeCatalogueHeading(
-          "gold-liquidity-ratios",
-          "LIQUIDITY RATIOS",
-          "Current and acid-test liquidity ratios from available statements.",
-        ),
-        makeCatalogueHeading(
-          "gold-profitability-ratios",
-          "PROFITABILITY RATIOS",
-          "Gross and operating profitability ratios where available.",
-        ),
-        makeCatalogueHeading(
-          "gold-solvency-ratios",
-          "SOLVENCY RATIOS",
-          "Solvency and leverage ratios from available statements.",
+          "gold-ratios",
+          "RATIOS",
+          "Liquidity, profitability and solvency ratios from available financial statements.",
         ),
         makeCatalogueHeading(
           "gold-contracts",
@@ -1954,6 +1916,11 @@
         return String(label || "").trim().toUpperCase();
       }
 
+      const CUSTOMIZED_EXCLUDED_ADD_ON_LABELS = {
+        "PROPERTIES AND BONDS IN THE NAME OF THE PRINCIPAL": true,
+        "PROPERTIES AND BONDS IN THE NAME OF THE SUBJECT": true,
+      };
+
       /** Gold headings not present in the Bronze catalogue — optional Customized add-ons */
       function buildGoldOnlyAddOnSections() {
         var bronzeLabels = {};
@@ -1963,7 +1930,11 @@
         });
         return GOLD_REPORT_SECTIONS.filter(function (s) {
           if (s.isSubItem || s.isPlaceholder) return false;
-          return !bronzeLabels[normalizeCatalogueLabel(s.label)];
+          var label = normalizeCatalogueLabel(s.label);
+          if (bronzeLabels[label] || CUSTOMIZED_EXCLUDED_ADD_ON_LABELS[label]) {
+            return false;
+          }
+          return true;
         });
       }
 
@@ -2366,8 +2337,8 @@
         return 0;
       }
 
-      /** Customized report: fixed charge for standard headings (same demo value as Bronze P&B) */
-      const CUSTOMIZED_STANDARD_BASE_ZAR = getStandardPackagePrice("bronze-pb");
+      /** Customized report: fixed charge for Bronze base headings */
+      const CUSTOMIZED_STANDARD_BASE_ZAR = 850;
 
       function syncStandardCatalogueLineDisplay(isCustom) {
         var lines = document.querySelectorAll(
